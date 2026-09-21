@@ -1,227 +1,235 @@
-import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Quote } from 'lucide-react';
-import Hero from '@/components/home/Hero';
-import Countdown from '@/components/home/Countdown';
-import NewsletterForm from '@/components/home/NewsletterForm';
-import { ProductCard } from '@/components/shop/ProductCard';
-import { SectionHeading } from '@/components/ui/SectionHeading';
+import { ArrowRight } from 'lucide-react';
+import { Hero } from '@/components/home/Hero';
+import { SmartImage } from '@/components/home/SmartImage';
+import { ProductTile } from '@/components/home/ProductTile';
+import { NewsletterForm } from '@/components/home/NewsletterForm';
+import { EditorialHeader } from '@/components/home/EditorialHeader';
+import { SectionHeading, Reveal, Stars, Button } from '@/components/ui';
 import { getCategories, getProducts } from '@/lib/store';
 import type { Product } from '@/lib/types';
 
 export const metadata = {
-  title: 'NovaMart — Everything you love, delivered',
+  title: 'NovaMart — The new general store',
   description:
-    'Shop electronics, fashion, home essentials and more at NovaMart. Free shipping over the threshold, 30-day returns, secure checkout.',
+    'Good goods, fairly priced. Shop electronics, home, fashion, beauty, sports and toys with 24-hour shipping and 30-day returns.',
 };
 
-const TESTIMONIALS = [
+const CAT_IMAGES: Record<string, string> = {
+  electronics: '/images/cat-electronics.jpg',
+  'home-kitchen': '/images/cat-home.jpg',
+  fashion: '/images/cat-fashion.jpg',
+  beauty: '/images/cat-beauty.jpg',
+  sports: '/images/cat-sports.jpg',
+  'toys-and-games': '/images/cat-toys.jpg',
+};
+
+const REVIEWS = [
   {
     quote:
-      'Ordered on Monday, at my door on Wednesday. The packaging was perfect and the headphones exceeded every expectation.',
-    name: 'Sarah Mitchell',
-    detail: 'Verified buyer · Austin, TX',
+      'Ordered Tuesday, arrived Thursday. The box looked like someone actually cared.',
+    name: 'Maya R.',
+    detail: 'Verified buyer · Portland',
   },
   {
     quote:
-      'I compared prices everywhere before buying my kitchen set. NovaMart was the cheapest, and the quality honestly surprised me.',
-    name: 'David Okafor',
-    detail: 'Verified buyer · Chicago, IL',
+      'I came for the charger and stayed for the prices. My kitchen drawer is now forty percent NovaMart.',
+    name: 'Daniel K.',
+    detail: 'Verified buyer · Austin',
   },
   {
     quote:
-      'Had an issue with a size and support sorted it in one email — replacement shipped the same day. This is how you earn loyalty.',
-    name: 'Priya Raman',
-    detail: 'Verified buyer · Seattle, WA',
+      'Returned a jacket — no questions, refund in two days. That is why I keep coming back.',
+    name: 'Sofia L.',
+    detail: 'Verified buyer · Miami',
   },
 ];
 
-const BRANDS = [
-  'Nordhaus',
-  'Velvetine',
-  'Klarheit',
-  'Ozone Labs',
-  'Papertrail',
-  'Bloom & Co.',
-  'Forge & Field',
-  'Lumen',
-];
-
-function discountPct(p: Product): number {
-  if (!p.compareAtPrice || p.compareAtPrice <= p.price) return 0;
-  return (p.compareAtPrice - p.price) / p.compareAtPrice;
-}
+const byNewest = (a: Product, b: Product) => b.createdAt.localeCompare(a.createdAt);
+const byLoved = (a: Product, b: Product) => b.rating * b.reviewsCount - a.rating * a.reviewsCount;
 
 export default function HomePage() {
-  const categories = getCategories().slice(0, 6);
+  const categories = getCategories();
   const products = getProducts();
-  const featured = products.filter((p) => p.featured).slice(0, 8);
-  const deals = products
-    .filter(
-      (p) =>
-        (p.compareAtPrice && p.compareAtPrice > p.price) ||
-        p.badge === 'SALE' ||
-        p.badge === 'HOT',
-    )
-    .sort((a, b) => discountPct(b) - discountPct(a))
-    .slice(0, 4);
+  const drops = [...products].sort(byNewest).slice(0, 8);
+  const bestsellers = [...products].sort(byLoved).slice(0, 8);
+  const catName = (slug: string) => categories.find((c) => c.slug === slug)?.name ?? slug;
+  const catCount = (slug: string) => products.filter((p) => p.category === slug).length;
 
   return (
-    <main>
+    <>
       <Hero />
 
       {/* Category tiles */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <SectionHeading
-          kicker="Browse"
-          title="Shop by category"
-          sub="Six curated departments, one checkout. Start where your wishlist lives."
-          link={{ href: '/shop', label: 'View all products' }}
-        />
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-          {categories.map((c) => (
-            <Link
-              key={c.id}
-              href={`/shop/${c.slug}`}
-              className="group overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200 transition hover:-translate-y-1 hover:shadow-md"
-            >
-              <div className="relative aspect-square overflow-hidden">
-                <Image
-                  src={c.image}
-                  alt={c.name}
-                  fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 16vw"
-                  className="object-cover transition duration-300 group-hover:scale-105"
-                />
-              </div>
-              <div className="p-4">
-                <h3 className="text-sm font-semibold text-slate-900">{c.name}</h3>
-                <p className="mt-1 line-clamp-2 text-xs text-slate-500">
-                  {c.description}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* Featured products */}
-      <section className="bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-20">
+        <Reveal>
           <SectionHeading
-            kicker="Handpicked"
-            title="Featured products"
-            sub="Our most loved picks right now — rated, reviewed and restocked."
+            kicker="Browse"
+            title="Six aisles, zero filler."
+            sub="Every category earns its shelf space. Nothing here is padding."
             link={{ href: '/shop', label: 'Shop everything' }}
           />
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-            {featured.map((p) => (
-              <ProductCard key={p.id} product={p} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Deals of the day */}
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 ring-1 ring-amber-200">
-          <div className="flex flex-col gap-6 p-6 sm:p-10 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-bold tracking-widest text-amber-700 uppercase">
-                Limited time
-              </p>
-              <h2 className="mt-2 text-3xl font-extrabold text-slate-900">
-                Deals of the day
-              </h2>
-              <p className="mt-2 max-w-md text-sm text-slate-600">
-                Deep discounts on bestsellers. When the clock hits zero, prices
-                go back up.
-              </p>
-            </div>
-            <Countdown label="Deals refresh in" />
-          </div>
-        </div>
-        <div className="mt-8 grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {deals.map((p) => (
-            <ProductCard key={p.id} product={p} />
+        </Reveal>
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 sm:gap-5 lg:grid-cols-6">
+          {categories.map((c, i) => (
+            <Reveal key={c.id} delay={Math.min(i * 0.06, 0.3)}>
+              <Link
+                href={`/shop/${c.slug}`}
+                className="group block overflow-hidden rounded-[14px] border border-line bg-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-ink/10"
+              >
+                <SmartImage
+                  src={CAT_IMAGES[c.slug] ?? c.image}
+                  alt={c.name}
+                  label={c.name}
+                  sizes="(min-width: 1024px) 16vw, 45vw"
+                  className="aspect-[4/5] w-full"
+                  imgClassName="transition-transform duration-500 group-hover:scale-[1.05]"
+                />
+                <div className="px-4 py-3.5">
+                  <h3 className="font-display text-lg font-semibold leading-tight text-ink">
+                    {c.name}
+                  </h3>
+                  <p className="mt-1 text-xs font-medium uppercase tracking-[0.14em] text-muted">
+                    {catCount(c.slug)} products
+                  </p>
+                </div>
+              </Link>
+            </Reveal>
           ))}
         </div>
-        <div className="mt-8 text-center">
-          <Link
-            href="/deals"
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-indigo-600 hover:text-indigo-600"
-          >
-            See all deals
-            <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </Link>
-        </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="bg-slate-50">
-        <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
-          <SectionHeading
-            kicker="Reviews"
-            title="Loved by shoppers"
-            sub="Real orders, real deliveries, real opinions."
-          />
-          <div className="mt-8 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
-              <figure
-                key={t.name}
-                className="flex flex-col rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
-              >
-                <Quote className="h-7 w-7 text-indigo-300" aria-hidden="true" />
-                <blockquote className="mt-4 flex-1 text-sm leading-relaxed text-slate-700">
-                  &ldquo;{t.quote}&rdquo;
-                </blockquote>
-                <figcaption className="mt-6 border-t border-slate-100 pt-4">
-                  <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-                  <p className="mt-0.5 text-xs text-slate-500">{t.detail}</p>
-                </figcaption>
-              </figure>
+      {/* This week's drops — horizontal rail */}
+      <section className="border-y border-line bg-sand/50 py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading
+              kicker="Fresh"
+              title="This week's drops."
+              sub="Restocked Friday. Gone by Monday, usually."
+              link={{ href: '/shop', label: 'Shop all' }}
+            />
+          </Reveal>
+        </div>
+        <Reveal delay={0.1}>
+          <div className="no-scrollbar flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-[max(1.5rem,calc((100vw-80rem)/2+1.5rem))]">
+            {drops.map((p) => (
+              <ProductTile key={p.id} product={p} eyebrow={catName(p.category)} className="snap-start" />
             ))}
           </div>
+        </Reveal>
+      </section>
+
+      {/* Editorial banner — forest */}
+      <section className="bg-forest text-paper">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:py-24">
+          <Reveal>
+            <SmartImage
+              src="/images/story.jpg"
+              alt="Inside the NovaMart packing room"
+              label="The packing room, mid-Friday."
+              sizes="(min-width: 1024px) 45vw, 90vw"
+              className="aspect-[4/3] w-full rounded-[14px]"
+            />
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="mb-4 text-xs font-bold uppercase tracking-[0.24em] text-accent">Our story</p>
+            <h2 className="font-display text-[clamp(1.9rem,4vw,2.9rem)] font-semibold leading-[1.1] tracking-tight">
+              A general store, minus the dust.
+            </h2>
+            <p className="mt-5 max-w-prose leading-relaxed text-paper/75">
+              NovaMart started with a simple complaint: buying decent basics online had become
+              a chore — endless tabs, mystery sellers, prices that moved while you blinked.
+              So we built the shop we wanted to use. A short shelf of good things, honest
+              prices, and shipping that shows up when we say it will.
+            </p>
+            <Link
+              href="/about"
+              className="mt-8 inline-flex items-center gap-2 rounded-full border border-paper/30 px-6 py-3 text-sm font-semibold text-paper transition-all hover:border-paper hover:bg-paper/10 active:scale-[0.98]"
+            >
+              Read our story
+              <ArrowRight size={16} aria-hidden />
+            </Link>
+          </Reveal>
         </div>
       </section>
 
-      {/* Brand strip */}
-      <section className="border-y border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-semibold tracking-widest text-slate-400 uppercase">
-            Featuring brands we love
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-x-10 gap-y-4">
-            {BRANDS.map((b) => (
-              <span
-                key={b}
-                className="text-lg font-bold tracking-tight text-slate-400 transition hover:text-slate-600"
-              >
-                {b}
-              </span>
+      {/* Bestsellers */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-20">
+        <Reveal>
+          <SectionHeading
+            kicker="Loved"
+            title="Bestsellers."
+            sub="The things people reorder — and tell their friends about."
+            link={{ href: '/shop', label: 'Shop all' }}
+          />
+        </Reveal>
+        <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:gap-x-5 lg:grid-cols-4">
+          {bestsellers.map((p, i) => (
+            <Reveal key={p.id} delay={Math.min(i * 0.05, 0.3)}>
+              <ProductTile product={p} eyebrow={catName(p.category)} className="w-full" />
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* Reviews */}
+      <section className="bg-sand/60 py-16 lg:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+          <Reveal>
+            <SectionHeading kicker="Word of mouth" title="People keep the receipts." />
+          </Reveal>
+          <div className="grid gap-5 md:grid-cols-3">
+            {REVIEWS.map((r, i) => (
+              <Reveal key={r.name} delay={i * 0.08}>
+                <figure className="flex h-full flex-col rounded-[14px] border border-line bg-card p-6">
+                  <Stars value={5} size="md" />
+                  <blockquote className="mt-4 flex-1 font-display text-lg italic leading-snug text-ink">
+                    &ldquo;{r.quote}&rdquo;
+                  </blockquote>
+                  <figcaption className="mt-5">
+                    <p className="text-sm font-semibold text-ink">{r.name}</p>
+                    <p className="text-xs text-muted">{r.detail}</p>
+                  </figcaption>
+                </figure>
+              </Reveal>
             ))}
           </div>
         </div>
       </section>
 
       {/* Newsletter */}
-      <section className="bg-indigo-950">
-        <div className="mx-auto max-w-3xl px-4 py-14 text-center sm:px-6 sm:py-20 lg:px-8">
-          <p className="text-xs font-bold tracking-widest text-amber-300 uppercase">
-            Newsletter
-          </p>
-          <h2 className="mt-3 text-3xl font-extrabold text-white">
-            Get 10% off your first order
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-indigo-200">
-            Join 40,000+ subscribers for subscriber-only deals, early access to
-            new arrivals and zero spam. Your welcome code lands instantly.
-          </p>
-          <div className="mt-8">
-            <NewsletterForm />
-          </div>
-        </div>
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-20">
+        <Reveal className="mx-auto max-w-xl text-center">
+          <EditorialHeader
+            align="center"
+            kicker="The Friday email"
+            title="First dibs, every Friday."
+            lede="New drops, restocks, and the occasional strong opinion. One email a week, worth opening."
+          />
+          <NewsletterForm className="mx-auto mt-8 max-w-md" />
+        </Reveal>
       </section>
-    </main>
+
+      {/* CTA strip */}
+      <section className="mx-auto max-w-7xl px-4 pb-20 sm:px-6">
+        <Reveal>
+          <div className="flex flex-col items-start justify-between gap-6 rounded-[14px] border border-line bg-card px-8 py-10 sm:flex-row sm:items-center">
+            <div>
+              <h2 className="font-display text-2xl font-semibold text-ink sm:text-3xl">
+                Still browsing? The deals page is better.
+              </h2>
+              <p className="mt-2 text-muted">Real discounts on things that rarely go on sale.</p>
+            </div>
+            <Link href="/deals" className="shrink-0">
+              <Button size="lg">
+                Today&apos;s deals
+                <ArrowRight size={18} aria-hidden />
+              </Button>
+            </Link>
+          </div>
+        </Reveal>
+      </section>
+    </>
   );
 }

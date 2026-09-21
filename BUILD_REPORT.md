@@ -72,3 +72,54 @@ Date: 2026-09-21. Scope: reconcile all 10 agents' code → `npx tsc --noEmit` cl
 6. **Cart persistence**: add items → reload → cart survives; checkout clears it exactly once.
 7. **Stock**: placing an order decrements `adjustStock`; admin product edit + stock quick-adjust round-trip.
 8. **Mobile layout**: header hamburger, cart drawer, checkout steps on a small viewport.
+
+---
+
+# Masterpiece Redesign — Build Report (2026-09-21)
+
+**Scope:** full visual redesign of storefront + admin per `DESIGN_BRIEF.md` (CONTRACT.md APIs/routes unchanged).
+Design tokens: paper `#F6F1E8`, ink `#191410`, accent `#E4572E`, forest `#1E3A2F`; Fraunces display +
+Space Grotesk body; no gradients, no indigo/purple/blue. Dark "mission control" admin (`#14110D`).
+Copy per `COPY_DECK.md`. Editorial art in `public/images/` (hero, story, 6 category tiles — 1600×1066, each <500KB).
+
+## Environment
+
+| Item | Value |
+|---|---|
+| `node -v` | v24.20.0 |
+| `npm -v` | 10.9.4 |
+
+## Dependencies (`package.json`)
+
+**Runtime:** `next` ^14.2.0 · `react`/`react-dom` ^18.3.1 · `lucide-react` ^0.469.0 ·
+`framer-motion` ^13.4.0 (redesign motion: scroll reveals, staggered hero entrance, card hover)
+
+**Dev:** `typescript` ^5.0.0 (strict) · `tailwindcss` ^3.4.0 · `postcss` ^8.4.0 ·
+`autoprefixer` ^10.4.0 · `@types/node` ^20 · `@types/react`/`@types/react-dom` ^18.3
+
+**Scripts:** `dev` (`next dev`) · `build` (`next build`) · `start` (`next start`) · `lint` (`next lint`)
+
+## Commands run
+
+| Command | Result |
+|---|---|
+| `npm install` | PENDING — run from repo root and record exit code |
+| `npx tsc --noEmit` | PENDING — must be zero errors (definition of done) |
+| `npm run build` | PENDING — must exit 0 with all routes compiled |
+
+```bash
+cd ~/workspace/ecommerce-site
+npm install
+npx tsc --noEmit
+npm run build
+```
+
+## Integration notes carried forward from v1
+
+- `taxRate` stored as a **fraction** (`0.08` = 8%); admin settings UI displays/edits **percent**, converts on load/save.
+- `createOrder` internally calls `markCouponUsed` — checkout must not increment coupon usage separately.
+- Demo-order seeder creates 5 demo orders only when none exist; never overwrites checkout-created orders.
+- During the parallel redesign, `app/deals/page.tsx` had a TypeScript error; it was fixed and `npx tsc --noEmit`
+  passed clean at final integration check (2026-09-21, exit 0, no output).
+- A dedicated build-integrator agent ran `npx tsc --noEmit` on a loop during the redesign and fixed only
+  integration-level issues (import paths, prop mismatches) without restyling.

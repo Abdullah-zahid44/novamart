@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import { cn } from '@/lib/cn';
 import type { Product } from '@/lib/types';
 
 const badgeClass: Record<string, string> = {
-  NEW: 'bg-emerald-600 text-white',
-  SALE: 'bg-rose-600 text-white',
-  HOT: 'bg-amber-400 text-indigo-950',
-  BESTSELLER: 'bg-indigo-600 text-white',
+  NEW: 'bg-forest text-paper',
+  SALE: 'bg-accent text-white',
+  HOT: 'bg-accent-deep text-white',
+  BESTSELLER: 'bg-ink text-paper',
 };
 
 interface ImageGalleryProps {
@@ -23,7 +24,7 @@ export function ImageGallery({ images, name, badge }: ImageGalleryProps) {
 
   return (
     <div>
-      <div className="group relative aspect-square cursor-zoom-in overflow-hidden rounded-xl border border-gray-200 bg-gray-100">
+      <div className="group relative aspect-square cursor-zoom-in overflow-hidden rounded-[14px] border border-line bg-sand">
         <Image
           key={current}
           src={current}
@@ -31,11 +32,14 @@ export function ImageGallery({ images, name, badge }: ImageGalleryProps) {
           fill
           sizes="(min-width: 1024px) 45vw, 100vw"
           priority
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-150"
+          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.08]"
         />
         {badge && (
           <span
-            className={`absolute left-3 top-3 rounded-md px-2.5 py-1 text-xs font-bold tracking-wide ${badgeClass[badge]}`}
+            className={cn(
+              'absolute left-4 top-4 rounded-full px-3 py-1 text-[11px] font-bold uppercase tracking-[0.08em]',
+              badgeClass[badge],
+            )}
           >
             {badge}
           </span>
@@ -49,11 +53,20 @@ export function ImageGallery({ images, name, badge }: ImageGalleryProps) {
               type="button"
               onClick={() => setActive(i)}
               aria-label={`View image ${i + 1} of ${name}`}
-              className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border-2 bg-gray-100 transition-colors ${
-                i === active ? 'border-indigo-600' : 'border-transparent hover:border-gray-300'
-              }`}
+              className={cn(
+                'relative h-16 w-16 shrink-0 overflow-hidden rounded-[10px] border-2 bg-sand transition-all',
+                i === active
+                  ? 'border-accent'
+                  : 'border-line hover:border-muted',
+              )}
             >
-              <Image src={src} alt={`${name} thumbnail ${i + 1}`} fill sizes="64px" className="object-cover" />
+              <Image
+                src={src}
+                alt={`${name} thumbnail ${i + 1}`}
+                fill
+                sizes="64px"
+                className="object-cover"
+              />
             </button>
           ))}
         </div>

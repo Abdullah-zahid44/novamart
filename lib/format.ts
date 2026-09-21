@@ -19,12 +19,13 @@ export function formatDate(iso: string): string {
   });
 }
 
-/** Order status label + colored dot (tailwind bg class) for badges/timelines */
+/** Order status label + colored dot (tailwind bg class) for badges/timelines.
+ *  Warm editorial palette per DESIGN_BRIEF.md — no indigo/blue. */
 export const orderStatusMeta: Record<OrderStatus, { label: string; dot: string }> = {
-  pending: { label: 'Pending', dot: 'bg-amber-400' },
-  confirmed: { label: 'Confirmed', dot: 'bg-sky-500' },
-  shipped: { label: 'Shipped', dot: 'bg-indigo-500' },
-  delivered: { label: 'Delivered', dot: 'bg-emerald-500' },
-  cancelled: { label: 'Cancelled', dot: 'bg-rose-500' },
-  refunded: { label: 'Refunded', dot: 'bg-slate-400' },
+  pending: { label: 'Pending', dot: 'bg-[#E0A458]' },
+  confirmed: { label: 'Confirmed', dot: 'bg-[#E4572E]' },
+  shipped: { label: 'Shipped', dot: 'bg-[#C99A2C]' },
+  delivered: { label: 'Delivered', dot: 'bg-[#7FB069]' },
+  cancelled: { label: 'Cancelled', dot: 'bg-[#E26D5A]' },
+  refunded: { label: 'Refunded', dot: 'bg-[#A39A89]' },
 };

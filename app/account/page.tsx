@@ -25,8 +25,8 @@ function byNewest(a: Order, b: Order) {
 
 const QUICK_LINKS = [
   { href: "/account/orders", label: "Track orders", hint: "See where your parcels are", icon: Truck },
-  { href: "/account/wishlist", label: "Wishlist", hint: "Items you're saving", icon: Heart },
-  { href: "/account/addresses", label: "Addresses", hint: "Delivery destinations", icon: MapPin },
+  { href: "/account/wishlist", label: "Wishlist", hint: "Things you're keeping an eye on", icon: Heart },
+  { href: "/account/addresses", label: "Addresses", hint: "Where orders get delivered", icon: MapPin },
   { href: "/account/settings", label: "Settings", hint: "Name and password", icon: Settings },
 ];
 
@@ -57,11 +57,11 @@ export default function AccountDashboardPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-          Welcome back, {user.name.split(" ")[0]}
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          Good to see you, {user.name.split(" ")[0]}
         </h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Here&apos;s a snapshot of your NovaMart activity.
+        <p className="mt-1 text-sm text-muted">
+          A quick look at your NovaMart activity.
         </p>
       </div>
 
@@ -70,12 +70,12 @@ export default function AccountDashboardPage() {
         {stats.map((s) => (
           <Card key={s.label} className="p-5">
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sand text-accent">
                 <s.icon className="h-5 w-5" />
               </div>
               <div>
-                <p className="text-xl font-bold text-gray-900">{s.value}</p>
-                <p className="text-xs font-medium text-gray-500">{s.label}</p>
+                <p className="tnum text-xl font-semibold text-ink">{s.value}</p>
+                <p className="text-xs font-medium text-muted">{s.label}</p>
               </div>
             </div>
           </Card>
@@ -83,13 +83,13 @@ export default function AccountDashboardPage() {
       </div>
 
       {/* Recent orders */}
-      <div className="mt-8">
+      <div className="mt-10">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Recent orders</h2>
+          <h2 className="font-display text-xl font-semibold text-ink">Recent orders</h2>
           {orders.length > 0 && (
             <Link
               href="/account/orders"
-              className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+              className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-accent-deep hover:underline"
             >
               View all <ArrowRight className="h-4 w-4" />
             </Link>
@@ -100,10 +100,10 @@ export default function AccountDashboardPage() {
           <EmptyState
             icon={Package}
             title="No orders yet"
-            hint="Your orders will show up here once you place your first one."
+            hint="Your history starts with the first box."
             action={
               <Link href="/shop">
-                <Button variant="primary">Start shopping</Button>
+                <Button variant="primary">Browse the shop</Button>
               </Link>
             }
           />
@@ -117,20 +117,20 @@ export default function AccountDashboardPage() {
                   <Card className="p-4 transition-shadow hover:shadow-md sm:p-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div className="flex items-center gap-4">
-                        <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-gray-100 text-gray-500">
+                        <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-sand text-muted">
                           <Package className="h-5 w-5" />
                         </div>
                         <div>
-                          <p className="text-sm font-semibold text-gray-900">Order {o.number}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-sm font-semibold text-ink">Order {o.number}</p>
+                          <p className="text-xs text-muted">
                             {formatDate(o.createdAt)} · {itemCount}{" "}
                             {itemCount === 1 ? "item" : "items"}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center gap-4">
-                        <span className="text-sm font-bold text-gray-900">{currency(o.total)}</span>
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+                        <span className="tnum text-sm font-semibold text-ink">{currency(o.total)}</span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full bg-sand px-3 py-1 text-xs font-medium text-ink">
                           <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
                           {meta.label}
                         </span>
@@ -145,20 +145,20 @@ export default function AccountDashboardPage() {
       </div>
 
       {/* Quick links */}
-      <div className="mt-8">
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">Quick links</h2>
+      <div className="mt-10">
+        <h2 className="mb-4 font-display text-xl font-semibold text-ink">Quick links</h2>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {QUICK_LINKS.map((q) => (
             <Link key={q.href} href={q.href}>
               <Card className="group flex items-center gap-4 p-5 transition-shadow hover:shadow-md">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 transition-colors group-hover:bg-indigo-100">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sand text-accent transition-colors group-hover:bg-accent group-hover:text-white">
                   <q.icon className="h-5 w-5" />
                 </div>
                 <div className="flex-1">
-                  <p className="text-sm font-semibold text-gray-900">{q.label}</p>
-                  <p className="text-xs text-gray-500">{q.hint}</p>
+                  <p className="text-sm font-semibold text-ink">{q.label}</p>
+                  <p className="text-xs text-muted">{q.hint}</p>
                 </div>
-                <ArrowRight className="h-4 w-4 text-gray-300 transition-transform group-hover:translate-x-0.5 group-hover:text-indigo-600" />
+                <ArrowRight className="h-4 w-4 text-line transition-all group-hover:translate-x-0.5 group-hover:text-accent" />
               </Card>
             </Link>
           ))}

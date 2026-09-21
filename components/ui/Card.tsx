@@ -6,11 +6,9 @@ export interface CardProps {
   children: ReactNode;
 }
 
-/** Rounded-xl white card with subtle border + shadow. */
+/** Warm card: card bg, 1px line border, 14px radius (DESIGN_BRIEF §2). */
 export function Card({ className, children }: CardProps) {
   return (
-    <div className={cn('rounded-xl border border-slate-200 bg-white shadow-sm', className)}>
-      {children}
-    </div>
+    <div className={cn('rounded-[14px] border border-line bg-card', className)}>{children}</div>
   );
 }

@@ -1,0 +1,6 @@
+A12 storefront/home agent — complete.
+Scope: layout chrome (Header, Footer), homepage, /deals, /about, /contact, /faq, /shipping, /privacy, /terms.
+Theme: DESIGN_BRIEF warm editorial (paper/ink/forest/accent #E4572E), Fraunces + Space Grotesk, no gradients, no indigo.
+Checks: npm install ok; npx tsc --noEmit clean; isolated production build green (NOVAMART_DIST=.next-a12, BUILD_ID written, all 7 pages + homepage prerendered and content-verified); banned-copy/indigo/gradient scan clean.
+Note: canonical .next build collides with parallel agents running `next build` simultaneously — used the NOVAMART_DIST hook already present in next.config.js for isolation.
+Done: 2026-09-21 23:45 PKT

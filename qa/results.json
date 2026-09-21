@@ -1,0 +1,19 @@
+{
+  "startedAt": "2026-09-21T18:26:52.430Z",
+  "finishedAt": "2026-09-21T18:27:12.975Z",
+  "base": "http://localhost:3100",
+  "summary": {
+    "routesChecked": 0,
+    "routesOk": 0,
+    "flowsRun": 1,
+    "flowsOk": 0
+  },
+  "routes": [],
+  "flows": [
+    {
+      "name": "script: completed without fatal error",
+      "ok": false,
+      "detail": "TypeError: Cannot read properties of undefined (reading 'launch')"
+    }
+  ]
+}

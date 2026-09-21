@@ -98,26 +98,28 @@ export default function SettingsPage() {
   return (
     <div className="max-w-2xl">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Settings</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          Settings
+        </h1>
+        <p className="mt-1 text-sm text-muted">
           Keep your profile details and password up to date.
         </p>
       </div>
 
       {/* Profile */}
       <Card className="p-5 sm:p-6">
-        <h2 className="text-base font-semibold text-gray-900">Profile</h2>
+        <h2 className="font-display text-lg font-semibold text-ink">Profile</h2>
         <form onSubmit={handleProfileSubmit} noValidate className="mt-4 space-y-4">
           {profileErrors.form && (
             <div
               role="alert"
-              className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+              className="rounded-xl border border-[#E26D5A]/30 bg-[#E26D5A]/10 px-4 py-3 text-sm text-[#A33B2A]"
             >
               {profileErrors.form}
             </div>
           )}
           {profileSaved && (
-            <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div className="flex items-center gap-2 rounded-xl border border-[#7FB069]/40 bg-[#7FB069]/15 px-4 py-3 text-sm text-[#2F5D34]">
               <CheckCircle2 className="h-4 w-4" /> Your name has been updated.
             </div>
           )}
@@ -130,10 +132,10 @@ export default function SettingsPage() {
             error={profileErrors.name}
           />
           <div>
-            <span className="mb-1 block text-sm font-medium text-gray-700">Email address</span>
-            <p className="rounded-lg bg-gray-50 px-4 py-2.5 text-sm text-gray-500">{user.email}</p>
-            <p className="mt-1 text-xs text-gray-500">
-              Your email address can&apos;t be changed on a demo account.
+            <span className="mb-1 block text-sm font-medium text-ink/80">Email address</span>
+            <p className="rounded-xl bg-sand px-4 py-2.5 text-sm text-muted">{user.email}</p>
+            <p className="mt-1 text-xs text-muted">
+              Email addresses can&apos;t be changed on a demo account.
             </p>
           </div>
           <Button type="submit" variant="primary" disabled={profileLoading}>
@@ -144,18 +146,18 @@ export default function SettingsPage() {
 
       {/* Password */}
       <Card className="mt-6 p-5 sm:p-6">
-        <h2 className="text-base font-semibold text-gray-900">Change password</h2>
+        <h2 className="font-display text-lg font-semibold text-ink">Change password</h2>
         <form onSubmit={handlePasswordSubmit} noValidate className="mt-4 space-y-4">
           {pwErrors.form && (
             <div
               role="alert"
-              className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-700"
+              className="rounded-xl border border-[#E26D5A]/30 bg-[#E26D5A]/10 px-4 py-3 text-sm text-[#A33B2A]"
             >
               {pwErrors.form}
             </div>
           )}
           {pwSaved && (
-            <div className="flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
+            <div className="flex items-center gap-2 rounded-xl border border-[#7FB069]/40 bg-[#7FB069]/15 px-4 py-3 text-sm text-[#2F5D34]">
               <CheckCircle2 className="h-4 w-4" /> Your password has been changed.
             </div>
           )}
@@ -194,12 +196,12 @@ export default function SettingsPage() {
       </Card>
 
       {/* Danger zone */}
-      <Card className="mt-6 border-rose-200 p-5 sm:p-6">
+      <Card className="mt-6 border-[#E26D5A]/40 p-5 sm:p-6">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-rose-600" />
+          <AlertTriangle className="mt-0.5 h-5 w-5 shrink-0 text-[#E26D5A]" />
           <div>
-            <h2 className="text-base font-semibold text-gray-900">Danger zone</h2>
-            <p className="mt-2 text-sm leading-relaxed text-gray-600">
+            <h2 className="font-display text-lg font-semibold text-ink">Danger zone</h2>
+            <p className="mt-2 text-sm leading-relaxed text-muted">
               Account deletion isn&apos;t available in this demo storefront — all NovaMart data
               lives only in your browser&apos;s local storage. To start over, clear this
               site&apos;s stored data from your browser settings, which removes your account,

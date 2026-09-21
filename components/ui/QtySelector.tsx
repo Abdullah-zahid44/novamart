@@ -15,8 +15,8 @@ export interface QtySelectorProps {
 export function QtySelector({ value, onChange, min = 1, max = 99, small = false }: QtySelectorProps) {
   const clamp = (v: number) => Math.min(max, Math.max(min, v));
   const btn = cn(
-    'flex items-center justify-center rounded-lg border border-slate-300 text-slate-600 transition-colors',
-    'hover:border-slate-400 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40',
+    'flex items-center justify-center rounded-full border border-line bg-card text-muted transition-colors',
+    'hover:border-ink/30 hover:text-ink disabled:cursor-not-allowed disabled:opacity-40',
     small ? 'h-7 w-7' : 'h-9 w-9',
   );
   return (
@@ -32,7 +32,7 @@ export function QtySelector({ value, onChange, min = 1, max = 99, small = false 
       </button>
       <span
         aria-live="polite"
-        className={cn('min-w-8 text-center font-medium tabular-nums', small ? 'text-sm' : 'text-base')}
+        className={cn('tnum min-w-8 text-center font-medium text-ink', small ? 'text-sm' : 'text-base')}
       >
         {value}
       </span>

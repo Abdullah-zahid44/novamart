@@ -1,95 +1,110 @@
 'use client';
 
 import { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Plus } from 'lucide-react';
+import { EditorialHeader } from '@/components/home/EditorialHeader';
+import { QuoteBlock } from '@/components/home/EditorialHeader';
+import { Reveal } from '@/components/ui';
+import { cn } from '@/lib/cn';
 
 const FAQS = [
   {
-    q: 'How long does shipping take?',
-    a: 'Standard shipping arrives in 3–5 business days within the contiguous US. Express (1–2 business days) is available at checkout for most items. Every order includes live tracking from our warehouse to your door.',
+    q: 'How fast is shipping, really?',
+    a: 'Orders leave our packing room within 24 hours. Standard takes 3–5 business days ($6.99, free over $75); express takes 1–2 business days ($12.99). Every parcel is tracked door to door.',
   },
   {
-    q: 'What is the return policy?',
-    a: 'You have 30 days from delivery to return any unused item in its original packaging for a full refund — no questions, no restocking fees. Start a return from your account page or by emailing support, and we will send a prepaid label.',
+    q: 'What is your return policy?',
+    a: 'Thirty days, no questions, prepaid label. If you changed your mind, that is reason enough. Refunds land within 2–3 business days of the return arriving.',
   },
   {
     q: 'How do I track my order?',
-    a: 'As soon as your order ships you will get a tracking link by email. You can also paste your order number and email on our Track page at any time to see the latest status.',
+    a: 'Head to the Track page and enter your order number (it looks like NM-102341). You will see every step from confirmed to delivered.',
   },
   {
-    q: 'Which payment methods do you accept?',
-    a: 'We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover) through our secure encrypted checkout. This demo store does not process real payments.',
+    q: 'Do you have discount codes?',
+    a: 'New here? WELCOME10 takes 10% off orders over $50. We also run weekly deals every Friday — that is where the serious discounts live.',
   },
   {
-    q: 'Can I use a coupon code?',
-    a: 'Yes — enter your code at checkout and the discount applies instantly. Codes have minimum order values and expiry dates, which are shown next to the code. Only one coupon per order.',
+    q: 'Is the checkout real? Will my card be charged?',
+    a: 'No. NovaMart is a demo storefront — the payment step is clearly labeled as a demo and nothing is ever charged. Your cart, orders and account live in your own browser.',
   },
   {
     q: 'Do you ship internationally?',
-    a: 'Currently we ship within the United States. International shipping to Canada, the UK and the EU is on our roadmap — join the newsletter and we will announce it there first.',
+    a: 'Not yet. We ship within the US for now, and we would rather do one country well than five badly. International shipping is on the roadmap.',
   },
   {
-    q: 'Do I need an account to order?',
-    a: 'No, guest checkout is fully supported. Creating a free account just makes life easier: faster checkout, order history, saved addresses and a wishlist that syncs across devices.',
+    q: 'What if my item arrives damaged or wrong?',
+    a: 'Send a photo to support@novamart.com and a replacement ships the same day — no return needed for damaged goods. Mistakes are on us, and we act like it.',
   },
   {
-    q: 'Are your products genuine?',
-    a: 'Absolutely. We buy directly from brands and authorized distributors — never grey-market stock. Every product carries its full manufacturer warranty, and our buying team tests samples before listing.',
+    q: 'Is the stock count accurate?',
+    a: 'Yes. Inventory updates the moment an order is placed, so if the page says it is in stock, it is yours.',
   },
 ];
 
+function Item({ q, a, open, onToggle }: { q: string; a: string; open: boolean; onToggle: () => void }) {
+  return (
+    <div className="overflow-hidden rounded-[14px] border border-line bg-card">
+      <button
+        type="button"
+        onClick={onToggle}
+        aria-expanded={open}
+        className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
+      >
+        <span className="font-display text-lg font-semibold text-ink">{q}</span>
+        <span
+          className={cn(
+            'flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-sand text-ink transition-transform duration-300',
+            open && 'rotate-45 bg-accent text-white',
+          )}
+        >
+          <Plus size={16} aria-hidden />
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.28, ease: 'easeOut' }}
+          >
+            <p className="px-6 pb-6 leading-relaxed text-muted">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export default function FaqPage() {
-  const [open, setOpen] = useState<number | null>(0);
+  const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-      <p className="text-xs font-bold tracking-widest text-indigo-600 uppercase">
-        Help center
-      </p>
-      <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl">
-        Frequently asked questions
-      </h1>
-      <p className="mt-3 text-slate-600">
-        Quick answers to the things shoppers ask us most. Still stuck?{' '}
-        <a href="/contact" className="font-medium text-indigo-600 hover:underline">
-          Contact us
-        </a>
-        .
-      </p>
-
-      <div className="mt-10 space-y-3">
-        {FAQS.map((f, i) => {
-          const isOpen = open === i;
-          return (
-            <div
-              key={f.q}
-              className="overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200"
-            >
-              <button
-                type="button"
-                onClick={() => setOpen(isOpen ? null : i)}
-                aria-expanded={isOpen}
-                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left transition hover:bg-slate-50"
-              >
-                <span className="text-sm font-semibold text-slate-900 sm:text-base">
-                  {f.q}
-                </span>
-                <ChevronDown
-                  className={`h-5 w-5 shrink-0 text-slate-400 transition-transform ${
-                    isOpen ? 'rotate-180' : ''
-                  }`}
-                  aria-hidden="true"
-                />
-              </button>
-              {isOpen && (
-                <div className="border-t border-slate-100 px-5 py-4">
-                  <p className="text-sm leading-relaxed text-slate-600">{f.a}</p>
-                </div>
-              )}
-            </div>
-          );
-        })}
+    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
+      <EditorialHeader
+        kicker="FAQ"
+        title="Asked, answered."
+        lede="The things people actually ask us, answered the way we would answer them over the counter."
+      />
+      <div className="mx-auto mt-12 max-w-3xl space-y-3">
+        {FAQS.map((f, i) => (
+          <Reveal key={f.q} delay={Math.min(i * 0.04, 0.25)}>
+            <Item
+              q={f.q}
+              a={f.a}
+              open={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? null : i)}
+            />
+          </Reveal>
+        ))}
       </div>
-    </main>
+      <QuoteBlock
+        className="mx-auto mt-14 max-w-3xl"
+        quote="If your question isn't here, ask us. We'll answer — and probably add it to this page."
+        cite="The support desk"
+      />
+    </div>
   );
 }

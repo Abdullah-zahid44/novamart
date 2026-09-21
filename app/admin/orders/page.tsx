@@ -2,12 +2,24 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { PackageSearch, Search } from 'lucide-react';
+import { ArrowRight, PackageSearch } from 'lucide-react';
 import { getOrders } from '@/lib/store';
 import { currency, formatDate, orderStatusMeta } from '@/lib/format';
-import { Badge, Card, EmptyState, Input, Select } from '@/components/ui';
 import type { Order, OrderStatus } from '@/lib/types';
 import { ensureDemoOrders } from './seed';
+import {
+  EmptyBox,
+  Mono,
+  PageHeader,
+  Panel,
+  SearchInput,
+  StatusPill,
+  inputCls,
+  rowCls,
+  tdCls,
+  thCls,
+  theadCls,
+} from '../_ui';
 
 const ALL_STATUSES: OrderStatus[] = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'refunded'];
 
@@ -22,10 +34,11 @@ export default function AdminOrdersPage() {
 
   useEffect(() => {
     ensureDemoOrders();
-    const all = getOrders()
-      .slice()
-      .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt));
-    setOrders(all);
+    setOrders(
+      getOrders()
+        .slice()
+        .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    );
   }, []);
 
   const filtered = useMemo(() => {
@@ -41,110 +54,126 @@ export default function AdminOrdersPage() {
     });
   }, [orders, status, query]);
 
+  const counts = useMemo(() => {
+    const m = new Map<OrderStatus, number>();
+    for (const o of orders) m.set(o.status, (m.get(o.status) ?? 0) + 1);
+    return m;
+  }, [orders]);
+
   const revenue = useMemo(() => filtered.reduce((s, o) => s + o.total, 0), [filtered]);
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Orders</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            {filtered.length} of {orders.length} orders
-            {filtered.length > 0 && ` · ${currency(revenue)} total value`}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        title="Orders"
+        sub={`${filtered.length} of ${orders.length} orders${
+          filtered.length > 0 ? ` · ${currency(revenue)} total value` : ''
+        }`}
+      />
 
-      <Card className="p-4">
+      <Panel className="p-4">
         <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="relative flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-            <Input
-              placeholder="Search by order number, name or email…"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="pl-9"
-              aria-label="Search orders"
-            />
-          </div>
-          <Select
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            placeholder="Search by order number, name or email…"
+            ariaLabel="Search orders"
+            className="flex-1"
+          />
+          <select
             value={status}
             onChange={(e) => setStatus(e.target.value as 'all' | OrderStatus)}
-            options={[
-              { value: 'all', label: 'All statuses' },
-              ...ALL_STATUSES.map((s) => ({ value: s, label: orderStatusMeta[s].label })),
-            ]}
-            className="sm:w-52"
+            className={`${inputCls} sm:w-60`}
             aria-label="Filter by status"
-          />
+          >
+            <option value="all">All statuses ({orders.length})</option>
+            {ALL_STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {orderStatusMeta[s].label} ({counts.get(s) ?? 0})
+              </option>
+            ))}
+          </select>
         </div>
-      </Card>
+      </Panel>
 
       {filtered.length === 0 ? (
-        <EmptyState
+        <EmptyBox
           icon={PackageSearch}
-          title={orders.length === 0 ? 'No orders yet' : 'No orders match your filters'}
+          title={orders.length === 0 ? 'No orders yet' : 'No orders match these filters'}
           hint={
             orders.length === 0
-              ? 'Orders placed through the storefront checkout will appear here.'
+              ? 'Orders placed through the storefront checkout will land here.'
               : 'Try a different search term or clear the status filter.'
           }
-          action={undefined}
         />
       ) : (
-        <Card className="overflow-hidden">
+        <Panel className="overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[760px] text-left text-sm">
+            <table className="w-full min-w-[820px] text-left text-sm">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                  <th scope="col" className="px-4 py-3 font-semibold">Order</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">Date</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">Customer</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">Items</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">Payment</th>
-                  <th scope="col" className="px-4 py-3 text-right font-semibold">Total</th>
-                  <th scope="col" className="px-4 py-3 font-semibold">Status</th>
+                <tr className={theadCls}>
+                  <th scope="col" className={thCls}>Order</th>
+                  <th scope="col" className={thCls}>Date</th>
+                  <th scope="col" className={thCls}>Customer</th>
+                  <th scope="col" className={thCls}>Items</th>
+                  <th scope="col" className={thCls}>Payment</th>
+                  <th scope="col" className={`${thCls} text-right`}>Total</th>
+                  <th scope="col" className={thCls}>Status</th>
+                  <th scope="col" className={thCls}>
+                    <span className="sr-only">Open</span>
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-100">
-                {filtered.map((o) => {
-                  const meta = orderStatusMeta[o.status];
-                  return (
-                    <tr key={o.id} className="transition-colors hover:bg-slate-50">
-                      <td className="px-4 py-3">
-                        <Link
-                          href={`/admin/orders/${o.id}`}
-                          className="font-semibold text-indigo-600 hover:text-indigo-700 hover:underline"
-                        >
-                          #{o.number}
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-slate-600">{formatDate(o.createdAt)}</td>
-                      <td className="px-4 py-3">
-                        <div className="font-medium text-slate-900">{o.name}</div>
-                        <div className="text-xs text-slate-500">{o.email}</div>
-                      </td>
-                      <td className="px-4 py-3 text-slate-600">{itemCount(o)}</td>
-                      <td className="whitespace-nowrap px-4 py-3 text-slate-600">
-                        {o.paymentMethod}
-                        {o.paymentLast4 ? ` ···· ${o.paymentLast4}` : ''}
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-right font-semibold text-slate-900">
-                        {currency(o.total)}
-                      </td>
-                      <td className="px-4 py-3">
-                        <Badge>
-                          <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${meta.dot}`} aria-hidden="true" />
-                          {meta.label}
-                        </Badge>
-                      </td>
-                    </tr>
-                  );
-                })}
+              <tbody>
+                {filtered.map((o) => (
+                  <tr key={o.id} className={rowCls}>
+                    <td className={tdCls}>
+                      <Link
+                        href={`/admin/orders/${o.id}`}
+                        className="font-semibold text-[#E4572E] hover:underline"
+                      >
+                        #{o.number}
+                      </Link>
+                    </td>
+                    <td className={`${tdCls} whitespace-nowrap text-[#A39A89]`}>
+                      {formatDate(o.createdAt)}
+                    </td>
+                    <td className={tdCls}>
+                      <p className="font-medium text-[#F2EBDD]">{o.name}</p>
+                      <p className="text-xs text-[#A39A89]">{o.email}</p>
+                    </td>
+                    <td className={`${tdCls} tabular-nums text-[#A39A89]`}>{itemCount(o)}</td>
+                    <td className={`${tdCls} whitespace-nowrap text-[#A39A89]`}>
+                      {o.paymentMethod}
+                      {o.paymentLast4 ? (
+                        <span className="text-[#A39A89]/70"> ···· {o.paymentLast4}</span>
+                      ) : null}
+                    </td>
+                    <td className={`${tdCls} whitespace-nowrap text-right font-semibold tabular-nums text-[#F2EBDD]`}>
+                      {currency(o.total)}
+                    </td>
+                    <td className={tdCls}>
+                      <StatusPill status={o.status} />
+                    </td>
+                    <td className={tdCls}>
+                      <Link
+                        href={`/admin/orders/${o.id}`}
+                        aria-label={`Open order ${o.number}`}
+                        className="inline-flex items-center gap-1 rounded-full border border-[#2E2820] px-3 py-1.5 text-xs font-semibold text-[#A39A89] transition hover:border-[#E4572E] hover:text-[#E4572E]"
+                      >
+                        Open <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
-        </Card>
+          <p className="border-t border-[#2E2820] px-4 py-3 text-xs text-[#A39A89]">
+            <Mono>Demo data</Mono> — seeded orders are marked internally and never overwrite real
+            checkout orders.
+          </p>
+        </Panel>
       )}
     </div>
   );

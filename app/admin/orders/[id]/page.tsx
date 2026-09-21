@@ -1,19 +1,25 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { ArrowLeft, PackageSearch } from 'lucide-react';
+import { ArrowLeft, ArrowRight, MapPin, PackageSearch, Receipt, User } from 'lucide-react';
 import { getOrderById, updateOrder } from '@/lib/store';
 import { currency, formatDate, orderStatusMeta } from '@/lib/format';
-import { Badge, Button, Card, EmptyState } from '@/components/ui';
 import type { Order, OrderStatus } from '@/lib/types';
 import { ensureDemoOrders } from '../seed';
+import {
+  Btn,
+  ConfirmDialog,
+  EmptyBox,
+  Panel,
+  SERIF,
+  StatusPill,
+} from '../../_ui';
 
 interface StatusAction {
   label: string;
   to: OrderStatus;
-  variant: 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
+  variant: 'primary' | 'secondary' | 'danger';
   needsConfirm: boolean;
   note: string;
   confirmTitle: string;
@@ -24,7 +30,7 @@ const ACTIONS: StatusAction[] = [
   {
     label: 'Confirm',
     to: 'confirmed',
-    variant: 'primary',
+    variant: 'secondary',
     needsConfirm: false,
     note: 'Order confirmed by admin. Preparing for shipment.',
     confirmTitle: 'Confirm this order?',
@@ -33,7 +39,7 @@ const ACTIONS: StatusAction[] = [
   {
     label: 'Ship',
     to: 'shipped',
-    variant: 'primary',
+    variant: 'secondary',
     needsConfirm: false,
     note: 'Order shipped by admin.',
     confirmTitle: 'Mark as shipped?',
@@ -42,7 +48,7 @@ const ACTIONS: StatusAction[] = [
   {
     label: 'Deliver',
     to: 'delivered',
-    variant: 'primary',
+    variant: 'secondary',
     needsConfirm: false,
     note: 'Order marked as delivered by admin.',
     confirmTitle: 'Mark as delivered?',
@@ -60,13 +66,20 @@ const ACTIONS: StatusAction[] = [
   {
     label: 'Refund',
     to: 'refunded',
-    variant: 'outline',
+    variant: 'danger',
     needsConfirm: true,
     note: 'Order refunded by admin.',
     confirmTitle: 'Refund this order?',
     confirmBody: 'This will issue a full refund to the original payment method. This cannot be undone.',
   },
 ];
+
+/** The happy-path next step for each status — powers the "Advance status" button. */
+const NEXT: Partial<Record<OrderStatus, StatusAction>> = {
+  pending: ACTIONS[0],
+  confirmed: ACTIONS[1],
+  shipped: ACTIONS[2],
+};
 
 const ALLOWED: Record<OrderStatus, OrderStatus[]> = {
   pending: ['confirmed', 'cancelled'],
@@ -77,10 +90,17 @@ const ALLOWED: Record<OrderStatus, OrderStatus[]> = {
   refunded: [],
 };
 
-const TERMINAL: OrderStatus[] = ['cancelled', 'refunded'];
-
 function formatTime(iso: string): string {
   return new Date(iso).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+}
+
+function SectionHead({ icon: Icon, title }: { icon: typeof User; title: string }) {
+  return (
+    <div className="flex items-center gap-2">
+      <Icon className="h-4 w-4 text-[#E4572E]" />
+      <h2 className="text-[15px] font-semibold text-[#F2EBDD]">{title}</h2>
+    </div>
+  );
 }
 
 export default function AdminOrderDetailPage({ params }: { params: { id: string } }) {
@@ -94,19 +114,37 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
     setLoaded(true);
   }, [params.id]);
 
+  const applyStatus = (action: StatusAction) => {
+    if (!order) return;
+    const entry = { status: action.to, at: new Date().toISOString(), note: action.note };
+    const timeline = [...order.timeline, entry];
+    updateOrder(order.id, { status: action.to, timeline });
+    setOrder({ ...order, status: action.to, timeline });
+    setPendingAction(null);
+  };
+
+  const timeline = useMemo(() => (order ? order.timeline.slice().reverse() : []), [order]);
+
   if (!loaded) {
-    return <p className="text-sm text-slate-500">Loading order…</p>;
+    return (
+      <div className="space-y-6">
+        <div className="h-8 w-56 animate-pulse rounded bg-[#1E1A14]" />
+        <div className="h-64 animate-pulse rounded-[14px] bg-[#1E1A14]" />
+      </div>
+    );
   }
 
   if (!order) {
     return (
-      <EmptyState
+      <EmptyBox
         icon={PackageSearch}
         title="Order not found"
         hint="This order may have been deleted, or the link is incorrect."
         action={
           <Link href="/admin/orders">
-            <Button variant="secondary">Back to orders</Button>
+            <Btn variant="secondary">
+              <ArrowLeft className="h-4 w-4" /> Back to orders
+            </Btn>
           </Link>
         }
       />
@@ -114,32 +152,15 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
   }
 
   const meta = orderStatusMeta[order.status];
-  const isTerminal = TERMINAL.includes(order.status);
+  const isTerminal = order.status === 'cancelled' || order.status === 'refunded';
   const itemCount = order.items.reduce((n, i) => n + i.qty, 0);
-
-  const applyStatus = (action: StatusAction) => {
-    const entry = { status: action.to, at: new Date().toISOString(), note: action.note };
-    const updated: Order = { ...order, status: action.to, timeline: [...order.timeline, entry] };
-    updateOrder(order.id, { status: action.to, timeline: updated.timeline });
-    setOrder(updated);
-    setPendingAction(null);
-  };
-
-  const handleAction = (action: StatusAction) => {
-    if (action.needsConfirm) {
-      setPendingAction(action);
-    } else {
-      applyStatus(action);
-    }
-  };
-
-  const timeline = order.timeline.slice().reverse();
+  const nextAction = NEXT[order.status];
 
   return (
     <div className="space-y-6">
       <Link
         href="/admin/orders"
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-indigo-600"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-[#A39A89] transition hover:text-[#E4572E]"
       >
         <ArrowLeft className="h-4 w-4" /> Back to orders
       </Link>
@@ -147,28 +168,32 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-3">
-            <h1 className="text-2xl font-bold text-slate-900">Order #{order.number}</h1>
-            <Badge>
-              <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${meta.dot}`} aria-hidden="true" />
-              {meta.label}
-            </Badge>
+            <h1 className={`text-3xl font-semibold tracking-tight text-[#F2EBDD] ${SERIF}`}>
+              Order <span className="font-mono text-[0.85em]">#{order.number}</span>
+            </h1>
+            <StatusPill status={order.status} />
           </div>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1.5 text-sm text-[#A39A89]">
             Placed {formatDate(order.createdAt)} · {itemCount} item{itemCount === 1 ? '' : 's'} ·{' '}
-            {currency(order.total)}
+            <span className="font-semibold text-[#F2EBDD]">{currency(order.total)}</span>
           </p>
         </div>
+        {nextAction && !isTerminal && (
+          <Btn onClick={() => applyStatus(nextAction)}>
+            Advance status: {nextAction.label} <ArrowRight className="h-4 w-4" />
+          </Btn>
+        )}
       </div>
 
-      <Card className="p-4 sm:p-5">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Order actions</h2>
+      <Panel className="p-5">
+        <SectionHead icon={Receipt} title="Fulfillment" />
         {isTerminal ? (
-          <p className="mt-3 rounded-lg bg-slate-100 px-4 py-3 text-sm text-slate-600">
-            This order is <strong className="font-semibold">{meta.label.toLowerCase()}</strong>. Terminal
-            orders cannot be changed — no further actions are available.
+          <p className="mt-3 rounded-lg border border-[#2E2820] bg-[#14110D] px-4 py-3 text-sm text-[#A39A89]">
+            This order is <strong className="font-semibold text-[#F2EBDD]">{meta.label.toLowerCase()}</strong> —
+            terminal orders can&apos;t be moved. The full history is below.
           </p>
         ) : (
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-[#A39A89]">
             Move the order through its lifecycle. Cancellations and refunds ask for confirmation first.
           </p>
         )}
@@ -176,227 +201,190 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
           {ACTIONS.map((action) => {
             const allowed = ALLOWED[order.status].includes(action.to) && !isTerminal;
             return (
-              <Button
+              <Btn
                 key={action.label}
                 variant={action.variant}
                 size="sm"
                 disabled={!allowed}
-                onClick={() => handleAction(action)}
+                onClick={() =>
+                  action.needsConfirm ? setPendingAction(action) : applyStatus(action)
+                }
                 title={allowed ? action.confirmTitle : `Not available while ${meta.label.toLowerCase()}`}
               >
                 {action.label}
-              </Button>
+              </Btn>
             );
           })}
         </div>
-      </Card>
+      </Panel>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-base font-semibold text-slate-900">Items</h2>
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full min-w-[520px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-500">
-                    <th scope="col" className="pb-2 pr-4 font-semibold">Product</th>
-                    <th scope="col" className="px-2 pb-2 font-semibold">Qty</th>
-                    <th scope="col" className="px-2 pb-2 text-right font-semibold">Price</th>
-                    <th scope="col" className="py-2 pl-2 text-right font-semibold">Line total</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-100">
-                  {order.items.map((item, i) => (
-                    <tr key={`${item.productId}-${i}`}>
-                      <td className="py-3 pr-4">
-                        <div className="flex items-center gap-3">
-                          <Image
-                            src={item.image}
-                            alt={item.name}
-                            width={56}
-                            height={56}
-                            className="h-14 w-14 rounded-lg object-cover"
-                          />
-                          <div>
-                            <div className="font-medium text-slate-900">{item.name}</div>
-                            {(item.color || item.size) && (
-                              <div className="text-xs text-slate-500">
-                                {[item.color, item.size].filter(Boolean).join(' · ')}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-2 py-3 text-slate-600">× {item.qty}</td>
-                      <td className="px-2 py-3 text-right text-slate-600">{currency(item.price)}</td>
-                      <td className="py-3 pl-2 text-right font-semibold text-slate-900">
-                        {currency(item.price * item.qty)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
+          <Panel className="p-5 sm:p-6">
+            <SectionHead icon={PackageSearch} title={`Items (${itemCount})`} />
+            <ul className="mt-4 divide-y divide-[#2E2820]/60">
+              {order.items.map((item, i) => (
+                <li key={`${item.productId}-${i}`} className="flex items-center gap-4 py-3.5 first:pt-0 last:pb-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="h-14 w-14 shrink-0 rounded-lg border border-[#2E2820] object-cover"
+                    loading="lazy"
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium text-[#F2EBDD]">{item.name}</p>
+                    {(item.color || item.size) && (
+                      <p className="text-xs text-[#A39A89]">
+                        {[item.color, item.size].filter(Boolean).join(' · ')}
+                      </p>
+                    )}
+                  </div>
+                  <p className="shrink-0 text-sm tabular-nums text-[#A39A89]">× {item.qty}</p>
+                  <p className="w-24 shrink-0 text-right text-sm font-semibold tabular-nums text-[#F2EBDD]">
+                    {currency(item.price * item.qty)}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Panel>
 
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-base font-semibold text-slate-900">Status timeline</h2>
-            <ol className="mt-4 space-y-0">
+          <Panel className="p-5 sm:p-6">
+            <SectionHead icon={ArrowRight} title="Status timeline" />
+            <ol className="mt-5">
               {timeline.map((entry, i) => {
                 const m = orderStatusMeta[entry.status];
                 const latest = i === 0;
                 return (
                   <li key={`${entry.status}-${entry.at}-${i}`} className="relative flex gap-4 pb-6 last:pb-0">
                     {i < timeline.length - 1 && (
-                      <span className="absolute left-[7px] top-5 h-full w-px bg-slate-200" aria-hidden="true" />
+                      <span className="absolute left-[6px] top-5 h-full w-px bg-[#2E2820]" aria-hidden="true" />
                     )}
                     <span
-                      className={`mt-1 h-[15px] w-[15px] shrink-0 rounded-full border-2 border-white shadow ${
-                        latest ? m.dot : 'bg-slate-300'
+                      className={`mt-1 h-3.5 w-3.5 shrink-0 rounded-full border-2 border-[#1E1A14] ${
+                        latest ? 'bg-[#E4572E]' : 'bg-[#2E2820]'
                       }`}
                       aria-hidden="true"
                     />
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className={`text-sm font-semibold ${latest ? 'text-slate-900' : 'text-slate-600'}`}>
+                        <span className={`text-sm font-semibold ${latest ? 'text-[#F2EBDD]' : 'text-[#A39A89]'}`}>
                           {m.label}
                         </span>
                         {latest && (
-                          <span className="rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700">
+                          <span className="rounded-full border border-[#E4572E]/30 bg-[#E4572E]/10 px-2 py-0.5 text-[11px] font-semibold text-[#E4572E]">
                             Current
                           </span>
                         )}
                       </div>
-                      <p className="mt-0.5 text-xs text-slate-500">
+                      <p className="mt-0.5 text-xs text-[#A39A89]">
                         {formatDate(entry.at)} · {formatTime(entry.at)}
                       </p>
-                      {entry.note && <p className="mt-1 text-sm text-slate-600">{entry.note}</p>}
+                      {entry.note && <p className="mt-1 text-sm text-[#A39A89]">{entry.note}</p>}
                     </div>
                   </li>
                 );
               })}
             </ol>
-          </Card>
+          </Panel>
         </div>
 
         <div className="space-y-6">
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-base font-semibold text-slate-900">Customer</h2>
-            <dl className="mt-3 space-y-1.5 text-sm">
-              <div>
-                <dt className="sr-only">Name</dt>
-                <dd className="font-medium text-slate-900">{order.name}</dd>
+          <Panel className="p-5">
+            <SectionHead icon={User} title="Customer" />
+            <p className="mt-3 font-medium text-[#F2EBDD]">{order.name}</p>
+            <p className="text-sm text-[#A39A89]">{order.email}</p>
+            <div className="mt-4 border-t border-[#2E2820] pt-4">
+              <div className="flex items-center gap-2">
+                <MapPin className="h-4 w-4 text-[#E4572E]" />
+                <h3 className="text-[13px] font-semibold text-[#F2EBDD]">Shipping address</h3>
               </div>
-              <div>
-                <dt className="sr-only">Email</dt>
-                <dd className="text-slate-600">{order.email}</dd>
-              </div>
-            </dl>
-            <h3 className="mt-5 text-sm font-semibold text-slate-900">Shipping address</h3>
-            <address className="mt-2 text-sm not-italic leading-relaxed text-slate-600">
-              {order.address.fullName}
-              <br />
-              {order.address.street}
-              <br />
-              {order.address.city}, {order.address.postal}
-              <br />
-              {order.address.country}
-              <br />
-              {order.address.phone}
-            </address>
-          </Card>
+              <address className="mt-2 text-sm not-italic leading-relaxed text-[#A39A89]">
+                {order.address.fullName}
+                <br />
+                {order.address.street}
+                <br />
+                {order.address.city}, {order.address.postal}
+                <br />
+                {order.address.country}
+                <br />
+                {order.address.phone}
+              </address>
+            </div>
+          </Panel>
 
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-base font-semibold text-slate-900">Payment</h2>
+          <Panel className="p-5">
+            <SectionHead icon={Receipt} title="Payment & totals" />
             <dl className="mt-3 space-y-2 text-sm">
               <div className="flex justify-between gap-4">
-                <dt className="text-slate-500">Method</dt>
-                <dd className="font-medium text-slate-900">{order.paymentMethod}</dd>
+                <dt className="text-[#A39A89]">Method</dt>
+                <dd className="font-medium text-[#F2EBDD]">{order.paymentMethod}</dd>
               </div>
               {order.paymentLast4 && (
                 <div className="flex justify-between gap-4">
-                  <dt className="text-slate-500">Card</dt>
-                  <dd className="font-medium text-slate-900">···· {order.paymentLast4}</dd>
+                  <dt className="text-[#A39A89]">Card</dt>
+                  <dd className="font-mono text-[#F2EBDD]">···· {order.paymentLast4}</dd>
                 </div>
               )}
               {order.couponCode && (
                 <div className="flex justify-between gap-4">
-                  <dt className="text-slate-500">Coupon</dt>
-                  <dd className="font-medium text-slate-900">{order.couponCode}</dd>
+                  <dt className="text-[#A39A89]">Coupon</dt>
+                  <dd className="font-mono font-semibold text-[#E0A458]">{order.couponCode}</dd>
                 </div>
               )}
-            </dl>
-            <p className="mt-3 rounded-lg bg-slate-50 px-3 py-2 text-xs text-slate-500">
-              Demo store — no real payment was processed.
-            </p>
-          </Card>
-
-          <Card className="p-4 sm:p-6">
-            <h2 className="text-base font-semibold text-slate-900">Totals</h2>
-            <dl className="mt-3 space-y-2 text-sm">
-              <div className="flex justify-between gap-4">
-                <dt className="text-slate-500">Subtotal</dt>
-                <dd className="text-slate-900">{currency(order.subtotal)}</dd>
+              <div className="flex justify-between gap-4 border-t border-[#2E2820] pt-2.5">
+                <dt className="text-[#A39A89]">Subtotal</dt>
+                <dd className="tabular-nums text-[#F2EBDD]">{currency(order.subtotal)}</dd>
               </div>
               {order.discount > 0 && (
                 <div className="flex justify-between gap-4">
-                  <dt className="text-slate-500">Discount</dt>
-                  <dd className="font-medium text-emerald-600">−{currency(order.discount)}</dd>
+                  <dt className="text-[#A39A89]">Discount</dt>
+                  <dd className="font-medium tabular-nums text-[#7FB069]">−{currency(order.discount)}</dd>
                 </div>
               )}
               <div className="flex justify-between gap-4">
-                <dt className="text-slate-500">Shipping</dt>
-                <dd className="text-slate-900">
+                <dt className="text-[#A39A89]">Shipping</dt>
+                <dd className="tabular-nums text-[#F2EBDD]">
                   {order.shipping === 0 ? 'Free' : currency(order.shipping)}
                 </dd>
               </div>
               <div className="flex justify-between gap-4">
-                <dt className="text-slate-500">Tax</dt>
-                <dd className="text-slate-900">{currency(order.tax)}</dd>
+                <dt className="text-[#A39A89]">Tax</dt>
+                <dd className="tabular-nums text-[#F2EBDD]">{currency(order.tax)}</dd>
               </div>
-              <div className="flex justify-between gap-4 border-t border-slate-200 pt-3">
-                <dt className="font-semibold text-slate-900">Total</dt>
-                <dd className="font-bold text-slate-900">{currency(order.total)}</dd>
+              <div className="flex justify-between gap-4 border-t border-[#2E2820] pt-2.5">
+                <dt className="font-semibold text-[#F2EBDD]">Total</dt>
+                <dd className="font-bold tabular-nums text-[#F2EBDD]">{currency(order.total)}</dd>
               </div>
             </dl>
-          </Card>
+            <p className="mt-4 rounded-lg border border-[#2E2820] bg-[#14110D] px-3 py-2.5 text-xs leading-relaxed text-[#A39A89]">
+              Demo store — no real payment was processed for this order.
+            </p>
+          </Panel>
         </div>
       </div>
 
       {pendingAction && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4"
-          onClick={() => setPendingAction(null)}
-          role="presentation"
-        >
-          <div
-            className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="confirm-dialog-title"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3 id="confirm-dialog-title" className="text-lg font-semibold text-slate-900">
-              {pendingAction.confirmTitle}
-            </h3>
-            <p className="mt-2 text-sm text-slate-600">{pendingAction.confirmBody}</p>
-            <p className="mt-2 text-sm text-slate-500">
-              Order <strong className="font-semibold text-slate-700">#{order.number}</strong> will move to{' '}
-              <strong className="font-semibold text-slate-700">
-                {orderStatusMeta[pendingAction.to].label}
-              </strong>
-              .
-            </p>
-            <div className="mt-6 flex justify-end gap-2">
-              <Button variant="secondary" size="sm" onClick={() => setPendingAction(null)}>
-                Keep order
-              </Button>
-              <Button variant="danger" size="sm" onClick={() => applyStatus(pendingAction)}>
-                Yes, {pendingAction.label.toLowerCase()} it
-              </Button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          title={pendingAction.confirmTitle}
+          body={
+            <>
+              <p>{pendingAction.confirmBody}</p>
+              <p className="mt-2">
+                Order <strong className="font-semibold text-[#F2EBDD]">#{order.number}</strong> will
+                move to{' '}
+                <strong className="font-semibold text-[#F2EBDD]">
+                  {orderStatusMeta[pendingAction.to].label}
+                </strong>
+                .
+              </p>
+            </>
+          }
+          confirmLabel={`Yes, ${pendingAction.label.toLowerCase()} it`}
+          danger={pendingAction.variant === 'danger'}
+          onCancel={() => setPendingAction(null)}
+          onConfirm={() => applyStatus(pendingAction)}
+        />
       )}
     </div>
   );

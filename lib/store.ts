@@ -138,7 +138,10 @@ export function getCategories(): Category[] {
 
 export function getReviews(productId: string): Review[] {
   ensureSeed();
-  return read<Review[]>('reviews', []).filter((r) => r.productId === productId);
+  const hidden = read<string[]>('reviews_hidden', []);
+  return read<Review[]>('reviews', []).filter(
+    (r) => r.productId === productId && !hidden.includes(r.id),
+  );
 }
 
 export function searchProducts(q: string): Product[] {

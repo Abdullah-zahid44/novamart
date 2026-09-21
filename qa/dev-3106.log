@@ -1,0 +1,397 @@
+  ▲ Next.js 14.2.35
+  - Local:        http://localhost:3106
+
+ ✓ Starting...
+ ✓ Ready in 3.9s
+ ○ Compiling /admin/login ...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+The user aborted a request.
+
+Retrying 1/3...
+ ✓ Compiled /admin/login in 35.8s (1565 modules)
+ GET /admin/login 200 in 36406ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 7s (1549 modules)
+ GET /admin 200 in 7210ms
+ ✓ Compiled /admin/products in 451ms (1555 modules)
+ GET /admin/products 200 in 665ms
+ ○ Compiling /admin/products/new ...
+ ✓ Compiled /admin/products/new in 932ms (1569 modules)
+ GET /admin/products/new 200 in 1099ms
+ ✓ Compiled /admin/products/[id] in 383ms (1579 modules)
+ GET /admin/products/p001 200 in 980ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 547ms (1591 modules)
+ GET /admin/orders 200 in 720ms
+ ○ Compiling /admin/orders/[id] ...
+ ✓ Compiled /admin/orders/[id] in 2.2s (1601 modules)
+ GET /admin/orders/D-1001 200 in 2690ms
+ ○ Compiling /admin/customers ...
+ ✓ Compiled /admin/customers in 1348ms (1611 modules)
+ GET /admin/customers 200 in 2396ms
+ ○ Compiling /admin/coupons ...
+ ✓ Compiled /admin/coupons in 2.6s (1621 modules)
+ GET /admin/coupons 200 in 2802ms
+ ○ Compiling /admin/reviews ...
+ ✓ Compiled /admin/reviews in 1436ms (1635 modules)
+ GET /admin/reviews 200 in 1650ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 1895ms (1645 modules)
+ GET /admin/settings 200 in 2136ms
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 1734ms (1674 modules)
+ GET /shop 200 in 1922ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 2.1s (1696 modules)
+ GET /checkout 200 in 2325ms
+ ○ Compiling /account/orders ...
+ ✓ Compiled /account/orders in 2s (1711 modules)
+ GET /account/orders 200 in 2553ms
+ ○ Compiling / ...
+ ✓ Compiled / in 2.7s (1753 modules)
+ GET / 200 in 3093ms
+ GET /admin 200 in 527ms
+ ⚠ Cross origin request detected from 127.0.0.1 to /_next/* resource. In a future major version of Next.js, you will need to explicitly configure "allowedDevOrigins" in next.config to allow this.
+Read more: https://nextjs.org/docs/app/api-reference/config/next-config-js/allowedDevOrigins
+ GET /admin/login 200 in 360ms
+ GET /admin/login 200 in 293ms
+ GET /admin 200 in 142ms
+ GET /admin 200 in 161ms
+ GET /admin/products 200 in 228ms
+ GET /shop 200 in 12983ms
+ GET /shop 200 in 878ms
+ GET /admin/products 200 in 480ms
+ GET /admin/products/new 200 in 188ms
+ GET /admin 200 in 302ms
+ GET /admin/login 200 in 163ms
+ GET /admin/login 200 in 149ms
+ GET /admin 200 in 272ms
+ GET /admin 200 in 182ms
+ GET /admin/products 200 in 278ms
+ GET /shop 200 in 193ms
+ GET /shop 200 in 1058ms
+ GET /admin/products 200 in 286ms
+ GET /admin/products/new 200 in 78ms
+ GET /admin/orders 200 in 517ms
+ GET /admin/orders/ord_mubmoexir8noay82 200 in 279ms
+ GET /admin 200 in 34ms
+ GET /admin/login 200 in 40ms
+ GET /admin/login 200 in 43ms
+ GET /admin 200 in 142ms
+ GET /admin 200 in 462ms
+ GET /admin/products 200 in 237ms
+ GET /shop 200 in 387ms
+ GET /shop 200 in 727ms
+ GET /admin/products 200 in 142ms
+ GET /admin/products/new 200 in 167ms
+ GET /admin/orders 200 in 55ms
+ GET /admin/orders/ord_mubmr8aw3i8qlt9f 200 in 347ms
+ GET /account/orders 200 in 154ms
+ GET /admin/customers 200 in 180ms
+ GET /admin/coupons 200 in 82ms
+ GET /checkout 200 in 60ms
+ ○ Compiling /cart ...
+ ✓ Compiled /admin/reviews in 5.9s (1698 modules)
+ GET /admin/reviews 200 in 3308ms
+ GET /shop 200 in 157ms
+ ✓ Compiled in 4.2s (859 modules)
+ ✓ Compiled in 561ms (859 modules)
+ ✓ Compiled in 5.2s (1654 modules)
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 1920ms (818 modules)
+ GET /admin 200 in 2679ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 628ms (824 modules)
+ GET /admin/login 200 in 273ms
+ GET /admin/login 200 in 326ms
+ GET /admin 200 in 122ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 785ms (823 modules)
+ GET /admin/orders 200 in 1129ms
+ GET /admin 200 in 113ms
+ GET /admin 200 in 218ms
+ ○ Compiling /admin/products ...
+ ✓ Compiled /admin/products in 1065ms (821 modules)
+ GET /admin/products 200 in 1251ms
+ ○ Compiling /admin/products/[id] ...
+ ✓ Compiled /admin/products/[id] in 630ms (830 modules)
+ GET /shop 200 in 286ms
+ ○ Compiling /product/[slug] ...
+ ✓ Compiled /product/[slug] in 10.7s (1687 modules)
+ GET /product/robovac-s9-self-cleaning 200 in 17197ms
+ GET /admin/products 200 in 359ms
+ ✓ Compiled /admin/products/new in 355ms (829 modules)
+ GET /admin/products/new 200 in 490ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 685ms (836 modules)
+ GET /admin/orders 200 in 1142ms
+ ○ Compiling /admin/orders/[id] ...
+ ✓ Compiled /admin/orders/[id] in 858ms (836 modules)
+ GET /admin/orders/ord_mubmvprel25tkysc 200 in 1473ms
+ ○ Compiling /account/orders ...
+ ✓ Compiled /account/orders in 676ms (822 modules)
+ GET /account/orders 200 in 1012ms
+ ✓ Compiled /admin/customers in 505ms (829 modules)
+ GET /admin/customers 200 in 746ms
+ ○ Compiling /admin/coupons ...
+ ✓ Compiled /admin/coupons in 2.5s (835 modules)
+ GET /admin/coupons 200 in 3697ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1761ms (867 modules)
+ GET / 200 in 3260ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 3.2s (855 modules)
+ GET /checkout 200 in 4714ms
+ ○ Compiling /cart ...
+ ✓ Compiled /cart in 2.4s (860 modules)
+ ○ Compiling /admin/reviews ...
+ ✓ Compiled /admin/reviews in 2.9s (868 modules)
+ GET /admin/reviews 200 in 4099ms
+ ○ Compiling /product/[slug] ...
+ ✓ Compiled /product/[slug] in 845ms (874 modules)
+ GET /product/aurora-x9-noise-cancelling-headphones 200 in 1430ms
+ GET /product/aurora-x9-noise-cancelling-headphones 200 in 97ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 825ms (872 modules)
+ GET /admin/settings 200 in 1563ms
+ GET /admin/settings 200 in 266ms
+ GET /checkout 200 in 276ms
+ GET /admin/settings 200 in 111ms
+ GET / 200 in 1377ms
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 3.1s (881 modules)
+ GET /shop 200 in 5708ms
+ GET /checkout 200 in 368ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 5.8s (820 modules)
+ GET /admin/login 200 in 6635ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 2.3s (820 modules)
+ GET /admin/coupons 200 in 951ms
+ ○ Compiling / ...
+ ✓ Compiled / in 578ms (849 modules)
+ GET / 200 in 902ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 1723ms (861 modules)
+ GET /checkout 200 in 2238ms
+ GET /admin 200 in 183ms
+ GET /admin/login 200 in 139ms
+ GET /admin/login 200 in 55ms
+ GET /admin 200 in 89ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 1164ms (854 modules)
+ GET /admin/orders 200 in 1400ms
+ GET /admin 200 in 314ms
+ GET /admin 200 in 74ms
+ ✓ Compiled /admin/products in 373ms (824 modules)
+ GET /admin/products 200 in 803ms
+ ○ Compiling /admin/products/[id] ...
+ ✓ Compiled /admin/products/[id] in 1016ms (832 modules)
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 1119ms (842 modules)
+ GET /shop 200 in 1437ms
+ ○ Compiling /product/[slug] ...
+ ✓ Compiled /product/[slug] in 1526ms (848 modules)
+ GET /product/robovac-s9-self-cleaning 200 in 2843ms
+ GET /admin/products 200 in 216ms
+ ○ Compiling /admin/products/new ...
+ ✓ Compiled /admin/products/new in 1202ms (847 modules)
+ GET /admin/products/new 200 in 1826ms
+ GET /shop 200 in 203ms
+ GET /admin/products/p_mubn4wn21j38x 200 in 352ms
+ GET /admin/orders 200 in 133ms
+ ○ Compiling /admin/orders/[id] ...
+ ✓ Compiled /admin/orders/[id] in 1012ms (833 modules)
+ GET /admin/orders/ord_mubn3najcyzn61d6 200 in 1540ms
+ ○ Compiling /account/orders ...
+ ✓ Compiled /account/orders in 1386ms (821 modules)
+ GET /account/orders 200 in 1855ms
+ ○ Compiling /admin/customers ...
+ ✓ Compiled /admin/customers in 1310ms (828 modules)
+ GET /admin/customers 200 in 1778ms
+ ○ Compiling /admin/coupons ...
+ ✓ Compiled /admin/coupons in 2.1s (834 modules)
+ GET /admin/coupons 200 in 3139ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1373ms (872 modules)
+ GET / 200 in 2281ms
+ ○ Compiling /checkout ...
+ ✓ Compiled /checkout in 1680ms (865 modules)
+ GET /checkout 200 in 3849ms
+ ○ Compiling /admin/reviews ...
+ ✓ Compiled /admin/reviews in 2.6s (858 modules)
+ GET /admin/reviews 200 in 3703ms
+ ○ Compiling /product/[slug] ...
+ ✓ Compiled /product/[slug] in 666ms (849 modules)
+ GET /product/aurora-x9-noise-cancelling-headphones 200 in 1204ms
+ GET /product/aurora-x9-noise-cancelling-headphones 200 in 523ms
+ ○ Compiling /admin/settings ...
+ ✓ Compiled /admin/settings in 1198ms (846 modules)
+ GET /admin/settings 200 in 1696ms
+ GET /admin/settings 200 in 99ms
+ GET /checkout 200 in 383ms
+ GET /admin/settings 200 in 282ms
+ GET / 200 in 508ms
+ ○ Compiling /shop ...
+ ✓ Compiled /shop in 2.6s (853 modules)
+ GET /shop 200 in 3995ms
+ GET /checkout 200 in 630ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 4.6s (845 modules)
+ GET /admin/login 200 in 5648ms
+ ○ Compiling /admin ...
+ ✓ Compiled /admin in 4.1s (855 modules)
+ GET /admin/reviews 200 in 346ms
+ GET /admin/settings 200 in 100ms
+ GET /admin/login 200 in 328ms
+ GET /admin/reviews 200 in 196ms
+ GET /product/aurora-x9-noise-cancelling-headphones 200 in 531ms
+ GET /admin/settings 200 in 105ms
+ GET /admin/login 200 in 202ms
+ GET /admin 200 in 187ms
+ GET /admin/login 200 in 328ms
+ GET /admin/login 200 in 193ms
+ ○ Compiling /admin/products ...
+ ✓ Compiled /admin/products in 4.9s (815 modules)
+ GET /admin/products 200 in 5614ms
+ ○ Compiling /admin/products/new ...
+ ✓ Compiled /admin/products/new in 1190ms (823 modules)
+ GET /admin/products/new 200 in 1480ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 1413ms (830 modules)
+ GET /admin/orders 200 in 1707ms
+ ○ Compiling /admin/customers ...
+ ✓ Compiled /admin/customers in 1117ms (836 modules)
+ GET /admin/customers 200 in 1744ms
+ ○ Compiling /admin/coupons ...
+ ✓ Compiled /admin/coupons in 634ms (842 modules)
+ GET /admin/coupons 200 in 885ms
+ GET /admin/reviews 200 in 250ms
+ GET /admin/settings 200 in 268ms
+ GET /admin 200 in 274ms
+ GET /admin/products 200 in 175ms
+ GET /admin/login 200 in 318ms
+ GET /admin/products 200 in 166ms
+ GET /admin/login 200 in 596ms
+ GET /admin 200 in 279ms
+ GET /admin/products 200 in 275ms
+ GET /admin/settings 200 in 209ms
+ GET /admin 200 in 132ms
+ GET /admin/login 200 in 165ms
+ GET /admin/login 200 in 247ms
+ GET /admin 200 in 371ms
+ GET /admin/products 200 in 137ms
+ GET /admin/products/new 200 in 143ms
+ GET /admin/orders 200 in 282ms
+ GET /admin/customers 200 in 151ms
+ GET /admin/coupons 200 in 106ms
+ GET /admin/reviews 200 in 106ms
+ GET /admin/settings 200 in 160ms
+ GET /admin 200 in 180ms
+ GET /admin/login 200 in 59ms
+ GET /admin/login 200 in 55ms
+ GET /admin 200 in 48ms
+ GET /admin/products 200 in 44ms
+ GET /admin/products/new 200 in 107ms
+ GET /admin/orders 200 in 40ms
+ GET /admin/customers 200 in 115ms
+ GET /admin/coupons 200 in 64ms
+ GET /admin/reviews 200 in 202ms
+ GET /admin/settings 200 in 138ms
+ GET /admin 200 in 210ms
+ GET /admin/products 200 in 500ms
+ ○ Compiling /admin/products/[id] ...
+ ✓ Compiled /admin/products/[id] in 4.8s (831 modules)
+ GET /admin/products/p014 200 in 6462ms
+ ○ Compiling /admin/orders/[id] ...
+ ✓ Compiled /admin/orders/[id] in 6.1s (826 modules)
+ GET /admin/orders/ord_mubnlotyu6d5y1dd 200 in 7942ms
+ ○ Compiling /admin/login ...
+ ✓ Compiled /admin/login in 1310ms (805 modules)
+ GET /admin/login 200 in 2373ms
+ ○ Compiling /admin/orders ...
+ ✓ Compiled /admin/orders in 833ms (810 modules)
+ GET /admin/orders 200 in 1172ms
+ GET /admin/orders/ord_mubnop20x9gqv6ri 200 in 455ms
+ ✓ Compiled in 7.2s (1674 modules)
+ GET /admin/login 200 in 536ms
+ GET /admin/orders 200 in 127ms
+ GET /admin/orders/ord_mubnprjejbjyb6un 200 in 380ms
+ GET /admin/login 200 in 117ms
+ GET /admin/orders 200 in 439ms
+ GET /admin/orders/ord_mubnr53g6kcy75de 200 in 399ms
+ ✓ Compiled in 6.5s (1674 modules)
+ GET /admin/login 200 in 1005ms
+ GET /admin/orders 200 in 297ms
+ GET /admin/orders/ord_mubnsmj8lgo29nw9 200 in 443ms
+ GET /admin/login 200 in 2359ms
+ GET /admin/orders 200 in 114ms
+ GET /admin/orders/ord_mubnteqfnsby8nzg 200 in 230ms
+ GET /admin/orders/D-1001 200 in 412ms
+ ✓ Compiled in 2.3s (1674 modules)
+ GET /admin/login 200 in 307ms
+ GET /admin/orders 200 in 158ms
+ GET /admin/orders/ord_mubnuz9945hfuwj0 200 in 226ms
+ GET /admin/orders/D-1001 200 in 146ms
+ ✓ Compiled in 1681ms (1674 modules)
+ GET /admin/login 200 in 416ms
+ GET /admin/orders 200 in 58ms
+ GET /admin/orders/ord_mubnvvvvsq86qtib 200 in 102ms
+ GET /admin/login 200 in 69ms
+ GET /admin/orders 200 in 60ms
+ GET /admin/orders/ord_mubnwbdzky2g226h 200 in 72ms
+ GET /admin/orders/D-1001 200 in 191ms
+ GET /admin/login 200 in 61ms
+ GET /admin/login 200 in 65ms
+ GET /admin 200 in 206ms
+ ○ Compiling /admin/products ...
+ ✓ Compiled /admin/products in 2.1s (812 modules)
+ GET /admin/products 200 in 2329ms
+ ✓ Compiled /admin/products/new in 320ms (817 modules)
+ GET /admin/products/new 200 in 505ms
+ GET /admin/orders 200 in 73ms
+ ○ Compiling /admin/customers ...
+ ✓ Compiled /admin/customers in 685ms (817 modules)
+ GET /admin/customers 200 in 862ms
+ ○ Compiling /admin/coupons ...
+ ✓ Compiled /admin/coupons in 512ms (823 modules)
+ GET /admin/coupons 200 in 912ms
+ ✓ Compiled /admin/reviews in 321ms (825 modules)
+ GET /admin/reviews 200 in 439ms
+ ✓ Compiled /admin/settings in 285ms (831 modules)
+ GET /admin/settings 200 in 400ms
+ GET /admin 200 in 58ms
+ GET /admin/products 200 in 64ms
+ ✓ Compiled /admin/products/[id] in 377ms (831 modules)
+ GET /admin/products/p014 200 in 670ms
+ ○ Compiling /admin/orders/[id] ...
+ ✓ Compiled /admin/orders/[id] in 1138ms (837 modules)
+ GET /admin/orders/ord_mubnxh2d52izf0i4 200 in 1443ms
+ GET /admin/login 200 in 116ms
+ GET /admin 200 in 49ms
+ GET /admin/products 200 in 48ms
+ GET /admin/products/p014 200 in 283ms
+ GET /admin/orders/ord_mubnzn46qnq7bovy 200 in 210ms
+ GET /admin/login 200 in 71ms
+ GET /admin 200 in 100ms
+ GET /admin/login 200 in 105ms
+ GET /admin/orders 200 in 50ms
+ GET /admin/orders/ord_mubo1276e5t0j16s 200 in 232ms
+ GET /admin/login 200 in 69ms

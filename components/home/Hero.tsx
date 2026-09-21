@@ -1,109 +1,114 @@
-import Image from 'next/image';
+'use client';
+
 import Link from 'next/link';
-import { ArrowRight, RotateCcw, ShieldCheck, Truck } from 'lucide-react';
-import { getSettings } from '@/lib/store';
-import { currency } from '@/lib/format';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ArrowRight, RotateCcw, Star, Truck } from 'lucide-react';
+import { Button } from '@/components/ui';
+import { SmartImage } from './SmartImage';
 
-export default function Hero() {
-  const { freeShipOver } = getSettings();
+const HEADLINE = ['Good goods,', 'fairly priced.'];
 
-  const badges = [
-    {
-      icon: Truck,
-      title: `Free shipping over ${currency(freeShipOver)}`,
-      sub: 'Fast delivery, tracked door to door',
-    },
-    {
-      icon: RotateCcw,
-      title: '30-day easy returns',
-      sub: 'Changed your mind? No problem',
-    },
-    {
-      icon: ShieldCheck,
-      title: 'Secure checkout',
-      sub: 'Your payment stays protected',
-    },
-  ];
+const TRUST = [
+  { icon: Star, label: '4.9 · 12k reviews' },
+  { icon: RotateCcw, label: '30-day returns' },
+  { icon: Truck, label: 'Ships in 24h' },
+];
+
+/** Masterpiece hero — staggered Fraunces headline, pill CTAs, arch image (DESIGN_BRIEF §5.3). */
+export function Hero() {
+  const reduce = useReducedMotion();
+
+  const line = (text: string, i: number) =>
+    reduce ? (
+      <span key={text} className="block">
+        {text}
+      </span>
+    ) : (
+      <motion.span
+        key={text}
+        className="block"
+        initial={{ opacity: 0, y: 40 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 0.1 + i * 0.14, ease: 'easeOut' }}
+      >
+        {text}
+      </motion.span>
+    );
+
+  const fadeUp = reduce
+    ? {}
+    : {
+        initial: { opacity: 0, y: 24 },
+        animate: { opacity: 1, y: 0 },
+        transition: { duration: 0.6, delay: 0.45, ease: 'easeOut' as const },
+      };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-indigo-800 to-indigo-600 text-white">
-      {/* soft decorative glow */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-32 -right-32 h-96 w-96 rounded-full bg-indigo-400/20 blur-3xl"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-indigo-950/40 blur-3xl"
-      />
-
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid items-center gap-12 py-14 sm:py-20 lg:grid-cols-2 lg:py-24">
-          <div>
-            <span className="inline-flex items-center rounded-full bg-amber-400/15 px-4 py-1.5 text-xs font-semibold tracking-widest text-amber-300 uppercase ring-1 ring-amber-300/30">
-              New season sale · up to 40% off
-            </span>
-            <h1 className="mt-6 text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl">
-              Everything you love,
-              <span className="block text-amber-300">delivered.</span>
-            </h1>
-            <p className="mt-6 max-w-lg text-base leading-relaxed text-indigo-100 sm:text-lg">
-              NovaMart brings together 48+ hand-picked products across tech,
-              fashion, home and more — quality you can trust, prices you will
-              love, and shipping that is actually fast.
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <Link
-                href="/shop"
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-white px-7 py-3.5 text-base font-semibold text-indigo-700 shadow-lg transition hover:bg-indigo-50"
-              >
-                Shop now
-                <ArrowRight className="h-5 w-5" aria-hidden="true" />
-              </Link>
-              <Link
-                href="/deals"
-                className="inline-flex items-center justify-center gap-2 rounded-lg border border-white/40 px-7 py-3.5 text-base font-semibold text-white transition hover:border-white hover:bg-white/10"
-              >
+    <section className="overflow-hidden">
+      <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 pb-16 pt-12 sm:px-6 lg:grid-cols-2 lg:gap-6 lg:pt-20">
+        <div>
+          <motion.p
+            initial={reduce ? undefined : { opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="mb-5 text-xs font-bold uppercase tracking-[0.24em] text-accent"
+          >
+            The new general store
+          </motion.p>
+          <h1 className="font-display text-[clamp(3rem,8vw,6.5rem)] font-semibold leading-[0.98] tracking-tight text-ink">
+            {HEADLINE.map(line)}
+          </h1>
+          <motion.p
+            {...fadeUp}
+            className="mt-6 max-w-md text-lg leading-relaxed text-muted"
+          >
+            We sell things we would buy ourselves. That is the whole strategy.
+          </motion.p>
+          <motion.div {...fadeUp} className="mt-8 flex flex-wrap gap-3">
+            <Link href="/shop">
+              <Button size="lg">
+                Shop the collection
+                <ArrowRight size={18} aria-hidden />
+              </Button>
+            </Link>
+            <Link href="/deals">
+              <Button size="lg" variant="secondary">
                 Today&apos;s deals
-              </Link>
-            </div>
-
-            <dl className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-3">
-              {badges.map((b) => (
-                <div key={b.title} className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 ring-1 ring-white/20">
-                    <b.icon className="h-5 w-5 text-amber-300" aria-hidden="true" />
-                  </span>
-                  <div>
-                    <dt className="text-sm font-semibold">{b.title}</dt>
-                    <dd className="mt-0.5 text-xs text-indigo-200">{b.sub}</dd>
-                  </div>
-                </div>
-              ))}
-            </dl>
-          </div>
-
-          <div className="relative">
-            <div className="overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/20">
-              <Image
-                src="https://picsum.photos/seed/novamart-hero/1000/800"
-                alt="A curated selection of NovaMart products"
-                width={1000}
-                height={800}
-                priority
-                className="h-auto w-full object-cover"
-              />
-            </div>
-            <div className="absolute -bottom-5 left-5 rounded-xl bg-white px-5 py-4 text-slate-900 shadow-xl sm:left-8">
-              <p className="text-xs font-medium tracking-wide text-slate-500 uppercase">
-                This week only
-              </p>
-              <p className="mt-1 text-lg font-bold">
-                Extra 10% off <span className="text-indigo-600">WELCOME10</span>
-              </p>
-            </div>
-          </div>
+              </Button>
+            </Link>
+          </motion.div>
+          <motion.ul {...fadeUp} className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-2" aria-label="Store promises">
+            {TRUST.map(({ icon: Icon, label }) => (
+              <li key={label} className="flex items-center gap-2 text-sm font-medium text-muted">
+                <Icon size={15} className="text-accent" aria-hidden />
+                {label}
+              </li>
+            ))}
+          </motion.ul>
         </div>
+
+        <motion.div
+          initial={reduce ? undefined : { opacity: 0, scale: 0.97 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.25, ease: 'easeOut' }}
+          className="relative mx-auto w-full max-w-[420px]"
+        >
+          <div className="absolute -right-6 -top-6 h-40 w-40 rounded-full bg-sand" aria-hidden />
+          <SmartImage
+            src="/images/hero.jpg"
+            alt="A warm editorial flat-lay of NovaMart goods"
+            label="This week's shelf, photographed Tuesday."
+            priority
+            sizes="(min-width: 1024px) 420px, 90vw"
+            className="relative aspect-[4/5] w-full shadow-xl shadow-ink/10"
+            imgClassName="rounded-[999px_999px_18px_18px]"
+          />
+          <div className="absolute -left-4 bottom-10 rounded-[14px] border border-line bg-card px-4 py-3 shadow-lg shadow-ink/10 sm:-left-8">
+            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-accent">This week&apos;s drop</p>
+            <p className="mt-1 font-display text-lg font-semibold text-ink">Restocked Friday.</p>
+            <p className="text-sm text-muted">Gone by Monday, usually.</p>
+          </div>
+        </motion.div>
       </div>
     </section>
   );

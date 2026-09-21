@@ -29,22 +29,24 @@ export default function WishlistPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">Wishlist</h1>
-        <p className="mt-1 text-sm text-gray-600">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
+          Wishlist
+        </h1>
+        <p className="mt-1 text-sm text-muted">
           {products.length === 0
-            ? "Save items you love and find them here later."
-            : `${products.length} ${products.length === 1 ? "item" : "items"} you're saving for later.`}
+            ? "Save the ones you can't stop thinking about. They'll wait here."
+            : `${products.length} ${products.length === 1 ? "item" : "items"} you're keeping an eye on.`}
         </p>
       </div>
 
       {products.length === 0 ? (
         <EmptyState
           icon={Heart}
-          title="Your wishlist is empty"
-          hint="Tap the heart on any product to save it here for later."
+          title="No favorites yet."
+          hint="Tap the heart on anything you like. We'll keep it warm."
           action={
             <Link href="/shop">
-              <Button variant="primary">Discover products</Button>
+              <Button variant="primary">Browse the shop</Button>
             </Link>
           }
         />
@@ -57,7 +59,7 @@ export default function WishlistPage() {
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="w-full text-gray-500 hover:text-rose-600"
+                className="w-full text-muted hover:text-[#A33B2A]"
                 onClick={() => handleRemove(p.id)}
               >
                 <Trash2 className="mr-1.5 h-4 w-4" />

@@ -115,11 +115,11 @@ export default function AddressesPage() {
     <div>
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Addresses
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Manage where your orders get delivered.
+          <p className="mt-1 text-sm text-muted">
+            Save them once, skip the typing at checkout.
           </p>
         </div>
         {!formOpen && (
@@ -132,13 +132,13 @@ export default function AddressesPage() {
       {formOpen && (
         <Card className="mb-6 p-5 sm:p-6">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-900">
+            <h2 className="font-display text-lg font-semibold text-ink">
               {editIndex === null ? "Add a new address" : "Edit address"}
             </h2>
             <button
               type="button"
               onClick={() => setFormOpen(false)}
-              className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              className="rounded-full p-1.5 text-muted hover:bg-sand hover:text-ink"
               aria-label="Close address form"
             >
               <X className="h-5 w-5" />
@@ -225,7 +225,7 @@ export default function AddressesPage() {
         <EmptyState
           icon={Home}
           title="No saved addresses"
-          hint="Add a delivery address now and checkout will be one click faster."
+          hint="Add a delivery address now and checkout gets noticeably shorter."
           action={
             <Button variant="primary" onClick={openAdd}>
               <Plus className="mr-1.5 h-4 w-4" /> Add your first address
@@ -236,23 +236,23 @@ export default function AddressesPage() {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {addresses.map((a, i) => (
             <Card key={`${a.street}-${i}`} className="flex flex-col p-5">
-              <address className="flex-1 text-sm not-italic leading-relaxed text-gray-600">
-                <p className="font-semibold text-gray-900">{a.fullName}</p>
+              <address className="flex-1 text-sm not-italic leading-relaxed text-muted">
+                <p className="font-semibold text-ink">{a.fullName}</p>
                 <p>{a.street}</p>
                 <p>
                   {a.city}, {a.postal}
                 </p>
                 <p>{a.country}</p>
-                <p className="mt-1 text-gray-500">Phone: {a.phone}</p>
+                <p className="mt-1 text-muted">Phone: {a.phone}</p>
               </address>
-              <div className="mt-4 flex gap-2 border-t border-gray-100 pt-4">
+              <div className="mt-4 flex gap-2 border-t border-line pt-4">
                 <Button variant="outline" size="sm" onClick={() => openEdit(i)}>
                   <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
                 </Button>
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="text-rose-600 hover:text-rose-700"
+                  className="text-muted hover:text-[#A33B2A]"
                   onClick={() => handleDelete(i)}
                 >
                   <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete

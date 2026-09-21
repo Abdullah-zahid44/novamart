@@ -1,129 +1,87 @@
-import { PackageCheck, RotateCcw, ShieldCheck } from 'lucide-react';
+import { PackageCheck, RotateCcw, Truck } from 'lucide-react';
+import { EditorialHeader, QuoteBlock } from '@/components/home/EditorialHeader';
+import { Reveal, Card } from '@/components/ui';
 import { getSettings } from '@/lib/store';
 import { currency } from '@/lib/format';
 
 export const metadata = {
-  title: 'Shipping & returns — NovaMart',
-  description:
-    'NovaMart shipping options, delivery times and our 30-day return policy.',
+  title: 'Shipping & Returns — NovaMart',
+  description: 'How fast we ship, what it costs, and how returns work at NovaMart.',
 };
 
 export default function ShippingPage() {
   const { shippingFlat, freeShipOver } = getSettings();
 
+  const rates = [
+    {
+      icon: Truck,
+      name: 'Standard',
+      time: '3–5 business days',
+      price: `${currency(shippingFlat)} — free over ${currency(freeShipOver)}`,
+    },
+    {
+      icon: PackageCheck,
+      name: 'Express',
+      time: '1–2 business days',
+      price: '$12.99',
+    },
+  ];
+
   return (
-    <main className="mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-      <p className="text-xs font-bold tracking-widest text-indigo-600 uppercase">
-        Policies
-      </p>
-      <h1 className="mt-3 text-3xl font-extrabold text-slate-900 sm:text-4xl">
-        Shipping &amp; returns
-      </h1>
-      <p className="mt-3 text-slate-600">
-        Simple rules, no fine print. Here is exactly what to expect when you
-        order from NovaMart.
-      </p>
+    <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:py-20">
+      <EditorialHeader
+        kicker="Shipping & returns"
+        title="Fast out, easy back."
+        lede="Orders leave the packing room within 24 hours. If it is late, that is on us — and if you change your mind, sending it back is painless."
+      />
 
-      <section className="mt-10">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
-          <PackageCheck className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-          Shipping options
-        </h2>
-        <div className="mt-5 overflow-hidden rounded-xl bg-white shadow-sm ring-1 ring-slate-200">
-          <table className="w-full text-left text-sm">
-            <thead className="bg-slate-50 text-xs tracking-wide text-slate-500 uppercase">
-              <tr>
-                <th className="px-5 py-3 font-semibold">Method</th>
-                <th className="px-5 py-3 font-semibold">Delivery time</th>
-                <th className="px-5 py-3 font-semibold">Cost</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              <tr>
-                <td className="px-5 py-4 font-medium text-slate-900">
-                  Standard
-                </td>
-                <td className="px-5 py-4 text-slate-600">
-                  3–5 business days
-                </td>
-                <td className="px-5 py-4 text-slate-600">
-                  {currency(shippingFlat)} flat ·{' '}
-                  <span className="font-semibold text-emerald-600">
-                    free over {currency(freeShipOver)}
-                  </span>
-                </td>
-              </tr>
-              <tr>
-                <td className="px-5 py-4 font-medium text-slate-900">Express</td>
-                <td className="px-5 py-4 text-slate-600">
-                  1–2 business days
-                </td>
-                <td className="px-5 py-4 text-slate-600">
-                  Calculated at checkout
-                </td>
-              </tr>
-            </tbody>
-          </table>
+      <div className="mt-12 grid gap-5 md:grid-cols-2">
+        {rates.map(({ icon: Icon, name, time, price }, i) => (
+          <Reveal key={name} delay={i * 0.08}>
+            <Card className="flex h-full items-start gap-5 p-7">
+              <span className="inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-sand text-accent">
+                <Icon size={22} aria-hidden />
+              </span>
+              <div>
+                <h2 className="font-display text-xl font-semibold text-ink">{name}</h2>
+                <p className="mt-1 text-sm text-muted">{time}</p>
+                <p className="mt-2 font-semibold text-ink">{price}</p>
+              </div>
+            </Card>
+          </Reveal>
+        ))}
+      </div>
+
+      <Reveal className="mt-12 max-w-3xl">
+        <h2 className="font-display text-2xl font-semibold text-ink">Returns, the short version</h2>
+        <div className="mt-4 space-y-4 leading-relaxed text-ink/85">
+          <p>
+            Thirty days from delivery, no questions asked. Start a return from your
+            account or by emailing support — we send a prepaid label, you drop the box
+            off, and the refund lands 2–3 business days after it arrives.
+          </p>
+          <p>
+            Items should be unused and in their original packaging where possible.
+            Damaged or wrong items are a different story: send us a photo and a
+            replacement ships the same day, no return needed.
+          </p>
         </div>
-        <ul className="mt-5 space-y-2 text-sm leading-relaxed text-slate-600">
-          <li>
-            <span className="font-semibold text-slate-900">Processing:</span>{' '}
-            orders placed before 2pm CT ship the same business day; later
-            orders ship the next business day.
-          </li>
-          <li>
-            <span className="font-semibold text-slate-900">Tracking:</span>{' '}
-            every order includes live tracking emailed to you and available on
-            the Track page.
-          </li>
-          <li>
-            <span className="font-semibold text-slate-900">Coverage:</span> we
-            currently ship within the United States. PO boxes and APO/FPO
-            addresses are supported for Standard shipping.
-          </li>
-        </ul>
-      </section>
+      </Reveal>
 
-      <section className="mt-12">
-        <h2 className="flex items-center gap-2 text-xl font-bold text-slate-900">
-          <RotateCcw className="h-6 w-6 text-indigo-600" aria-hidden="true" />
-          Returns &amp; refunds
-        </h2>
-        <ul className="mt-5 space-y-2 text-sm leading-relaxed text-slate-600">
-          <li>
-            <span className="font-semibold text-slate-900">30 days:</span> you
-            have 30 days from delivery to return any unused item in its
-            original packaging.
-          </li>
-          <li>
-            <span className="font-semibold text-slate-900">Free return label:</span>{' '}
-            start a return from your account or by emailing support and we will
-            send a prepaid label — return shipping is on us.
-          </li>
-          <li>
-            <span className="font-semibold text-slate-900">Refunds:</span>{' '}
-            issued to your original payment method within 3–5 business days of
-            us receiving the item.
-          </li>
-          <li>
-            <span className="font-semibold text-slate-900">Damaged or wrong item:</span>{' '}
-            tell us within 14 days with a photo and we will ship a replacement
-            immediately, no return needed.
-          </li>
-        </ul>
-      </section>
+      <QuoteBlock
+        className="mt-12 max-w-3xl"
+        quote="If a parcel is late, we tell you before you have to ask. That's the job."
+        cite="The packing room wall"
+      />
 
-      <section className="mt-12 rounded-xl bg-indigo-50 p-6 ring-1 ring-indigo-100">
-        <h2 className="flex items-center gap-2 text-base font-bold text-slate-900">
-          <ShieldCheck className="h-5 w-5 text-indigo-600" aria-hidden="true" />
-          Our promise
-        </h2>
-        <p className="mt-2 text-sm leading-relaxed text-slate-600">
-          If your package is lost in transit, we reship or refund — your
-          choice. You should never pay for a delivery problem that was not
-          your fault.
+      <Reveal className="mt-12 flex max-w-3xl items-start gap-4 rounded-[14px] border border-line bg-sand p-6">
+        <RotateCcw size={20} className="mt-0.5 shrink-0 text-accent" aria-hidden />
+        <p className="text-sm leading-relaxed text-ink/85">
+          <span className="font-semibold text-ink">Demo note:</span> NovaMart is a demo
+          storefront. Shipping options and returns described here illustrate the flow —
+          no real parcels are harmed.
         </p>
-      </section>
-    </main>
+      </Reveal>
+    </div>
   );
 }

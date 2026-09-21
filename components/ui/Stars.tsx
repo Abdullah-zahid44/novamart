@@ -9,7 +9,7 @@ export interface StarsProps {
 
 const px: Record<NonNullable<StarsProps['size']>, number> = { sm: 14, md: 16, lg: 20 };
 
-/** 5-star rating display (filled per rounded value). */
+/** 5-star rating display, gold fill (DESIGN_BRIEF §2 — gold is for stars only). */
 export function Stars({ value, size = 'sm', className }: StarsProps) {
   const filled = Math.round(value);
   return (
@@ -23,7 +23,7 @@ export function Stars({ value, size = 'sm', className }: StarsProps) {
           key={i}
           size={px[size]}
           aria-hidden
-          className={i <= filled ? 'fill-amber-400 text-amber-400' : 'fill-slate-200 text-slate-200'}
+          className={i <= filled ? 'fill-gold text-gold' : 'fill-line text-line'}
         />
       ))}
     </span>

@@ -49,23 +49,24 @@ export function SortBar({ sort, onSortChange, count, onToggleFilters }: SortBarP
           <button
             type="button"
             onClick={onToggleFilters}
-            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 px-3 py-2 text-sm font-medium text-gray-700 md:hidden"
+            className="inline-flex items-center gap-2 rounded-full border border-line bg-card px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-ink active:scale-[0.98] md:hidden"
           >
             <SlidersHorizontal className="h-4 w-4" />
             Filters
           </button>
         )}
-        <p className="text-sm text-gray-600">
-          {count} {count === 1 ? 'product' : 'products'}
+        <p className="text-sm text-muted">
+          <span className="font-semibold text-ink">{count}</span>{' '}
+          {count === 1 ? 'product' : 'products'}
         </p>
       </div>
-      <label className="flex items-center gap-2 text-sm text-gray-600">
+      <label className="flex items-center gap-2 text-sm text-muted">
         <span className="hidden sm:inline">Sort by</span>
         <select
           value={sort}
           onChange={(e) => onSortChange(e.target.value)}
           aria-label="Sort products"
-          className="rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+          className="rounded-full border border-line bg-card px-4 py-2 text-sm font-medium text-ink focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
         >
           {sortOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>

@@ -14,15 +14,15 @@ export type BadgeVariant =
   | 'neutral';
 
 const variantStyles: Record<BadgeVariant, string> = {
-  new: 'bg-emerald-100 text-emerald-800',
-  sale: 'bg-rose-100 text-rose-800',
-  hot: 'bg-amber-100 text-amber-900',
-  bestseller: 'bg-indigo-100 text-indigo-800',
-  info: 'bg-sky-100 text-sky-800',
-  success: 'bg-emerald-100 text-emerald-800',
-  warning: 'bg-amber-100 text-amber-900',
-  danger: 'bg-rose-100 text-rose-800',
-  neutral: 'bg-slate-100 text-slate-700',
+  new: 'bg-forest text-paper',
+  sale: 'bg-accent text-white',
+  hot: 'bg-ink text-paper',
+  bestseller: 'bg-accent-deep text-white',
+  info: 'bg-sand text-ink',
+  success: 'bg-forest text-paper',
+  warning: 'bg-gold text-ink',
+  danger: 'bg-rose-600 text-white',
+  neutral: 'bg-sand text-muted',
 };
 
 /** Map a Product badge to its Badge variant. */

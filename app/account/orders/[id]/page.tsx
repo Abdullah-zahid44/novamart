@@ -26,11 +26,11 @@ function TotalsRow({ label, value, strong }: { label: string; value: string; str
   return (
     <div
       className={`flex items-center justify-between text-sm ${
-        strong ? "font-bold text-gray-900" : "text-gray-600"
+        strong ? "font-semibold text-ink" : "text-muted"
       }`}
     >
       <span>{label}</span>
-      <span className={strong ? "text-base" : ""}>{value}</span>
+      <span className={`tnum ${strong ? "text-base" : ""}`}>{value}</span>
     </div>
   );
 }
@@ -81,22 +81,22 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
     <div>
       <Link
         href="/account/orders"
-        className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+        className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-accent-deep hover:underline"
       >
         <ArrowLeft className="h-4 w-4" /> Back to orders
       </Link>
 
       <div className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+          <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
             Order {order.number}
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted">
             Placed {formatDate(order.createdAt)} · {itemCount}{" "}
             {itemCount === 1 ? "item" : "items"}
           </p>
         </div>
-        <span className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-4 py-1.5 text-sm font-medium text-gray-700">
+        <span className="inline-flex items-center gap-2 rounded-full bg-sand px-4 py-1.5 text-sm font-medium text-ink">
           <span className={`h-2.5 w-2.5 rounded-full ${meta.dot}`} />
           {meta.label}
         </span>
@@ -106,11 +106,11 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         <div className="space-y-6 lg:col-span-2">
           {/* Items */}
           <Card className="p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-gray-900">Items</h2>
-            <ul className="mt-4 divide-y divide-gray-100">
+            <h2 className="font-display text-lg font-semibold text-ink">Items</h2>
+            <ul className="mt-4 divide-y divide-line/70">
               {order.items.map((item, idx) => (
                 <li key={`${item.productId}-${idx}`} className="flex gap-4 py-4 first:pt-0 last:pb-0">
-                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-gray-100">
+                  <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-sand">
                     <Image
                       src={item.image}
                       alt={item.name}
@@ -120,17 +120,17 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                     />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-gray-900">{item.name}</p>
-                    <p className="mt-0.5 text-xs text-gray-500">
+                    <p className="truncate text-sm font-semibold text-ink">{item.name}</p>
+                    <p className="mt-0.5 text-xs text-muted">
                       {[item.color, item.size].filter(Boolean).join(" · ") || "Standard"} · Qty{" "}
                       {item.qty}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-900">
+                    <p className="tnum text-sm font-semibold text-ink">
                       {currency(item.price * item.qty)}
                     </p>
-                    <p className="text-xs text-gray-500">{currency(item.price)} each</p>
+                    <p className="tnum text-xs text-muted">{currency(item.price)} each</p>
                   </div>
                 </li>
               ))}
@@ -139,7 +139,7 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
           {/* Status timeline */}
           <Card className="p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-gray-900">Order timeline</h2>
+            <h2 className="font-display text-lg font-semibold text-ink">Order timeline</h2>
             <ol className="mt-4 space-y-0">
               {timeline.map((t, idx) => {
                 const m = orderStatusMeta[t.status];
@@ -149,16 +149,16 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                     {!last && (
                       <span
                         aria-hidden="true"
-                        className="absolute left-[7px] top-5 h-full w-px bg-gray-200"
+                        className="absolute left-[7px] top-5 h-full w-px bg-line"
                       />
                     )}
                     <span className={`mt-1 h-4 w-4 shrink-0 rounded-full ${m.dot}`} />
                     <div>
-                      <p className="text-sm font-semibold text-gray-900">{m.label}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-sm font-semibold text-ink">{m.label}</p>
+                      <p className="text-xs text-muted">
                         {formatDate(t.at)} · {formatTime(t.at)}
                       </p>
-                      {t.note && <p className="mt-1 text-sm text-gray-600">{t.note}</p>}
+                      {t.note && <p className="mt-1 text-sm text-muted">{t.note}</p>}
                     </div>
                   </li>
                 );
@@ -170,9 +170,9 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
         <div className="space-y-6">
           {/* Delivery address */}
           <Card className="p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-gray-900">Delivery address</h2>
-            <address className="mt-3 text-sm not-italic leading-relaxed text-gray-600">
-              <p className="font-semibold text-gray-900">{order.address.fullName}</p>
+            <h2 className="font-display text-lg font-semibold text-ink">Delivery address</h2>
+            <address className="mt-3 text-sm not-italic leading-relaxed text-muted">
+              <p className="font-semibold text-ink">{order.address.fullName}</p>
               <p>{order.address.street}</p>
               <p>
                 {order.address.city}, {order.address.postal}
@@ -184,15 +184,15 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
 
           {/* Payment */}
           <Card className="p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-gray-900">Payment</h2>
-            <p className="mt-3 text-sm text-gray-600">
+            <h2 className="font-display text-lg font-semibold text-ink">Payment</h2>
+            <p className="mt-3 text-sm text-muted">
               {order.paymentMethod}
               {order.paymentLast4 ? ` ending in ${order.paymentLast4}` : ""}
             </p>
             {order.couponCode && (
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-muted">
                 Coupon applied:{" "}
-                <span className="font-mono font-semibold text-emerald-700">
+                <span className="font-mono font-semibold text-[#2F5D34]">
                   {order.couponCode}
                 </span>
               </p>
@@ -200,8 +200,8 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
           </Card>
 
           {/* Totals */}
-          <Card className="p-5 sm:p-6">
-            <h2 className="text-base font-semibold text-gray-900">Order summary</h2>
+          <Card className="bg-sand p-5 sm:p-6">
+            <h2 className="font-display text-lg font-semibold text-ink">Order summary</h2>
             <div className="mt-4 space-y-2.5">
               <TotalsRow label="Subtotal" value={currency(order.subtotal)} />
               {order.discount > 0 && (
@@ -212,16 +212,16 @@ export default function OrderDetailPage({ params }: { params: { id: string } }) 
                 value={order.shipping === 0 ? "Free" : currency(order.shipping)}
               />
               <TotalsRow label="Tax" value={currency(order.tax)} />
-              <div className="border-t border-gray-200 pt-2.5">
+              <div className="border-t border-line pt-2.5">
                 <TotalsRow label="Total" value={currency(order.total)} strong />
               </div>
             </div>
           </Card>
 
           {user && (
-            <p className="text-xs text-gray-500">
+            <p className="text-xs leading-relaxed text-muted">
               Need help with this order? Contact our support team with order number{" "}
-              <span className="font-semibold">{order.number}</span>.
+              <span className="tnum font-semibold text-ink">{order.number}</span>.
             </p>
           )}
         </div>

@@ -7,12 +7,16 @@ import { getReviews } from '@/lib/store';
 import { formatDate } from '@/lib/format';
 import { Stars } from '@/components/ui/Stars';
 import { Button } from '@/components/ui/Button';
+import { cn } from '@/lib/cn';
 
 interface ReviewsListProps {
   productId: string;
   rating: number;
   reviewsCount: number;
 }
+
+const fieldClass =
+  'w-full rounded-[10px] border border-line bg-card px-3 py-2 text-sm text-ink placeholder:text-muted focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20';
 
 export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProps) {
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -51,24 +55,24 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
 
   return (
     <div className="grid gap-8 md:grid-cols-[280px_1fr]">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-900">Customer reviews</h3>
+      <div className="md:sticky md:top-24 md:self-start">
+        <h3 className="font-display text-xl font-semibold text-ink">Customer reviews</h3>
         <div className="mt-3 flex items-center gap-2">
           <Stars value={average} size="md" />
-          <span className="text-sm font-semibold text-gray-900">{average.toFixed(1)} out of 5</span>
+          <span className="text-sm font-semibold text-ink">{average.toFixed(1)} out of 5</span>
         </div>
-        <p className="mt-1 text-sm text-gray-500">Based on {reviewsCount} reviews</p>
+        <p className="mt-1 text-sm text-muted">Based on {reviewsCount} reviews</p>
         <div className="mt-4 space-y-1.5">
           {distribution.map((count, i) => {
             const stars = 5 - i;
             const pct = reviews.length === 0 ? 0 : Math.round((count / reviews.length) * 100);
             return (
-              <div key={stars} className="flex items-center gap-2 text-xs text-gray-600">
-                <span className="w-8 shrink-0">{stars} star</span>
-                <div className="h-2 flex-1 overflow-hidden rounded-full bg-gray-200">
-                  <div className="h-full rounded-full bg-amber-400" style={{ width: `${pct}%` }} />
+              <div key={stars} className="flex items-center gap-2 text-xs text-muted">
+                <span className="w-10 shrink-0 tabular-nums">{stars} star</span>
+                <div className="h-2 flex-1 overflow-hidden rounded-full bg-line">
+                  <div className="h-full rounded-full bg-gold" style={{ width: `${pct}%` }} />
                 </div>
-                <span className="w-8 shrink-0 text-right">{count}</span>
+                <span className="w-8 shrink-0 text-right tabular-nums">{count}</span>
               </div>
             );
           })}
@@ -77,49 +81,57 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
 
       <div className="space-y-6">
         {reviews.length === 0 ? (
-          <p className="rounded-xl border border-dashed border-gray-300 bg-gray-50 p-6 text-sm text-gray-500">
+          <p className="rounded-[14px] border border-dashed border-line bg-sand/60 p-6 text-sm text-muted">
             No written reviews yet — be the first to share your experience below.
           </p>
         ) : (
           reviews.map((review) => (
-            <article key={review.id} className="border-b border-gray-200 pb-6 last:border-0">
+            <article
+              key={review.id}
+              className="rounded-[14px] border border-line bg-card p-5"
+            >
               <div className="flex items-center gap-2">
                 <Stars value={review.rating} size="sm" />
-                <h4 className="text-sm font-semibold text-gray-900">{review.title}</h4>
+                <h4 className="text-sm font-semibold text-ink">{review.title}</h4>
               </div>
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-1 text-xs text-muted">
                 {review.userName} · {formatDate(review.createdAt)}
               </p>
-              <p className="mt-2 text-sm leading-6 text-gray-700">{review.body}</p>
+              <p className="mt-2 text-sm leading-6 text-ink/80">{review.body}</p>
             </article>
           ))
         )}
 
-        <div className="rounded-xl border border-gray-200 bg-gray-50 p-5">
+        <div className="rounded-[14px] border border-line bg-sand/60 p-5 sm:p-6">
           {submitted ? (
             <div className="flex items-start gap-3">
-              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" />
+              <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-forest" />
               <div>
-                <h4 className="text-sm font-semibold text-gray-900">Thanks for your review!</h4>
-                <p className="mt-1 text-sm text-gray-600">
-                  Your feedback was received and will be published after a quick moderation check.
+                <h4 className="text-sm font-semibold text-ink">Thanks for your review.</h4>
+                <p className="mt-1 text-sm text-muted">
+                  It will appear here after a quick moderation check.
                 </p>
               </div>
             </div>
           ) : (
             <form onSubmit={handleSubmit} noValidate>
-              <h4 className="flex items-center gap-2 text-sm font-semibold text-gray-900">
+              <h4 className="flex items-center gap-2 text-sm font-semibold text-ink">
                 <PenLine className="h-4 w-4" />
                 Write a review
               </h4>
               {error && (
-                <p role="alert" className="mt-3 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700">
+                <p
+                  role="alert"
+                  className={cn(
+                    'mt-3 rounded-[10px] border border-accent/30 bg-accent/10 px-3 py-2 text-sm text-accent-deep',
+                  )}
+                >
                   {error}
                 </p>
               )}
               <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="review-name" className="mb-1 block text-xs font-medium text-gray-700">
+                  <label htmlFor="review-name" className="mb-1 block text-xs font-medium text-ink">
                     Your name
                   </label>
                   <input
@@ -128,18 +140,18 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Jane Doe"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    className={fieldClass}
                   />
                 </div>
                 <div>
-                  <label htmlFor="review-rating" className="mb-1 block text-xs font-medium text-gray-700">
+                  <label htmlFor="review-rating" className="mb-1 block text-xs font-medium text-ink">
                     Rating
                   </label>
                   <select
                     id="review-rating"
                     value={reviewRating}
                     onChange={(e) => setReviewRating(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                    className={fieldClass}
                   >
                     {[5, 4, 3, 2, 1].map((n) => (
                       <option key={n} value={n}>
@@ -150,7 +162,7 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
                 </div>
               </div>
               <div className="mt-4">
-                <label htmlFor="review-title" className="mb-1 block text-xs font-medium text-gray-700">
+                <label htmlFor="review-title" className="mb-1 block text-xs font-medium text-ink">
                   Headline
                 </label>
                 <input
@@ -159,11 +171,11 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="Sum up your experience"
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                  className={fieldClass}
                 />
               </div>
               <div className="mt-4">
-                <label htmlFor="review-body" className="mb-1 block text-xs font-medium text-gray-700">
+                <label htmlFor="review-body" className="mb-1 block text-xs font-medium text-ink">
                   Review
                 </label>
                 <textarea
@@ -172,11 +184,11 @@ export function ReviewsList({ productId, rating, reviewsCount }: ReviewsListProp
                   onChange={(e) => setBody(e.target.value)}
                   rows={4}
                   placeholder="What did you like or dislike?"
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                  className={fieldClass}
                 />
               </div>
               <div className="mt-4">
-                <Button type="submit" variant="primary" size="md">
+                <Button type="submit" variant="primary" size="md" className="rounded-full">
                   Submit review
                 </Button>
               </div>

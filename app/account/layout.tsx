@@ -49,7 +49,7 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
   if (!ready) {
     return (
       <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-24">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-accent" />
         <span className="sr-only">Loading your account…</span>
       </div>
     );
@@ -60,18 +60,20 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
     router.push("/");
   }
 
+  const initial = (user?.name ?? "?").trim().charAt(0).toUpperCase();
+
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 lg:py-12">
       <div className="flex flex-col gap-8 md:flex-row">
         <aside className="md:w-64 md:shrink-0">
           {/* User card */}
-          <div className="mb-4 flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-indigo-100 text-indigo-700">
-              <UserIcon className="h-5 w-5" />
+          <div className="mb-4 flex items-center gap-3 rounded-[14px] border border-line bg-card p-4">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-forest font-display text-lg font-semibold text-paper">
+              {initial}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-gray-900">{user?.name}</p>
-              <p className="truncate text-xs text-gray-500">{user?.email}</p>
+              <p className="truncate text-sm font-semibold text-ink">{user?.name}</p>
+              <p className="truncate text-xs text-muted">{user?.email}</p>
             </div>
           </div>
 
@@ -85,8 +87,8 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
                   href={item.href}
                   className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
                     active
-                      ? "border-indigo-600 bg-indigo-600 text-white"
-                      : "border-gray-200 bg-white text-gray-700 hover:border-indigo-300 hover:text-indigo-700"
+                      ? "border-accent bg-accent text-white"
+                      : "border-line bg-card text-ink hover:border-ink/30"
                   }`}
                 >
                   <item.icon className="h-4 w-4" />
@@ -98,29 +100,29 @@ export default function AccountLayout({ children }: { children: ReactNode }) {
 
           {/* Desktop nav */}
           <nav aria-label="Account" className="hidden md:block">
-            <div className="rounded-xl border border-gray-200 bg-white p-2">
+            <div className="rounded-[14px] border border-line bg-card p-2">
               {NAV.map((item) => {
                 const active = isActive(pathname, item.href, item.exact);
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                       active
-                        ? "bg-indigo-50 text-indigo-700"
-                        : "text-gray-700 hover:bg-gray-50 hover:text-gray-900"
+                        ? "bg-sand text-ink"
+                        : "text-muted hover:bg-sand/60 hover:text-ink"
                     }`}
                   >
-                    <item.icon className="h-4 w-4" />
+                    <item.icon className={`h-4 w-4 ${active ? "text-accent" : ""}`} />
                     {item.label}
                   </Link>
                 );
               })}
-              <div className="mt-2 border-t border-gray-100 pt-2">
+              <div className="mt-2 border-t border-line pt-2">
                 <button
                   type="button"
                   onClick={handleSignOut}
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-rose-50 hover:text-rose-700"
+                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-[#E26D5A]/10 hover:text-[#A33B2A]"
                 >
                   <LogOut className="h-4 w-4" />
                   Sign out

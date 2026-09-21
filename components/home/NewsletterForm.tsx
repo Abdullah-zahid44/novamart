@@ -1,73 +1,70 @@
 'use client';
 
-import { useState } from 'react';
-import { CheckCircle2, Mail } from 'lucide-react';
+import { useState, type FormEvent } from 'react';
+import { CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui';
+import { cn } from '@/lib/cn';
 
-export default function NewsletterForm() {
+export interface NewsletterFormProps {
+  compact?: boolean;
+  className?: string;
+}
+
+/** Pill newsletter form with inline success state. Demo-grade: stores nothing. */
+export function NewsletterForm({ compact, className }: NewsletterFormProps) {
   const [email, setEmail] = useState('');
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
-  const submit = (e: React.FormEvent) => {
+  const submit = (e: FormEvent) => {
     e.preventDefault();
-    const value = email.trim();
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-      setError('Please enter a valid email address.');
+    const valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+    if (!valid) {
+      setError('That email does not look right — mind checking it?');
       return;
     }
-    setError('');
+    setError(null);
     setDone(true);
   };
 
   if (done) {
     return (
-      <div className="flex items-center gap-3 rounded-xl bg-white/10 px-5 py-4 ring-1 ring-white/20">
-        <CheckCircle2 className="h-6 w-6 shrink-0 text-emerald-300" aria-hidden="true" />
-        <p className="text-sm text-white">
-          <span className="font-semibold">You&apos;re on the list.</span> Watch
-          your inbox — your first subscriber-only deal is on its way.
+      <div className={cn('flex items-center gap-3 rounded-[14px] border border-line bg-card px-5 py-4', className)}>
+        <CheckCircle2 className="h-5 w-5 shrink-0 text-accent" aria-hidden />
+        <p className="text-sm font-medium text-ink">
+          You are on the list. First drop lands Friday.
         </p>
       </div>
     );
   }
 
   return (
-    <form onSubmit={submit} noValidate className="w-full">
-      <div className="flex flex-col gap-3 sm:flex-row">
-        <label htmlFor="newsletter-email" className="sr-only">
+    <form onSubmit={submit} noValidate className={cn('w-full', className)}>
+      <div
+        className={cn(
+          'flex items-center gap-2 rounded-full border bg-card p-1.5 pl-5',
+          error ? 'border-rose-500' : 'border-line',
+        )}
+      >
+        <label htmlFor={compact ? 'nl-email-footer' : 'nl-email'} className="sr-only">
           Email address
         </label>
-        <div className="relative flex-1">
-          <Mail
-            className="pointer-events-none absolute top-1/2 left-4 h-5 w-5 -translate-y-1/2 text-slate-400"
-            aria-hidden="true"
-          />
-          <input
-            id="newsletter-email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="you@example.com"
-            aria-invalid={error ? 'true' : undefined}
-            aria-describedby={error ? 'newsletter-error' : undefined}
-            className="w-full rounded-lg border-0 bg-white py-3.5 pr-4 pl-11 text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-amber-300 focus:outline-none"
-          />
-        </div>
-        <button
-          type="submit"
-          className="rounded-lg bg-amber-400 px-7 py-3.5 font-semibold text-slate-900 transition hover:bg-amber-300"
-        >
+        <input
+          id={compact ? 'nl-email-footer' : 'nl-email'}
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@example.com"
+          className="h-10 w-full bg-transparent text-sm text-ink placeholder:text-muted/70 focus:outline-none"
+        />
+        <Button type="submit" size={compact ? 'sm' : 'md'} className="shrink-0">
           Subscribe
-        </button>
+        </Button>
       </div>
-      {error && (
-        <p id="newsletter-error" role="alert" className="mt-2 text-sm text-amber-300">
-          {error}
-        </p>
+      {error && <p className="mt-2 pl-5 text-xs text-rose-600">{error}</p>}
+      {!compact && !error && (
+        <p className="mt-2 pl-5 text-xs text-muted">One email a week. Unsubscribe anytime.</p>
       )}
-      <p className="mt-3 text-xs text-indigo-200">
-        One email a week, max. Unsubscribe anytime — no hard feelings.
-      </p>
     </form>
   );
 }

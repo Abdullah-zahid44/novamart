@@ -34,7 +34,7 @@ export function CouponForm({ subtotal, coupon, onApply, onRemove }: CouponFormPr
     const res = validateCoupon(coupon.code, subtotal);
     if (!res.ok || !res.coupon) {
       onRemove();
-      setError(res.error ?? 'That coupon is no longer valid for this order.');
+      setError("That code doesn't work here. Check the spelling?");
     } else if (res.discount !== coupon.discount || (res.freeShip ?? false) !== coupon.freeShip) {
       onApply(toApplied(res.coupon.code, res.discount, res.freeShip, res.coupon.type));
     }
@@ -50,7 +50,7 @@ export function CouponForm({ subtotal, coupon, onApply, onRemove }: CouponFormPr
     }
     const res = validateCoupon(trimmed, subtotal);
     if (!res.ok || !res.coupon) {
-      setError(res.error ?? 'That coupon code is not valid.');
+      setError("That code doesn't work here. Check the spelling?");
       return;
     }
     setError('');
@@ -61,11 +61,11 @@ export function CouponForm({ subtotal, coupon, onApply, onRemove }: CouponFormPr
   if (coupon) {
     return (
       <div>
-        <div className="flex items-center justify-between rounded-lg bg-emerald-50 px-3 py-2.5">
-          <p className="flex items-center gap-2 text-sm font-semibold text-emerald-800">
-            <Tag className="h-4 w-4" aria-hidden />
-            {coupon.code}
-            <span className="font-normal text-emerald-700">
+        <div className="flex items-center justify-between rounded-xl bg-sand px-3.5 py-2.5">
+          <p className="flex items-center gap-2 text-sm font-semibold text-ink">
+            <Tag className="h-4 w-4 text-accent" aria-hidden />
+            <span className="font-mono tracking-wide">{coupon.code}</span>
+            <span className="font-normal text-muted">
               {coupon.freeShip ? '· free shipping applied' : `· ${currency(coupon.discount)} off applied`}
             </span>
           </p>
@@ -76,12 +76,12 @@ export function CouponForm({ subtotal, coupon, onApply, onRemove }: CouponFormPr
               setError('');
             }}
             aria-label={`Remove coupon ${coupon.code}`}
-            className="rounded p-1 text-emerald-700 transition hover:bg-emerald-100"
+            className="rounded-full p-1.5 text-muted transition hover:bg-line/70 hover:text-ink"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
-        {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+        {error && <p className="mt-1 text-xs text-[#B23A17]">{error}</p>}
       </div>
     );
   }

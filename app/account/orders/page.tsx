@@ -17,7 +17,7 @@ function byNewest(a: Order, b: Order) {
 function StatusBadge({ status }: { status: Order["status"] }) {
   const meta = orderStatusMeta[status];
   return (
-    <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
+    <span className="inline-flex items-center gap-1.5 rounded-full bg-sand px-3 py-1 text-xs font-medium text-ink">
       <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
       {meta.label}
     </span>
@@ -40,11 +40,11 @@ export default function OrdersPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
+        <h1 className="font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl">
           Order history
         </h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Every order you&apos;ve placed at NovaMart, newest first.
+        <p className="mt-1 text-sm text-muted">
+          Everything you&apos;ve ordered from NovaMart, newest first.
         </p>
       </div>
 
@@ -52,7 +52,7 @@ export default function OrdersPage() {
         <EmptyState
           icon={Package}
           title="No orders yet"
-          hint="When you place an order it will appear here with live status updates."
+          hint="Your history starts with the first box."
           action={
             <Link href="/shop">
               <Button variant="primary">Browse the shop</Button>
@@ -65,7 +65,7 @@ export default function OrdersPage() {
           <Card className="hidden overflow-hidden md:block">
             <table className="w-full text-left text-sm">
               <thead>
-                <tr className="border-b border-gray-200 bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+                <tr className="border-b border-line bg-sand/60 text-xs uppercase tracking-wide text-muted">
                   <th className="px-5 py-3 font-semibold">Order</th>
                   <th className="px-5 py-3 font-semibold">Date</th>
                   <th className="px-5 py-3 font-semibold">Items</th>
@@ -76,17 +76,17 @@ export default function OrdersPage() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-line/70">
                 {orders.map((o) => {
                   const itemCount = o.items.reduce((s, i) => s + i.qty, 0);
                   return (
-                    <tr key={o.id} className="transition-colors hover:bg-gray-50">
-                      <td className="px-5 py-4 font-semibold text-gray-900">{o.number}</td>
-                      <td className="px-5 py-4 text-gray-600">{formatDate(o.createdAt)}</td>
-                      <td className="px-5 py-4 text-gray-600">
+                    <tr key={o.id} className="transition-colors hover:bg-sand/40">
+                      <td className="tnum px-5 py-4 font-semibold text-ink">{o.number}</td>
+                      <td className="px-5 py-4 text-muted">{formatDate(o.createdAt)}</td>
+                      <td className="px-5 py-4 text-muted">
                         {itemCount} {itemCount === 1 ? "item" : "items"}
                       </td>
-                      <td className="px-5 py-4 font-semibold text-gray-900">
+                      <td className="tnum px-5 py-4 font-semibold text-ink">
                         {currency(o.total)}
                       </td>
                       <td className="px-5 py-4">
@@ -95,7 +95,7 @@ export default function OrdersPage() {
                       <td className="px-5 py-4 text-right">
                         <Link
                           href={`/account/orders/${o.id}`}
-                          className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600 hover:text-indigo-700"
+                          className="inline-flex items-center gap-1 text-sm font-semibold text-accent hover:text-accent-deep hover:underline"
                         >
                           View <ArrowRight className="h-4 w-4" />
                         </Link>
@@ -116,17 +116,17 @@ export default function OrdersPage() {
                   <Card className="p-4">
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">Order {o.number}</p>
-                        <p className="mt-0.5 text-xs text-gray-500">
+                        <p className="tnum text-sm font-semibold text-ink">Order {o.number}</p>
+                        <p className="mt-0.5 text-xs text-muted">
                           {formatDate(o.createdAt)} · {itemCount}{" "}
                           {itemCount === 1 ? "item" : "items"}
                         </p>
                       </div>
                       <StatusBadge status={o.status} />
                     </div>
-                    <div className="mt-3 flex items-center justify-between border-t border-gray-100 pt-3">
-                      <span className="text-sm font-bold text-gray-900">{currency(o.total)}</span>
-                      <span className="inline-flex items-center gap-1 text-sm font-semibold text-indigo-600">
+                    <div className="mt-3 flex items-center justify-between border-t border-line pt-3">
+                      <span className="tnum text-sm font-semibold text-ink">{currency(o.total)}</span>
+                      <span className="inline-flex items-center gap-1 text-sm font-semibold text-accent">
                         View details <ArrowRight className="h-4 w-4" />
                       </span>
                     </div>

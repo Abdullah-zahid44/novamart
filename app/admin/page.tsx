@@ -2,13 +2,17 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { DollarSign, ShoppingBag, Users, Receipt, AlertTriangle } from "lucide-react";
+import { AlertTriangle, ArrowRight, DollarSign, Receipt, ShoppingBag } from "lucide-react";
 import { getOrders, getProducts } from "@/lib/store";
-import { currency, formatDate, orderStatusMeta } from "@/lib/format";
-import type { Order, OrderStatus, Product } from "@/lib/types";
+import { currency, formatDate } from "@/lib/format";
+import type { Order, Product } from "@/lib/types";
 import StatCard from "@/components/admin/StatCard";
+import RevenueChart from "@/components/admin/RevenueChart";
+import StatusPill from "@/components/admin/StatusPill";
+import { fraunces } from "@/components/admin/fonts";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const WINDOW = 14;
 
 function startOfDay(d: Date) {
   const c = new Date(d);
@@ -22,6 +26,19 @@ function dayKey(d: Date) {
 
 const isLiveOrder = (o: Order) => o.status !== "cancelled" && o.status !== "refunded";
 
+function pctDelta(current: number, previous: number): { text: string; tone: "up" | "down" | "flat" } {
+  if (previous <= 0) {
+    if (current <= 0) return { text: "No prior-period data", tone: "flat" };
+    return { text: "New this period", tone: "up" };
+  }
+  const pct = ((current - previous) / previous) * 100;
+  if (Math.abs(pct) < 0.05) return { text: "Flat vs prior 14 days", tone: "flat" };
+  return {
+    text: `${pct >= 0 ? "+" : ""}${pct.toFixed(1)}% vs prior 14 days`,
+    tone: pct >= 0 ? "up" : "down",
+  };
+}
+
 export default function AdminDashboardPage() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -31,201 +48,268 @@ export default function AdminDashboardPage() {
     setProducts(getProducts());
   }, []);
 
-  const stats = useMemo(() => {
-    const live = orders.filter(isLiveOrder);
-    const revenue = live.reduce((sum, o) => sum + o.total, 0);
-    const customers = new Set(orders.map((o) => o.email.toLowerCase())).size;
-    const avg = live.length > 0 ? revenue / live.length : 0;
+  const live = useMemo(() => orders.filter(isLiveOrder), [orders]);
 
-    const now = Date.now();
-    const last7 = live.filter((o) => now - new Date(o.createdAt).getTime() < 7 * DAY_MS);
-    const prev7 = live.filter((o) => {
-      const age = now - new Date(o.createdAt).getTime();
-      return age >= 7 * DAY_MS && age < 14 * DAY_MS;
-    });
-    const r7 = last7.reduce((s, o) => s + o.total, 0);
-    const rPrev = prev7.reduce((s, o) => s + o.total, 0);
-    const deltaPct = rPrev > 0 ? ((r7 - rPrev) / rPrev) * 100 : r7 > 0 ? 100 : 0;
-    const delta = `${deltaPct >= 0 ? "+" : ""}${deltaPct.toFixed(1)}% vs prior 7 days`;
-
-    return { revenue, orderCount: orders.length, customers, avg, delta };
-  }, [orders]);
-
-  const chart = useMemo(() => {
+  /** Per-day series for the current and previous 14-day windows. */
+  const series = useMemo(() => {
     const today = startOfDay(new Date());
-    const days: { label: string; total: number }[] = [];
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date(today.getTime() - i * DAY_MS);
-      const key = dayKey(d);
-      const total = orders
-        .filter(isLiveOrder)
-        .filter((o) => dayKey(new Date(o.createdAt)) === key)
-        .reduce((s, o) => s + o.total, 0);
-      days.push({
-        label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
-        total,
-      });
-    }
-    const max = Math.max(...days.map((d) => d.total), 1);
-    return { days, max };
-  }, [orders]);
+    const mk = (offset: number) => {
+      const days: { label: string; key: string; revenue: number; count: number }[] = [];
+      for (let i = WINDOW - 1; i >= 0; i--) {
+        const d = new Date(today.getTime() - (i + offset) * DAY_MS);
+        days.push({
+          label: d.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+          key: dayKey(d),
+          revenue: 0,
+          count: 0,
+        });
+      }
+      const byKey = new Map(days.map((d) => [d.key, d]));
+      for (const o of live) {
+        const day = byKey.get(dayKey(new Date(o.createdAt)));
+        if (day) {
+          day.revenue += o.total;
+          day.count += 1;
+        }
+      }
+      return days;
+    };
+    return { current: mk(0), previous: mk(WINDOW) };
+  }, [live]);
 
-  const recentOrders = useMemo(
-    () =>
-      [...orders]
-        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-        .slice(0, 5),
-    [orders]
-  );
+  const stats = useMemo(() => {
+    const revenue = series.current.reduce((s, d) => s + d.revenue, 0);
+    const prevRevenue = series.previous.reduce((s, d) => s + d.revenue, 0);
+    const orderCount = series.current.reduce((s, d) => s + d.count, 0);
+    const prevOrderCount = series.previous.reduce((s, d) => s + d.count, 0);
+    const avg = orderCount > 0 ? revenue / orderCount : 0;
+    const prevAvg = prevOrderCount > 0 ? prevRevenue / prevOrderCount : 0;
+
+    return {
+      revenue,
+      revenueDelta: pctDelta(revenue, prevRevenue),
+      revenueSpark: series.current.map((d) => d.revenue),
+      orderCount,
+      orderDelta: pctDelta(orderCount, prevOrderCount),
+      orderSpark: series.current.map((d) => d.count),
+      avg,
+      avgDelta: pctDelta(avg, prevAvg),
+      avgSpark: series.current.map((d) => (d.count > 0 ? d.revenue / d.count : 0)),
+    };
+  }, [series]);
 
   const lowStock = useMemo(
     () =>
       [...products]
-        .filter((p) => p.stock < 10)
+        .filter((p) => p.stock <= 5)
         .sort((a, b) => a.stock - b.stock)
         .slice(0, 8),
     [products]
   );
 
-  const statusCounts = useMemo(() => {
-    const counts = {} as Record<OrderStatus, number>;
-    (Object.keys(orderStatusMeta) as OrderStatus[]).forEach((s) => (counts[s] = 0));
-    orders.forEach((o) => {
-      counts[o.status] = (counts[o.status] ?? 0) + 1;
-    });
-    return counts;
-  }, [orders]);
+  const recentOrders = useMemo(
+    () =>
+      [...orders]
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+        .slice(0, 6),
+    [orders]
+  );
+
+  const todayLabel = new Date().toLocaleDateString("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Dashboard</h1>
-        <p className="mt-1 text-sm text-gray-500">Store performance at a glance.</p>
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <h1 className={`${fraunces.className} text-3xl font-semibold text-[#F2EBDD] sm:text-4xl`}>
+            Mission control.
+          </h1>
+          <p className="mt-1.5 text-sm text-[#A39A89]">
+            The live pulse of the store — {todayLabel}. Last {WINDOW} days.
+          </p>
+        </div>
+        <Link
+          href="/"
+          className="inline-flex items-center gap-1.5 rounded-full border border-[#2E2820] px-4 py-2 text-sm font-medium text-[#F2EBDD] transition-colors hover:border-[#E4572E] hover:text-[#E4572E]"
+        >
+          View store <ArrowRight className="h-4 w-4" />
+        </Link>
       </div>
 
       {/* Stat cards */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard title="Total revenue" value={currency(stats.revenue)} delta={stats.delta} icon={DollarSign} tone="emerald" />
-        <StatCard title="Orders" value={String(stats.orderCount)} delta="All time" icon={ShoppingBag} tone="indigo" />
-        <StatCard title="Customers" value={String(stats.customers)} delta="Unique order emails" icon={Users} tone="amber" />
-        <StatCard title="Avg. order value" value={currency(stats.avg)} delta="Per completed order" icon={Receipt} tone="rose" />
-      </div>
-
-      {/* Status counts */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <h2 className="text-sm font-semibold text-gray-900">Orders by status</h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {(Object.keys(orderStatusMeta) as OrderStatus[]).map((status) => (
-            <Link
-              key={status}
-              href={`/admin/orders?status=${status}`}
-              className="flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm text-gray-700 hover:border-indigo-300 hover:bg-indigo-50"
-            >
-              <span className={`h-2 w-2 rounded-full ${orderStatusMeta[status].dot}`} />
-              <span className="font-medium">{orderStatusMeta[status].label}</span>
-              <span className="text-gray-500">{statusCounts[status]}</span>
-            </Link>
-          ))}
-        </div>
+        <StatCard
+          title="Revenue"
+          value={currency(stats.revenue)}
+          delta={stats.revenueDelta.text}
+          deltaTone={stats.revenueDelta.tone}
+          icon={DollarSign}
+          tone="orange"
+          spark={stats.revenueSpark}
+        />
+        <StatCard
+          title="Orders"
+          value={String(stats.orderCount)}
+          delta={stats.orderDelta.text}
+          deltaTone={stats.orderDelta.tone}
+          icon={ShoppingBag}
+          tone="green"
+          spark={stats.orderSpark}
+        />
+        <StatCard
+          title="Avg. order value"
+          value={currency(stats.avg)}
+          delta={stats.avgDelta.text}
+          deltaTone={stats.avgDelta.tone}
+          icon={Receipt}
+          tone="amber"
+          spark={stats.avgSpark}
+        />
+        <StatCard
+          title="Low stock"
+          value={String(lowStock.length)}
+          delta={lowStock.length === 0 ? "Everything is stocked up" : "Products at 5 units or fewer"}
+          deltaTone={lowStock.length === 0 ? "up" : "flat"}
+          icon={AlertTriangle}
+          tone="red"
+        />
       </div>
 
       {/* Revenue chart */}
-      <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-semibold text-gray-900">Revenue — last 14 days</h2>
-          <span className="text-xs text-gray-500">Max {currency(chart.max)}</span>
+      <section className="rounded-[14px] border border-[#2E2820] bg-[#1E1A14] p-5 sm:p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <div>
+            <h2 className={`${fraunces.className} text-xl font-semibold text-[#F2EBDD]`}>
+              Revenue
+            </h2>
+            <p className="mt-0.5 text-xs text-[#A39A89]">Last {WINDOW} days, live orders only</p>
+          </div>
+          <p className="text-sm text-[#A39A89]">
+            Total{" "}
+            <span className="text-lg font-semibold text-[#F2EBDD]">
+              {currency(stats.revenue)}
+            </span>
+          </p>
         </div>
-        <div className="mt-4 flex h-48 items-end gap-1.5 sm:gap-2">
-          {chart.days.map((d) => (
-            <div key={d.label} className="group relative flex h-full flex-1 flex-col justify-end">
-              <div
-                title={`${d.label}: ${currency(d.total)}`}
-                className="w-full rounded-t-md bg-indigo-500 transition-colors group-hover:bg-indigo-600"
-                style={{ height: `${Math.max((d.total / chart.max) * 100, 1.5)}%` }}
-              />
-              <p className="mt-1 hidden truncate text-center text-[10px] text-gray-400 sm:block">
-                {d.label}
-              </p>
-            </div>
-          ))}
+        <div className="mt-4">
+          <RevenueChart
+            days={series.current.map((d) => ({ label: d.label, total: d.revenue }))}
+          />
         </div>
-        <div className="mt-1 flex justify-between text-[10px] text-gray-400 sm:hidden">
-          <span>{chart.days[0].label}</span>
-          <span>{chart.days[chart.days.length - 1].label}</span>
-        </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-5">
         {/* Recent orders */}
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <section className="rounded-[14px] border border-[#2E2820] bg-[#1E1A14] p-5 sm:p-6 xl:col-span-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-900">Recent orders</h2>
-            <Link href="/admin/orders" className="text-sm font-medium text-indigo-600 hover:underline">
+            <h2 className={`${fraunces.className} text-xl font-semibold text-[#F2EBDD]`}>
+              Recent orders
+            </h2>
+            <Link
+              href="/admin/orders"
+              className="text-sm font-medium text-[#E4572E] hover:underline"
+            >
               View all
             </Link>
           </div>
           {recentOrders.length === 0 ? (
-            <p className="mt-4 text-sm text-gray-500">No orders yet.</p>
+            <p className="mt-6 rounded-lg border border-dashed border-[#2E2820] px-4 py-8 text-center text-sm text-[#A39A89]">
+              No orders yet. The moment someone checks out, it lands here.
+            </p>
           ) : (
-            <div className="mt-3 overflow-x-auto">
-              <table className="w-full text-sm">
+            <div className="mt-4 overflow-x-auto">
+              <table className="w-full min-w-[560px] text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100 text-left text-xs uppercase tracking-wide text-gray-400">
-                    <th className="py-2 pr-3 font-medium">Order</th>
-                    <th className="py-2 pr-3 font-medium">Customer</th>
-                    <th className="py-2 pr-3 font-medium">Status</th>
-                    <th className="py-2 text-right font-medium">Total</th>
+                  <tr className="border-b border-[#2E2820] text-left text-[11px] uppercase tracking-wider text-[#A39A89]">
+                    <th scope="col" className="py-2.5 pr-4 font-semibold">Order</th>
+                    <th scope="col" className="py-2.5 pr-4 font-semibold">Customer</th>
+                    <th scope="col" className="py-2.5 pr-4 text-center font-semibold">Items</th>
+                    <th scope="col" className="py-2.5 pr-4 font-semibold">Status</th>
+                    <th scope="col" className="py-2.5 text-right font-semibold">Total</th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentOrders.map((o) => (
-                    <tr key={o.id} className="border-b border-gray-50 last:border-0">
-                      <td className="py-2.5 pr-3">
-                        <Link href={`/admin/orders/${o.id}`} className="font-medium text-indigo-600 hover:underline">
+                    <tr
+                      key={o.id}
+                      className="border-b border-[#2E2820]/50 transition-colors last:border-0 hover:bg-[#26211A]"
+                    >
+                      <td className="py-3 pr-4">
+                        <Link
+                          href={`/admin/orders/${o.id}`}
+                          className="font-semibold text-[#E4572E] hover:underline"
+                        >
                           {o.number}
                         </Link>
-                        <p className="text-xs text-gray-400">{formatDate(o.createdAt)}</p>
+                        <p className="mt-0.5 text-xs text-[#A39A89]">{formatDate(o.createdAt)}</p>
                       </td>
-                      <td className="py-2.5 pr-3 text-gray-700">{o.name}</td>
-                      <td className="py-2.5 pr-3">
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-                          <span className={`h-1.5 w-1.5 rounded-full ${orderStatusMeta[o.status].dot}`} />
-                          {orderStatusMeta[o.status].label}
-                        </span>
+                      <td className="py-3 pr-4">
+                        <p className="font-medium text-[#F2EBDD]">{o.name}</p>
+                        <p className="mt-0.5 max-w-[180px] truncate text-xs text-[#A39A89]">
+                          {o.email}
+                        </p>
                       </td>
-                      <td className="py-2.5 text-right font-medium text-gray-900">{currency(o.total)}</td>
+                      <td className="py-3 pr-4 text-center text-[#A39A89]">
+                        {o.items.reduce((s, i) => s + i.qty, 0)}
+                      </td>
+                      <td className="py-3 pr-4">
+                        <StatusPill status={o.status} />
+                      </td>
+                      <td className="py-3 text-right font-semibold text-[#F2EBDD]">
+                        {currency(o.total)}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           )}
-        </div>
+        </section>
 
         {/* Low stock */}
-        <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm">
+        <section className="rounded-[14px] border border-[#2E2820] bg-[#1E1A14] p-5 sm:p-6 xl:col-span-2">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-semibold text-gray-900">Low stock</h2>
-            <Link href="/admin/products" className="text-sm font-medium text-indigo-600 hover:underline">
-              Manage products
+            <h2 className={`${fraunces.className} text-xl font-semibold text-[#F2EBDD]`}>
+              Running low
+            </h2>
+            <Link
+              href="/admin/products"
+              className="text-sm font-medium text-[#E4572E] hover:underline"
+            >
+              Restock
             </Link>
           </div>
           {lowStock.length === 0 ? (
-            <p className="mt-4 text-sm text-gray-500">All products are well stocked.</p>
+            <p className="mt-6 rounded-lg border border-dashed border-[#2E2820] px-4 py-8 text-center text-sm text-[#A39A89]">
+              Shelves are full. Nothing needs restocking.
+            </p>
           ) : (
-            <ul className="mt-3 divide-y divide-gray-50">
+            <ul className="mt-4 divide-y divide-[#2E2820]/60">
               {lowStock.map((p) => (
-                <li key={p.id} className="flex items-center justify-between gap-3 py-2.5">
+                <li key={p.id} className="flex items-center justify-between gap-3 py-3">
                   <div className="min-w-0">
-                    <Link href={`/admin/products/${p.id}`} className="truncate text-sm font-medium text-gray-900 hover:text-indigo-600">
+                    <Link
+                      href={`/admin/products/${p.id}`}
+                      className="block truncate text-sm font-medium text-[#F2EBDD] hover:text-[#E4572E]"
+                    >
                       {p.name}
                     </Link>
-                    <p className="text-xs text-gray-400">{p.brand} · {currency(p.price)}</p>
+                    <p className="mt-0.5 text-xs text-[#A39A89]">
+                      {p.brand} · {currency(p.price)}
+                    </p>
                   </div>
                   <span
-                    className={`flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      p.stock === 0 ? "bg-rose-100 text-rose-700" : "bg-amber-100 text-amber-700"
-                    }`}
+                    className="flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold"
+                    style={
+                      p.stock === 0
+                        ? { color: "#E26D5A", backgroundColor: "rgba(226,109,90,0.12)" }
+                        : { color: "#E0A458", backgroundColor: "rgba(224,164,88,0.12)" }
+                    }
                   >
                     <AlertTriangle className="h-3.5 w-3.5" />
                     {p.stock === 0 ? "Out of stock" : `${p.stock} left`}
@@ -234,7 +318,7 @@ export default function AdminDashboardPage() {
               ))}
             </ul>
           )}
-        </div>
+        </section>
       </div>
     </div>
   );

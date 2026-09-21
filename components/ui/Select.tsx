@@ -2,6 +2,7 @@ import type { SelectHTMLAttributes } from 'react';
 import type { ReactNode } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/cn';
+import { errorCls, fieldCls, labelCls } from './fieldBase';
 
 export interface SelectOption {
   value: string;
@@ -25,7 +26,7 @@ export function Select({ label, error, options, placeholder, id, className, chil
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={inputId} className="mb-1.5 block text-sm font-medium text-slate-700">
+        <label htmlFor={inputId} className={labelCls}>
           {label}
         </label>
       )}
@@ -33,14 +34,7 @@ export function Select({ label, error, options, placeholder, id, className, chil
         <select
           id={inputId}
           aria-invalid={!!error}
-          className={cn(
-            'h-10 w-full appearance-none rounded-lg border bg-white pl-3 pr-9 text-sm text-slate-900',
-            'transition-colors focus:outline-none focus:ring-2 focus:ring-offset-0',
-            error
-              ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-200'
-              : 'border-slate-300 focus:border-indigo-500 focus:ring-indigo-200',
-            className,
-          )}
+          className={cn(fieldCls(error), 'h-11 appearance-none pl-3.5 pr-10', className)}
           {...rest}
         >
           {placeholder && <option value="">{placeholder}</option>}
@@ -53,10 +47,10 @@ export function Select({ label, error, options, placeholder, id, className, chil
         <ChevronDown
           size={16}
           aria-hidden
-          className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 text-muted"
         />
       </div>
-      {error && <p className="mt-1 text-xs text-rose-600">{error}</p>}
+      {error && <p className={errorCls}>{error}</p>}
     </div>
   );
 }

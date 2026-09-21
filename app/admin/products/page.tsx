@@ -6,34 +6,46 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpDown,
-  CheckCircle2,
   Minus,
   Package,
   Pencil,
   Plus,
-  Search,
   Trash2,
 } from 'lucide-react';
 import { adjustStock, deleteProduct, getCategories, getProducts } from '@/lib/store';
 import type { Category, Product } from '@/lib/types';
 import { currency } from '@/lib/format';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { EmptyState } from '@/components/ui/EmptyState';
+import {
+  Btn,
+  ConfirmDialog,
+  EmptyBox,
+  Mono,
+  PageHeader,
+  Panel,
+  SearchInput,
+  Toast,
+  inputCls,
+  rowCls,
+  tdCls,
+  thCls,
+  theadCls,
+} from '../_ui';
 
 type SortKey = 'name' | 'price' | 'stock' | 'createdAt';
 type SortDir = 'asc' | 'desc';
 
-function statusFor(stock: number): { label: string; classes: string } {
-  if (stock === 0) return { label: 'Out of stock', classes: 'bg-rose-100 text-rose-700' };
-  if (stock < 10) return { label: 'Low stock', classes: 'bg-amber-100 text-amber-800' };
-  return { label: 'In stock', classes: 'bg-emerald-100 text-emerald-700' };
+function stockPill(stock: number): { label: string; cls: string } {
+  if (stock === 0)
+    return { label: 'Out of stock', cls: 'border-[#E26D5A]/30 bg-[#E26D5A]/10 text-[#E26D5A]' };
+  if (stock < 10)
+    return { label: 'Low stock', cls: 'border-[#E0A458]/30 bg-[#E0A458]/10 text-[#E0A458]' };
+  return { label: 'In stock', cls: 'border-[#7FB069]/30 bg-[#7FB069]/10 text-[#7FB069]' };
 }
 
-function stockTextClass(stock: number): string {
-  if (stock === 0) return 'text-rose-600';
-  if (stock < 10) return 'text-amber-600';
-  return 'text-slate-900';
+function stockNumCls(stock: number): string {
+  if (stock === 0) return 'text-[#E26D5A]';
+  if (stock < 10) return 'text-[#E0A458]';
+  return 'text-[#F2EBDD]';
 }
 
 export default function AdminProductsPage() {
@@ -44,6 +56,7 @@ export default function AdminProductsPage() {
   const [sortKey, setSortKey] = useState<SortKey>('createdAt');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
   const [banner, setBanner] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Product | null>(null);
 
   useEffect(() => {
     setProducts(getProducts());
@@ -58,15 +71,14 @@ export default function AdminProductsPage() {
 
   const flash = (msg: string) => {
     setBanner(msg);
-    window.setTimeout(() => setBanner(null), 3000);
+    window.setTimeout(() => setBanner(null), 3200);
   };
 
   const refresh = () => setProducts(getProducts());
 
   const toggleSort = (key: SortKey) => {
-    if (sortKey === key) {
-      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
-    } else {
+    if (sortKey === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    else {
       setSortKey(key);
       setSortDir(key === 'name' ? 'asc' : 'desc');
     }
@@ -74,7 +86,7 @@ export default function AdminProductsPage() {
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    let list = products.filter((p) => {
+    const list = products.filter((p) => {
       const matchesQ =
         !q ||
         p.name.toLowerCase().includes(q) ||
@@ -84,7 +96,7 @@ export default function AdminProductsPage() {
       const matchesCat = categoryFilter === 'all' || p.category === categoryFilter;
       return matchesQ && matchesCat;
     });
-    list = [...list].sort((a, b) => {
+    return [...list].sort((a, b) => {
       let cmp = 0;
       if (sortKey === 'name') cmp = a.name.localeCompare(b.name);
       else if (sortKey === 'price') cmp = a.price - b.price;
@@ -92,69 +104,72 @@ export default function AdminProductsPage() {
       else cmp = a.createdAt.localeCompare(b.createdAt);
       return sortDir === 'asc' ? cmp : -cmp;
     });
-    return list;
   }, [products, query, categoryFilter, sortKey, sortDir, catName]);
+
+  const lowStock = useMemo(() => products.filter((p) => p.stock < 10).length, [products]);
 
   const handleAdjust = (id: string, delta: number) => {
     adjustStock(id, delta);
     refresh();
-    flash('Stock updated.');
   };
 
-  const handleDelete = (p: Product) => {
-    if (window.confirm(`Delete "${p.name}"? This cannot be undone.`)) {
-      deleteProduct(p.id);
-      refresh();
-      flash(`"${p.name}" deleted.`);
-    }
+  const confirmDelete = () => {
+    if (!deleteTarget) return;
+    deleteProduct(deleteTarget.id);
+    setDeleteTarget(null);
+    refresh();
+    flash(`"${deleteTarget.name}" deleted.`);
   };
 
   const SortIcon = ({ k }: { k: SortKey }) => {
-    if (sortKey !== k) return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 text-slate-400" />;
+    if (sortKey !== k) return <ArrowUpDown className="ml-1 inline h-3.5 w-3.5 text-[#A39A89]/60" />;
     return sortDir === 'asc' ? (
-      <ArrowUp className="ml-1 inline h-3.5 w-3.5 text-indigo-600" />
+      <ArrowUp className="ml-1 inline h-3.5 w-3.5 text-[#E4572E]" />
     ) : (
-      <ArrowDown className="ml-1 inline h-3.5 w-3.5 text-indigo-600" />
+      <ArrowDown className="ml-1 inline h-3.5 w-3.5 text-[#E4572E]" />
     );
   };
 
+  const sortBtn = (key: SortKey, label: string) => (
+    <button
+      type="button"
+      onClick={() => toggleSort(key)}
+      className="inline-flex items-center uppercase hover:text-[#F2EBDD]"
+    >
+      {label} <SortIcon k={key} />
+    </button>
+  );
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Products</h1>
-          <p className="mt-1 text-sm text-slate-500">
-            Manage your catalog — {products.length} {products.length === 1 ? 'product' : 'products'}
-          </p>
-        </div>
-        <Link href="/admin/products/new">
-          <Button variant="primary">
-            <Plus className="mr-2 h-4 w-4" /> Add Product
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        title="Products"
+        sub={`${products.length} ${products.length === 1 ? 'product' : 'products'} in the catalog${
+          lowStock > 0 ? ` · ${lowStock} running low on stock` : ''
+        }`}
+        actions={
+          <Link href="/admin/products/new">
+            <Btn>
+              <Plus className="h-4 w-4" /> New product
+            </Btn>
+          </Link>
+        }
+      />
 
-      {banner && (
-        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          {banner}
-        </div>
-      )}
+      {banner && <Toast message={banner} />}
 
       <div className="flex flex-col gap-3 sm:flex-row">
-        <div className="relative flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
-          <Input
-            value={query}
-            onChange={(ev) => setQuery(ev.target.value)}
-            placeholder="Search by name, SKU, brand or category…"
-            className="pl-9"
-          />
-        </div>
+        <SearchInput
+          value={query}
+          onChange={setQuery}
+          placeholder="Search name, SKU, brand or category…"
+          ariaLabel="Search products"
+          className="flex-1"
+        />
         <select
           value={categoryFilter}
-          onChange={(ev) => setCategoryFilter(ev.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200 sm:w-56"
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className={`${inputCls} sm:w-56`}
           aria-label="Filter by category"
         >
           <option value="all">All categories</option>
@@ -167,138 +182,146 @@ export default function AdminProductsPage() {
       </div>
 
       {filtered.length === 0 ? (
-        <EmptyState
+        <EmptyBox
           icon={Package}
           title="No products found"
-          hint="Try adjusting your search or category filter — or add a new product to the catalog."
+          hint="Try a different search or category — or add a new product to the catalog."
           action={
             <Link href="/admin/products/new">
-              <Button variant="primary">
-                <Plus className="mr-2 h-4 w-4" /> Add Product
-              </Button>
+              <Btn>
+                <Plus className="h-4 w-4" /> New product
+              </Btn>
             </Link>
           }
         />
       ) : (
-        <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
-          <table className="w-full min-w-[940px] text-left text-sm">
-            <thead>
-              <tr className="border-b border-slate-200 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
-                <th className="px-4 py-3 font-semibold">Product</th>
-                <th className="px-4 py-3 font-semibold">SKU</th>
-                <th className="px-4 py-3 font-semibold">Category</th>
-                <th className="px-4 py-3 font-semibold">
-                  <button type="button" onClick={() => toggleSort('price')} className="inline-flex items-center hover:text-slate-800">
-                    Price <SortIcon k="price" />
-                  </button>
-                </th>
-                <th className="px-4 py-3 font-semibold">
-                  <button type="button" onClick={() => toggleSort('stock')} className="inline-flex items-center hover:text-slate-800">
-                    Stock <SortIcon k="stock" />
-                  </button>
-                </th>
-                <th className="px-4 py-3 font-semibold">Status</th>
-                <th className="px-4 py-3 text-right font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {filtered.map((p) => {
-                const status = statusFor(p.stock);
-                return (
-                  <tr key={p.id} className="hover:bg-slate-50">
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-3">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={p.images[0] ?? 'https://picsum.photos/seed/novamart/200/200'}
-                          alt={p.name}
-                          className="h-12 w-12 shrink-0 rounded-lg border border-slate-200 object-cover"
-                          onError={(ev) => {
-                            (ev.target as HTMLImageElement).src = 'https://picsum.photos/seed/novamart/200/200';
-                          }}
-                        />
-                        <div className="min-w-0">
+        <Panel className="overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[960px] text-left text-sm">
+              <thead>
+                <tr className={theadCls}>
+                  <th scope="col" className={thCls}>{sortBtn('name', 'Product')}</th>
+                  <th scope="col" className={thCls}>SKU</th>
+                  <th scope="col" className={thCls}>Category</th>
+                  <th scope="col" className={thCls}>{sortBtn('price', 'Price')}</th>
+                  <th scope="col" className={thCls}>{sortBtn('stock', 'Stock')}</th>
+                  <th scope="col" className={thCls}>Status</th>
+                  <th scope="col" className={`${thCls} text-right`}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((p) => {
+                  const pill = stockPill(p.stock);
+                  return (
+                    <tr key={p.id} className={rowCls}>
+                      <td className={tdCls}>
+                        <div className="flex items-center gap-3">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={p.images[0] ?? 'https://picsum.photos/seed/novamart/200/200'}
+                            alt={p.name}
+                            className="h-11 w-11 shrink-0 rounded-lg border border-[#2E2820] object-cover"
+                            loading="lazy"
+                            onError={(ev) => {
+                              (ev.target as HTMLImageElement).src =
+                                'https://picsum.photos/seed/novamart/200/200';
+                            }}
+                          />
+                          <div className="min-w-0">
+                            <p className="max-w-[230px] truncate font-semibold text-[#F2EBDD]">
+                              {p.name}
+                            </p>
+                            <p className="text-xs text-[#A39A89]">{p.brand}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className={tdCls}>
+                        <Mono>{p.id}</Mono>
+                      </td>
+                      <td className={`${tdCls} text-[#A39A89]`}>{catName(p.category)}</td>
+                      <td className={tdCls}>
+                        <span className="font-semibold text-[#F2EBDD]">{currency(p.price)}</span>
+                        {p.compareAtPrice && (
+                          <span className="ml-1.5 text-xs text-[#A39A89] line-through">
+                            {currency(p.compareAtPrice)}
+                          </span>
+                        )}
+                      </td>
+                      <td className={tdCls}>
+                        <div className="flex items-center gap-1.5">
                           <button
                             type="button"
-                            onClick={() => toggleSort('name')}
-                            className="sr-only"
-                            aria-label="Sort by name"
+                            aria-label={`Decrease stock for ${p.name}`}
+                            onClick={() => handleAdjust(p.id, -1)}
+                            disabled={p.stock === 0}
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-[#2E2820] text-[#A39A89] transition hover:border-[#E4572E] hover:text-[#E4572E] disabled:opacity-30 disabled:hover:border-[#2E2820] disabled:hover:text-[#A39A89]"
                           >
-                            <SortIcon k="name" />
+                            <Minus className="h-3.5 w-3.5" />
                           </button>
-                          <p className="max-w-[220px] truncate font-medium text-slate-900">{p.name}</p>
-                          <p className="text-xs text-slate-500">{p.brand}</p>
+                          <span
+                            className={`w-10 text-center font-semibold tabular-nums ${stockNumCls(p.stock)}`}
+                          >
+                            {p.stock}
+                          </span>
+                          <button
+                            type="button"
+                            aria-label={`Increase stock for ${p.name}`}
+                            onClick={() => handleAdjust(p.id, 1)}
+                            className="flex h-7 w-7 items-center justify-center rounded-full border border-[#2E2820] text-[#A39A89] transition hover:border-[#E4572E] hover:text-[#E4572E]"
+                          >
+                            <Plus className="h-3.5 w-3.5" />
+                          </button>
                         </div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className="font-mono text-xs text-slate-500">{p.id}</span>
-                    </td>
-                    <td className="px-4 py-3 text-slate-600">{catName(p.category)}</td>
-                    <td className="px-4 py-3">
-                      <span className="font-semibold text-slate-900">{currency(p.price)}</span>
-                      {p.compareAtPrice && (
-                        <span className="ml-1.5 text-xs text-slate-400 line-through">{currency(p.compareAtPrice)}</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          aria-label={`Decrease stock for ${p.name}`}
-                          onClick={() => handleAdjust(p.id, -1)}
-                          disabled={p.stock === 0}
-                          className="!px-2"
+                      </td>
+                      <td className={tdCls}>
+                        <span
+                          className={`inline-block rounded-full border px-2.5 py-1 text-xs font-semibold ${pill.cls}`}
                         >
-                          <Minus className="h-3.5 w-3.5" />
-                        </Button>
-                        <span className={`w-10 text-center font-semibold tabular-nums ${stockTextClass(p.stock)}`}>
-                          {p.stock}
+                          {pill.label}
                         </span>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          size="sm"
-                          aria-label={`Increase stock for ${p.name}`}
-                          onClick={() => handleAdjust(p.id, 1)}
-                          className="!px-2"
-                        >
-                          <Plus className="h-3.5 w-3.5" />
-                        </Button>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <span className={`inline-block rounded-full px-2.5 py-1 text-xs font-semibold ${status.classes}`}>
-                        {status.label}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center justify-end gap-1">
-                        <Link
-                          href={`/admin/products/${p.id}`}
-                          aria-label={`Edit ${p.name}`}
-                          className="rounded-lg p-2 text-slate-500 transition hover:bg-indigo-50 hover:text-indigo-600"
-                        >
-                          <Pencil className="h-4 w-4" />
-                        </Link>
-                        <button
-                          type="button"
-                          aria-label={`Delete ${p.name}`}
-                          onClick={() => handleDelete(p)}
-                          className="rounded-lg p-2 text-slate-500 transition hover:bg-rose-50 hover:text-rose-600"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                      </td>
+                      <td className={tdCls}>
+                        <div className="flex items-center justify-end gap-1">
+                          <Link
+                            href={`/admin/products/${p.id}`}
+                            aria-label={`Edit ${p.name}`}
+                            className="rounded-lg p-2 text-[#A39A89] transition hover:bg-white/5 hover:text-[#E4572E]"
+                          >
+                            <Pencil className="h-4 w-4" />
+                          </Link>
+                          <button
+                            type="button"
+                            aria-label={`Delete ${p.name}`}
+                            onClick={() => setDeleteTarget(p)}
+                            className="rounded-lg p-2 text-[#A39A89] transition hover:bg-white/5 hover:text-[#E26D5A]"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </Panel>
+      )}
+
+      {deleteTarget && (
+        <ConfirmDialog
+          title="Delete product?"
+          body={
+            <p>
+              <span className="font-semibold text-[#F2EBDD]">“{deleteTarget.name}”</span> will be
+              removed from the store and every listing. This cannot be undone.
+            </p>
+          }
+          confirmLabel="Delete product"
+          danger
+          onCancel={() => setDeleteTarget(null)}
+          onConfirm={confirmDelete}
+        />
       )}
     </div>
   );

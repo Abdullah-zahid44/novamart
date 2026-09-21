@@ -11,3 +11,5 @@ export * from './QtySelector';
 export * from './EmptyState';
 export * from './SectionHeading';
 export * from './Price';
+export * from './Reveal';
+export * from './Reveal';

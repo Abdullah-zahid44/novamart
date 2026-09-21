@@ -57,15 +57,20 @@ function TrackContent() {
   const meta = order ? orderStatusMeta[order.status] : null;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Track Your Order</h1>
-      <p className="mt-2 text-slate-600">
-        Enter your order number. Adding the email you checked out with keeps your order private.
-      </p>
+    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+      <div className="text-center">
+        <p className="text-xs font-bold uppercase tracking-widest text-accent">Order tracking</p>
+        <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
+          Where&apos;s my order?
+        </h1>
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted">
+          Enter your order number below. Adding the checkout email keeps your order private.
+        </p>
+      </div>
 
       <form
         onSubmit={onSubmit}
-        className="mt-6 rounded-xl border border-slate-200 bg-white p-5"
+        className="mx-auto mt-8 max-w-2xl rounded-[14px] border border-line bg-card p-5 sm:p-6"
         aria-label="Order lookup"
       >
         <div className="grid gap-4 sm:grid-cols-2">
@@ -90,86 +95,86 @@ function TrackContent() {
           </Field>
         </div>
         {error && (
-          <p role="alert" className="mt-3 text-sm text-rose-600">
+          <p role="alert" className="mt-3 text-sm text-[#B23A17]">
             {error}
           </p>
         )}
-        <Button variant="primary" size="md" type="submit" className="mt-4">
+        <Button variant="primary" size="md" type="submit" className="mt-5 w-full sm:w-auto">
           <Search className="mr-2 h-4 w-4" />
-          Track Order
+          Track order
         </Button>
       </form>
 
       {order && meta && (
-        <div className="mt-6 space-y-6">
-          <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Tracking result">
+        <div className="mx-auto mt-8 max-w-2xl space-y-6">
+          <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Tracking result">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div>
-                <p className="font-mono text-lg font-semibold text-slate-900">{order.number}</p>
-                <p className="text-xs text-slate-500">Placed {formatDate(order.createdAt)}</p>
+                <p className="font-mono text-lg font-semibold tracking-wide text-ink">{order.number}</p>
+                <p className="text-xs text-muted">Placed {formatDate(order.createdAt)}</p>
               </div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-semibold text-slate-700">
+              <span className="inline-flex items-center gap-2 rounded-full bg-sand px-3.5 py-1.5 text-xs font-semibold text-ink">
                 <span className={`h-2 w-2 rounded-full ${meta.dot}`} aria-hidden />
                 {meta.label}
               </span>
             </div>
-            <div className="mt-5">
+            <div className="mt-6">
               <OrderTimeline timeline={order.timeline} />
             </div>
           </section>
 
           <div className="grid gap-6 md:grid-cols-2">
-            <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Order items">
-              <h2 className="text-base font-semibold text-slate-900">Items</h2>
-              <ul className="mt-3 space-y-3">
+            <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Order items">
+              <h2 className="font-display text-lg font-semibold text-ink">Items</h2>
+              <ul className="mt-4 space-y-3">
                 {order.items.map((it, i) => (
                   <li key={`${it.productId}-${i}`} className="flex items-center gap-3">
-                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-sand">
                       <Image src={it.image} alt={it.name} fill sizes="48px" className="object-cover" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium text-slate-900">{it.name}</p>
-                      <p className="text-xs text-slate-500">Qty {it.qty}</p>
+                      <p className="truncate text-sm font-medium text-ink">{it.name}</p>
+                      <p className="text-xs text-muted">Qty {it.qty}</p>
                     </div>
-                    <p className="shrink-0 text-sm font-semibold text-slate-900">
+                    <p className="tnum shrink-0 text-sm font-semibold text-ink">
                       {currency(it.price * it.qty)}
                     </p>
                   </li>
                 ))}
               </ul>
-              <dl className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 text-sm">
+              <dl className="mt-4 space-y-1.5 border-t border-line pt-4 text-sm">
                 <div className="flex justify-between">
-                  <dt className="text-slate-600">Subtotal</dt>
-                  <dd className="text-slate-900">{currency(order.subtotal)}</dd>
+                  <dt className="text-muted">Subtotal</dt>
+                  <dd className="tnum text-ink">{currency(order.subtotal)}</dd>
                 </div>
                 {order.discount > 0 && (
-                  <div className="flex justify-between text-emerald-700">
+                  <div className="flex justify-between text-[#2F5D34]">
                     <dt>Discount{order.couponCode ? ` (${order.couponCode})` : ''}</dt>
-                    <dd>−{currency(order.discount)}</dd>
+                    <dd className="tnum">−{currency(order.discount)}</dd>
                   </div>
                 )}
                 <div className="flex justify-between">
-                  <dt className="text-slate-600">Shipping</dt>
-                  <dd className="text-slate-900">
+                  <dt className="text-muted">Shipping</dt>
+                  <dd className="tnum text-ink">
                     {order.shipping === 0 ? 'FREE' : currency(order.shipping)}
                   </dd>
                 </div>
                 <div className="flex justify-between">
-                  <dt className="text-slate-600">Tax</dt>
-                  <dd className="text-slate-900">{currency(order.tax)}</dd>
+                  <dt className="text-muted">Tax</dt>
+                  <dd className="tnum text-ink">{currency(order.tax)}</dd>
                 </div>
-                <div className="flex justify-between border-t border-slate-100 pt-2 text-base font-bold text-slate-900">
+                <div className="flex justify-between border-t border-line pt-2.5 text-base font-semibold text-ink">
                   <dt>Total</dt>
-                  <dd>{currency(order.total)}</dd>
+                  <dd className="tnum">{currency(order.total)}</dd>
                 </div>
               </dl>
             </section>
 
             <div className="space-y-6">
-              <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Shipping address">
-                <h2 className="text-base font-semibold text-slate-900">Shipping Address</h2>
-                <address className="mt-3 text-sm not-italic leading-relaxed text-slate-600">
-                  {order.address.fullName}
+              <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Shipping address">
+                <h2 className="font-display text-lg font-semibold text-ink">Shipping address</h2>
+                <address className="mt-3 text-sm not-italic leading-relaxed text-muted">
+                  <span className="font-semibold text-ink">{order.address.fullName}</span>
                   <br />
                   {order.address.street}
                   <br />
@@ -180,9 +185,9 @@ function TrackContent() {
                   {order.address.phone}
                 </address>
               </section>
-              <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Payment method">
-                <h2 className="text-base font-semibold text-slate-900">Payment</h2>
-                <p className="mt-2 text-sm text-slate-600">
+              <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Payment method">
+                <h2 className="font-display text-lg font-semibold text-ink">Payment</h2>
+                <p className="mt-2 text-sm text-muted">
                   {order.paymentMethod === 'card'
                     ? `Card ending in ${order.paymentLast4 ?? '····'}`
                     : order.paymentMethod}
@@ -194,7 +199,7 @@ function TrackContent() {
       )}
 
       {!order && !error && (
-        <div className="mt-10 text-center text-slate-400">
+        <div className="mt-12 text-center text-muted">
           <PackageSearch className="mx-auto h-12 w-12" aria-hidden />
           <p className="mt-2 text-sm">Your tracking details will appear here.</p>
         </div>
@@ -208,8 +213,8 @@ export default function TrackPage() {
     <Suspense
       fallback={
         <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6" aria-busy="true">
-          <div className="h-9 w-56 animate-pulse rounded-lg bg-slate-100" />
-          <div className="mt-6 h-48 animate-pulse rounded-xl bg-slate-100" />
+          <div className="h-10 w-56 animate-pulse rounded-xl bg-sand" />
+          <div className="mt-6 h-48 animate-pulse rounded-[14px] bg-sand" />
         </main>
       }
     >

@@ -5,10 +5,7 @@ import { useRouter } from 'next/navigation';
 import { CheckCircle2, Plus, X } from 'lucide-react';
 import { getCategories, getProducts, saveProduct } from '@/lib/store';
 import type { Category, Product } from '@/lib/types';
-import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Textarea } from '@/components/ui/Textarea';
-import { Card } from '@/components/ui/Card';
+import { Btn, Field, Panel, Toast, inputCls } from '../_ui';
 
 type BadgeValue = '' | 'NEW' | 'SALE' | 'HOT' | 'BESTSELLER';
 
@@ -50,28 +47,8 @@ function generateId(): string {
   return `p_${Date.now().toString(36)}${Math.random().toString(36).slice(2, 7)}`;
 }
 
-const selectClass =
-  'w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-200';
-
-function Field({
-  label,
-  error,
-  hint,
-  children,
-}: {
-  label: string;
-  error?: string;
-  hint?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div>
-      <label className="mb-1.5 block text-sm font-medium text-slate-700">{label}</label>
-      {children}
-      {hint && !error && <p className="mt-1 text-xs text-slate-500">{hint}</p>}
-      {error && <p className="mt-1 text-xs font-medium text-rose-600">{error}</p>}
-    </div>
-  );
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return <h2 className="text-[15px] font-semibold text-[#F2EBDD]">{children}</h2>;
 }
 
 export default function ProductForm({ product, mode }: ProductFormProps) {
@@ -122,7 +99,9 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
   };
 
   const removeSpec = (i: number) => {
-    setSpecs((prev) => (prev.length === 1 ? [{ key: '', value: '' }] : prev.filter((_, idx) => idx !== i)));
+    setSpecs((prev) =>
+      prev.length === 1 ? [{ key: '', value: '' }] : prev.filter((_, idx) => idx !== i)
+    );
   };
 
   const imageLines = imagesText
@@ -131,11 +110,12 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
     .filter(Boolean);
 
   const removeImageLine = (line: string) => {
-    const next = imagesText
-      .split('\n')
-      .filter((l) => l.trim() !== line)
-      .join('\n');
-    setImagesText(next);
+    setImagesText(
+      imagesText
+        .split('\n')
+        .filter((l) => l.trim() !== line)
+        .join('\n')
+    );
   };
 
   const validate = (): boolean => {
@@ -173,7 +153,9 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
     setSaving(true);
     const priceNum = parseFloat(price);
     const compareNum = compareAtPrice.trim() ? parseFloat(compareAtPrice) : undefined;
-    const specEntries = specs.filter((r) => r.key.trim()).map((r) => [r.key.trim(), r.value.trim()]);
+    const specEntries = specs
+      .filter((r) => r.key.trim())
+      .map((r) => [r.key.trim(), r.value.trim()]);
     const finalProduct: Product = {
       id: product?.id ?? generateId(),
       slug,
@@ -202,37 +184,52 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-      {saved && (
-        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-          <CheckCircle2 className="h-4 w-4 shrink-0" />
-          Product saved successfully. Returning to the product list…
-        </div>
-      )}
+      {saved && <Toast message="Product saved. Returning to the product list…" />}
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
-          <Card className="space-y-5 p-6">
-            <h2 className="text-base font-semibold text-slate-900">Basic information</h2>
+          <Panel className="space-y-5 p-6">
+            <SectionTitle>Basic information</SectionTitle>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Product name" error={errors.name}>
-                <Input
+              <Field label="Product name" htmlFor="pf-name" error={errors.name}>
+                <input
+                  id="pf-name"
                   value={name}
                   onChange={(ev) => handleNameChange(ev.target.value)}
                   placeholder="Aurora Wireless Headphones"
+                  className={inputCls}
                 />
               </Field>
-              <Field label="URL slug" error={errors.slug} hint="Auto-generated from the name; you can edit it.">
-                <Input
+              <Field
+                label="URL slug"
+                htmlFor="pf-slug"
+                error={errors.slug}
+                hint="Auto-generated from the name; you can edit it."
+              >
+                <input
+                  id="pf-slug"
                   value={slug}
                   onChange={(ev) => handleSlugChange(ev.target.value)}
                   placeholder="aurora-wireless-headphones"
+                  className={`${inputCls} font-mono`}
                 />
               </Field>
-              <Field label="Brand" error={errors.brand}>
-                <Input value={brand} onChange={(ev) => setBrand(ev.target.value)} placeholder="Aurora" />
+              <Field label="Brand" htmlFor="pf-brand" error={errors.brand}>
+                <input
+                  id="pf-brand"
+                  value={brand}
+                  onChange={(ev) => setBrand(ev.target.value)}
+                  placeholder="Aurora"
+                  className={inputCls}
+                />
               </Field>
-              <Field label="Category" error={errors.category}>
-                <select value={category} onChange={(ev) => setCategory(ev.target.value)} className={selectClass}>
+              <Field label="Category" htmlFor="pf-category" error={errors.category}>
+                <select
+                  id="pf-category"
+                  value={category}
+                  onChange={(ev) => setCategory(ev.target.value)}
+                  className={inputCls}
+                >
                   <option value="">Select a category</option>
                   {categories.map((c) => (
                     <option key={c.id} value={c.slug}>
@@ -242,125 +239,160 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
                 </select>
               </Field>
             </div>
-            <Field label="Description" error={errors.description}>
-              <Textarea
+            <Field label="Description" htmlFor="pf-description" error={errors.description}>
+              <textarea
+                id="pf-description"
                 value={description}
                 onChange={(ev) => setDescription(ev.target.value)}
                 rows={5}
-                placeholder="Describe what makes this product special, who it is for, and what is included in the box."
+                placeholder="What makes this product special, who it is for, and what is in the box."
+                className={`${inputCls} resize-y`}
               />
             </Field>
-            <Field label="Tags" hint="Comma-separated keywords that help customers find this product.">
-              <Input
+            <Field label="Tags" htmlFor="pf-tags" hint="Comma-separated keywords that help customers find this product.">
+              <input
+                id="pf-tags"
                 value={tags}
                 onChange={(ev) => setTags(ev.target.value)}
                 placeholder="wireless, bluetooth, noise cancelling, travel"
+                className={inputCls}
               />
             </Field>
-          </Card>
+          </Panel>
 
-          <Card className="space-y-5 p-6">
-            <h2 className="text-base font-semibold text-slate-900">Pricing &amp; inventory</h2>
+          <Panel className="space-y-5 p-6">
+            <SectionTitle>Pricing &amp; inventory</SectionTitle>
             <div className="grid gap-5 sm:grid-cols-3">
-              <Field label="Price (USD)" error={errors.price}>
-                <Input
+              <Field label="Price (USD)" htmlFor="pf-price" error={errors.price}>
+                <input
+                  id="pf-price"
                   type="number"
                   min="0"
                   step="0.01"
                   value={price}
                   onChange={(ev) => setPrice(ev.target.value)}
                   placeholder="149.99"
+                  className={inputCls}
                 />
               </Field>
-              <Field label="Compare-at price (USD)" error={errors.compareAtPrice} hint="Optional original price for sale items.">
-                <Input
+              <Field
+                label="Compare-at price (USD)"
+                htmlFor="pf-compare-at"
+                error={errors.compareAtPrice}
+                hint="Optional original price for sale items."
+              >
+                <input
+                  id="pf-compare-at"
                   type="number"
                   min="0"
                   step="0.01"
                   value={compareAtPrice}
                   onChange={(ev) => setCompareAtPrice(ev.target.value)}
                   placeholder="199.99"
+                  className={inputCls}
                 />
               </Field>
-              <Field label="Stock on hand" error={errors.stock}>
-                <Input
+              <Field label="Stock on hand" htmlFor="pf-stock" error={errors.stock}>
+                <input
+                  id="pf-stock"
                   type="number"
                   min="0"
                   step="1"
                   value={stock}
                   onChange={(ev) => setStock(ev.target.value)}
                   placeholder="25"
+                  className={inputCls}
                 />
               </Field>
             </div>
-          </Card>
+          </Panel>
 
-          <Card className="space-y-5 p-6">
-            <h2 className="text-base font-semibold text-slate-900">Variants</h2>
+          <Panel className="space-y-5 p-6">
+            <SectionTitle>Variants</SectionTitle>
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Colors" hint="Comma-separated, e.g. Midnight Black, Arctic White, Crimson Red.">
-                <Input
+              <Field label="Colors" htmlFor="pf-colors" hint="Comma-separated, e.g. Midnight Black, Arctic White.">
+                <input
+                  id="pf-colors"
                   value={colors}
                   onChange={(ev) => setColors(ev.target.value)}
                   placeholder="Midnight Black, Arctic White"
+                  className={inputCls}
                 />
               </Field>
-              <Field label="Sizes" hint="Comma-separated, e.g. XS, S, M, L, XL. Leave empty if not applicable.">
-                <Input
+              <Field
+                label="Sizes"
+                htmlFor="pf-sizes"
+                hint="Comma-separated, e.g. S, M, L, XL. Leave empty if not applicable."
+              >
+                <input
+                  id="pf-sizes"
                   value={sizes}
                   onChange={(ev) => setSizes(ev.target.value)}
                   placeholder="S, M, L, XL"
+                  className={inputCls}
                 />
               </Field>
             </div>
-          </Card>
+          </Panel>
 
-          <Card className="space-y-5 p-6">
+          <Panel className="space-y-5 p-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-base font-semibold text-slate-900">Specifications</h2>
-              <Button type="button" variant="outline" size="sm" onClick={() => setSpecs((p) => [...p, { key: '', value: '' }])}>
-                <Plus className="mr-1.5 h-4 w-4" /> Add row
-              </Button>
+              <SectionTitle>Specifications</SectionTitle>
+              <Btn
+                variant="secondary"
+                size="sm"
+                onClick={() => setSpecs((p) => [...p, { key: '', value: '' }])}
+              >
+                <Plus className="h-4 w-4" /> Add row
+              </Btn>
             </div>
             <div className="space-y-3">
               {specs.map((row, i) => (
                 <div key={i} className="flex gap-2">
-                  <Input
+                  <input
                     value={row.key}
                     onChange={(ev) => updateSpec(i, 'key', ev.target.value)}
                     placeholder="Key, e.g. Battery life"
-                    className="w-1/3"
+                    className={`${inputCls} w-1/3`}
+                    aria-label={`Specification ${i + 1} key`}
                   />
-                  <Input
+                  <input
                     value={row.value}
                     onChange={(ev) => updateSpec(i, 'value', ev.target.value)}
                     placeholder="Value, e.g. Up to 40 hours"
-                    className="flex-1"
+                    className={`${inputCls} flex-1`}
+                    aria-label={`Specification ${i + 1} value`}
                   />
-                  <Button
+                  <button
                     type="button"
-                    variant="ghost"
-                    size="sm"
                     aria-label="Remove specification row"
                     onClick={() => removeSpec(i)}
+                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-[#A39A89] transition hover:bg-white/5 hover:text-[#E26D5A]"
                   >
                     <X className="h-4 w-4" />
-                  </Button>
+                  </button>
                 </div>
               ))}
             </div>
-          </Card>
+          </Panel>
         </div>
 
         <div className="space-y-6">
-          <Card className="space-y-4 p-6">
-            <h2 className="text-base font-semibold text-slate-900">Images</h2>
-            <Field label="Image URLs" error={errors.images} hint="One URL per line. The first image is the cover.">
-              <Textarea
+          <Panel className="space-y-4 p-6">
+            <SectionTitle>Images</SectionTitle>
+            <Field
+              label="Image URLs"
+              htmlFor="pf-images"
+              error={errors.images}
+              hint="One URL per line. The first image is the cover."
+            >
+              <textarea
+                id="pf-images"
                 value={imagesText}
                 onChange={(ev) => setImagesText(ev.target.value)}
                 rows={4}
                 placeholder={'https://picsum.photos/seed/aurora-1/800/800\nhttps://picsum.photos/seed/aurora-2/800/800'}
+                className={`${inputCls} resize-y font-mono text-xs`}
               />
             </Field>
             {imageLines.length > 0 && (
@@ -371,16 +403,18 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
                     <img
                       src={line}
                       alt="Product preview"
-                      className="h-16 w-16 rounded-lg border border-slate-200 object-cover"
+                      className="h-16 w-16 rounded-lg border border-[#2E2820] object-cover"
+                      loading="lazy"
                       onError={(ev) => {
-                        (ev.target as HTMLImageElement).src = 'https://picsum.photos/seed/novamart/200/200';
+                        (ev.target as HTMLImageElement).src =
+                          'https://picsum.photos/seed/novamart/200/200';
                       }}
                     />
                     <button
                       type="button"
                       aria-label="Remove image"
                       onClick={() => removeImageLine(line)}
-                      className="absolute -right-1.5 -top-1.5 hidden rounded-full bg-rose-600 p-0.5 text-white shadow group-hover:block"
+                      className="absolute -right-1.5 -top-1.5 hidden rounded-full bg-[#E26D5A] p-0.5 text-white shadow group-hover:block"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -388,12 +422,17 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
                 ))}
               </div>
             )}
-          </Card>
+          </Panel>
 
-          <Card className="space-y-5 p-6">
-            <h2 className="text-base font-semibold text-slate-900">Visibility</h2>
-            <Field label="Badge">
-              <select value={badge} onChange={(ev) => setBadge(ev.target.value as BadgeValue)} className={selectClass}>
+          <Panel className="space-y-5 p-6">
+            <SectionTitle>Visibility</SectionTitle>
+            <Field label="Badge" htmlFor="pf-badge">
+              <select
+                id="pf-badge"
+                value={badge}
+                onChange={(ev) => setBadge(ev.target.value as BadgeValue)}
+                className={inputCls}
+              >
                 <option value="">None</option>
                 <option value="NEW">New</option>
                 <option value="SALE">Sale</option>
@@ -406,24 +445,26 @@ export default function ProductForm({ product, mode }: ProductFormProps) {
                 type="checkbox"
                 checked={featured}
                 onChange={(ev) => setFeatured(ev.target.checked)}
-                className="mt-1 h-4 w-4 rounded accent-indigo-600"
+                className="mt-1 h-4 w-4 rounded accent-[#E4572E]"
               />
               <span>
-                <span className="block text-sm font-medium text-slate-700">Featured product</span>
-                <span className="block text-xs text-slate-500">Show this product in the homepage featured section.</span>
+                <span className="block text-sm font-medium text-[#F2EBDD]">Featured product</span>
+                <span className="block text-xs text-[#A39A89]">
+                  Show this product in the homepage featured section.
+                </span>
               </span>
             </label>
-          </Card>
+          </Panel>
         </div>
       </div>
 
-      <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-2 py-4">
-        <Button type="button" variant="outline" onClick={() => router.back()} disabled={saving}>
+      <div className="sticky bottom-0 -mx-1 flex items-center justify-end gap-3 border-t border-[#2E2820] bg-[#14110D]/95 px-2 py-4 backdrop-blur">
+        <Btn variant="secondary" onClick={() => router.back()} disabled={saving}>
           Cancel
-        </Button>
-        <Button type="submit" variant="primary" disabled={saving}>
+        </Btn>
+        <Btn type="submit" disabled={saving}>
           {saving ? 'Saving…' : mode === 'new' ? 'Add product' : 'Save changes'}
-        </Button>
+        </Btn>
       </div>
     </form>
   );

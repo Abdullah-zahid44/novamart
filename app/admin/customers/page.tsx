@@ -2,80 +2,56 @@
 
 import { Fragment, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, DollarSign, Search, ShoppingBag, Users } from 'lucide-react';
+import { ChevronDown, Crown, DollarSign, ShoppingBag, Users } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { getOrders } from '@/lib/store';
-import { currency, formatDate, orderStatusMeta } from '@/lib/format';
-import type { Order, User } from '@/lib/types';
+import { currency, formatDate } from '@/lib/format';
+import type { Order } from '@/lib/types';
+import { ensureDemoOrders } from '../orders/seed';
+import {
+  EmptyBox,
+  PageHeader,
+  Panel,
+  SearchInput,
+  StatusPill,
+  rowCls,
+  tdCls,
+  thCls,
+  theadCls,
+} from '../_ui';
 
 interface CustomerRow {
-  user: User;
+  email: string;
+  name: string;
+  firstSeen: string;
   orders: Order[];
+  orderCount: number;
   totalSpent: number;
-}
-
-function isUserArray(v: unknown): v is User[] {
-  return (
-    Array.isArray(v) &&
-    v.length > 0 &&
-    v.every(
-      (u): u is User =>
-        typeof u === 'object' &&
-        u !== null &&
-        typeof (u as { email?: unknown }).email === 'string' &&
-        typeof (u as { name?: unknown }).name === 'string'
-    )
-  );
-}
-
-/**
- * lib/store seeds users into localStorage under a novamart_-prefixed key.
- * The contract does not name the exact key, so scan for the array of user
- * records (preferring the conventional `novamart_users` key).
- */
-function loadUsers(): User[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const keys = Object.keys(localStorage).filter((k) => k.startsWith('novamart_'));
-    const ordered = [...keys].sort((a, b) =>
-      a === 'novamart_users' ? -1 : b === 'novamart_users' ? 1 : 0
-    );
-    for (const key of ordered) {
-      try {
-        const parsed: unknown = JSON.parse(localStorage.getItem(key) ?? 'null');
-        if (isUserArray(parsed)) return parsed;
-      } catch {
-        /* try the next key */
-      }
-    }
-  } catch {
-    /* storage unavailable */
-  }
-  return [];
 }
 
 function Stat({ icon: Icon, label, value }: { icon: LucideIcon; label: string; value: string }) {
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
-      <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
+    <Panel className="flex items-center gap-3.5 p-4">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#E4572E]/10 text-[#E4572E]">
         <Icon className="h-5 w-5" />
       </span>
       <span>
-        <span className="block text-xs font-medium uppercase tracking-wide text-gray-500">{label}</span>
-        <span className="block text-lg font-bold text-gray-900">{value}</span>
+        <span className="block text-[11px] font-semibold uppercase tracking-[0.08em] text-[#A39A89]">
+          {label}
+        </span>
+        <span className="block text-xl font-bold tabular-nums text-[#F2EBDD]">{value}</span>
       </span>
-    </div>
+    </Panel>
   );
 }
 
 export default function AdminCustomersPage() {
-  const [users, setUsers] = useState<User[]>([]);
   const [orders, setOrders] = useState<Order[]>([]);
   const [query, setQuery] = useState('');
-  const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [expandedEmail, setExpandedEmail] = useState<string | null>(null);
 
   useEffect(() => {
-    setUsers(loadUsers());
+    ensureDemoOrders();
     try {
       setOrders(getOrders());
     } catch {
@@ -86,49 +62,53 @@ export default function AdminCustomersPage() {
   const rows: CustomerRow[] = useMemo(() => {
     const byEmail = new Map<string, Order[]>();
     for (const o of orders) {
-      const key = o.email.toLowerCase();
+      const key = o.email.trim().toLowerCase();
+      if (!key) continue;
       const list = byEmail.get(key) ?? [];
       list.push(o);
       byEmail.set(key, list);
     }
-    return users
-      .map((user) => {
-        const userOrders = (byEmail.get(user.email.toLowerCase()) ?? [])
-          .slice()
-          .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
-        const totalSpent = userOrders
+    return Array.from(byEmail.entries())
+      .map(([email, list]) => {
+        const sorted = list.slice().sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+        const totalSpent = sorted
           .filter((o) => o.status !== 'cancelled' && o.status !== 'refunded')
-          .reduce((sum, o) => sum + o.total, 0);
-        return { user, orders: userOrders, totalSpent };
+          .reduce((s, o) => s + o.total, 0);
+        return {
+          email,
+          name: sorted[0].name,
+          firstSeen: sorted[sorted.length - 1].createdAt,
+          orders: sorted,
+          orderCount: sorted.length,
+          totalSpent,
+        };
       })
       .sort((a, b) => b.totalSpent - a.totalSpent);
-  }, [users, orders]);
+  }, [orders]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     if (!q) return rows;
-    return rows.filter(
-      (r) => r.user.name.toLowerCase().includes(q) || r.user.email.toLowerCase().includes(q)
-    );
+    return rows.filter((r) => r.name.toLowerCase().includes(q) || r.email.includes(q));
   }, [rows, query]);
 
   const totals = useMemo(() => {
     const valid = orders.filter((o) => o.status !== 'cancelled' && o.status !== 'refunded');
     return {
-      customers: rows.filter((r) => r.user.role === 'customer').length,
+      customers: rows.length,
       orderCount: orders.length,
       revenue: valid.reduce((s, o) => s + o.total, 0),
     };
   }, [rows, orders]);
 
+  const topSpender = rows[0];
+
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Customers</h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Every registered shopper, their order history, and lifetime spend.
-        </p>
-      </div>
+      <PageHeader
+        title="Customers"
+        sub="Everyone who has ordered, ranked by lifetime spend. Built from order history — no account required to buy."
+      />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <Stat icon={Users} label="Customers" value={String(totals.customers)} />
@@ -136,139 +116,134 @@ export default function AdminCustomersPage() {
         <Stat icon={DollarSign} label="Customer revenue" value={currency(totals.revenue)} />
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-        <div className="border-b border-gray-200 p-4">
-          <div className="relative max-w-sm">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by name or email…"
-              className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            />
-          </div>
-        </div>
+      <SearchInput
+        value={query}
+        onChange={setQuery}
+        placeholder="Search by name or email…"
+        ariaLabel="Search customers"
+        className="max-w-sm"
+      />
 
-        {filtered.length === 0 ? (
-          <div className="p-10 text-center">
-            <Users className="mx-auto h-10 w-10 text-gray-300" />
-            <p className="mt-3 font-medium text-gray-900">No customers found</p>
-            <p className="mt-1 text-sm text-gray-500">
-              {query ? 'Try a different search.' : 'No registered users yet — new signups will appear here.'}
-            </p>
-          </div>
-        ) : (
+      {filtered.length === 0 ? (
+        <EmptyBox
+          icon={Users}
+          title="No customers found"
+          hint={
+            query
+              ? 'Try a different search.'
+              : 'Nobody has ordered yet — customers appear here after their first checkout.'
+          }
+        />
+      ) : (
+        <Panel className="overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Customer</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Role</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-500">Orders</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-500">Total spent</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Joined</th>
-                  <th className="w-10 px-4 py-3" />
+            <table className="w-full min-w-[720px] text-left text-sm">
+              <thead>
+                <tr className={theadCls}>
+                  <th scope="col" className={thCls}>Customer</th>
+                  <th scope="col" className={`${thCls} text-right`}>Orders</th>
+                  <th scope="col" className={`${thCls} text-right`}>Lifetime spend</th>
+                  <th scope="col" className={thCls}>First order</th>
+                  <th scope="col" className={thCls}>
+                    <span className="sr-only">Expand</span>
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody>
                 {filtered.map((row) => {
-                  const expanded = expandedId === row.user.id;
+                  const expanded = expandedEmail === row.email;
+                  const isTop = topSpender && row.email === topSpender.email;
                   return (
-                    <Fragment key={row.user.id}>
+                    <Fragment key={row.email}>
                       <tr
-                        onClick={() => setExpandedId(expanded ? null : row.user.id)}
-                        className="cursor-pointer hover:bg-gray-50"
+                        onClick={() => setExpandedEmail(expanded ? null : row.email)}
+                        className={`${rowCls} cursor-pointer`}
                       >
-                        <td className="px-4 py-3">
-                          <p className="font-medium text-gray-900">{row.user.name}</p>
-                          <p className="text-xs text-gray-500">{row.user.email}</p>
+                        <td className={tdCls}>
+                          <div className="flex items-center gap-3">
+                            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-[#2E2820] bg-[#14110D] text-sm font-bold text-[#E4572E]">
+                              {row.name.charAt(0).toUpperCase()}
+                            </span>
+                            <div>
+                              <p className="flex items-center gap-1.5 font-semibold text-[#F2EBDD]">
+                                {row.name}
+                                {isTop && (
+                                  <span className="inline-flex items-center gap-1 rounded-full border border-[#C99A2C]/30 bg-[#C99A2C]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-[#C99A2C]">
+                                    <Crown className="h-3 w-3" /> Top
+                                  </span>
+                                )}
+                              </p>
+                              <p className="text-xs text-[#A39A89]">{row.email}</p>
+                            </div>
+                          </div>
                         </td>
-                        <td className="px-4 py-3">
-                          <span
-                            className={`inline-flex rounded-full px-2.5 py-0.5 text-xs font-medium ${
-                              row.user.role === 'admin'
-                                ? 'bg-indigo-100 text-indigo-700'
-                                : 'bg-gray-100 text-gray-700'
-                            }`}
-                          >
-                            {row.user.role}
-                          </span>
+                        <td className={`${tdCls} text-right tabular-nums text-[#F2EBDD]`}>
+                          {row.orderCount}
                         </td>
-                        <td className="px-4 py-3 text-right tabular-nums text-gray-900">
-                          {row.orders.length}
-                        </td>
-                        <td className="px-4 py-3 text-right font-medium tabular-nums text-gray-900">
+                        <td className={`${tdCls} text-right font-semibold tabular-nums text-[#F2EBDD]`}>
                           {currency(row.totalSpent)}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-gray-500">
-                          {formatDate(row.user.createdAt)}
+                        <td className={`${tdCls} whitespace-nowrap text-[#A39A89]`}>
+                          {formatDate(row.firstSeen)}
                         </td>
-                        <td className="px-4 py-3 text-gray-400">
+                        <td className={tdCls}>
                           <ChevronDown
-                            className={`h-4 w-4 transition-transform ${expanded ? 'rotate-180' : ''}`}
+                            className={`h-4 w-4 text-[#A39A89] transition-transform ${expanded ? 'rotate-180' : ''}`}
                           />
                         </td>
                       </tr>
                       {expanded && (
-                        <tr className="bg-gray-50/60">
-                          <td colSpan={6} className="px-4 py-4">
-                            {row.orders.length === 0 ? (
-                              <p className="text-sm text-gray-500">
-                                {row.user.name} hasn&apos;t placed any orders yet.
-                              </p>
-                            ) : (
-                              <div className="overflow-x-auto">
-                                <table className="min-w-full divide-y divide-gray-200 rounded-lg border border-gray-200 bg-white text-sm">
-                                  <thead className="bg-gray-50">
-                                    <tr>
-                                      <th className="px-3 py-2 text-left font-medium text-gray-500">Order</th>
-                                      <th className="px-3 py-2 text-left font-medium text-gray-500">Date</th>
-                                      <th className="px-3 py-2 text-left font-medium text-gray-500">Status</th>
-                                      <th className="px-3 py-2 text-right font-medium text-gray-500">Items</th>
-                                      <th className="px-3 py-2 text-right font-medium text-gray-500">Total</th>
-                                      <th className="px-3 py-2" />
+                        <tr className="border-b border-[#2E2820]/60 bg-[#14110D]/60 last:border-0">
+                          <td colSpan={5} className="px-4 py-4">
+                            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.08em] text-[#A39A89]">
+                              Order history — {row.name}
+                            </p>
+                            <div className="overflow-x-auto rounded-lg border border-[#2E2820]">
+                              <table className="w-full min-w-[560px] bg-[#1E1A14] text-left text-sm">
+                                <thead>
+                                  <tr className={theadCls}>
+                                    <th scope="col" className={thCls}>Order</th>
+                                    <th scope="col" className={thCls}>Date</th>
+                                    <th scope="col" className={thCls}>Status</th>
+                                    <th scope="col" className={`${thCls} text-right`}>Items</th>
+                                    <th scope="col" className={`${thCls} text-right`}>Total</th>
+                                    <th scope="col" className={thCls}>
+                                      <span className="sr-only">View</span>
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {row.orders.map((o) => (
+                                    <tr key={o.id} className={rowCls}>
+                                      <td className={`${tdCls} font-mono text-xs text-[#A39A89]`}>
+                                        #{o.number}
+                                      </td>
+                                      <td className={`${tdCls} whitespace-nowrap text-[#A39A89]`}>
+                                        {formatDate(o.createdAt)}
+                                      </td>
+                                      <td className={tdCls}>
+                                        <StatusPill status={o.status} />
+                                      </td>
+                                      <td className={`${tdCls} text-right tabular-nums text-[#A39A89]`}>
+                                        {o.items.reduce((s, i) => s + i.qty, 0)}
+                                      </td>
+                                      <td className={`${tdCls} text-right font-semibold tabular-nums text-[#F2EBDD]`}>
+                                        {currency(o.total)}
+                                      </td>
+                                      <td className={`${tdCls} text-right`}>
+                                        <Link
+                                          href={`/admin/orders/${o.id}`}
+                                          onClick={(e) => e.stopPropagation()}
+                                          className="text-xs font-semibold text-[#E4572E] hover:underline"
+                                        >
+                                          View order
+                                        </Link>
+                                      </td>
                                     </tr>
-                                  </thead>
-                                  <tbody className="divide-y divide-gray-100">
-                                    {row.orders.map((o) => {
-                                      const meta = orderStatusMeta[o.status];
-                                      return (
-                                        <tr key={o.id}>
-                                          <td className="whitespace-nowrap px-3 py-2 font-medium text-gray-900">
-                                            {o.number}
-                                          </td>
-                                          <td className="whitespace-nowrap px-3 py-2 text-gray-500">
-                                            {formatDate(o.createdAt)}
-                                          </td>
-                                          <td className="px-3 py-2">
-                                            <span className="inline-flex items-center gap-1.5 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700">
-                                              <span className={`h-1.5 w-1.5 rounded-full ${meta.dot}`} />
-                                              {meta.label}
-                                            </span>
-                                          </td>
-                                          <td className="px-3 py-2 text-right tabular-nums text-gray-600">
-                                            {o.items.reduce((s, i) => s + i.qty, 0)}
-                                          </td>
-                                          <td className="px-3 py-2 text-right font-medium tabular-nums text-gray-900">
-                                            {currency(o.total)}
-                                          </td>
-                                          <td className="px-3 py-2 text-right">
-                                            <Link
-                                              href={`/admin/orders/${o.id}`}
-                                              onClick={(e) => e.stopPropagation()}
-                                              className="text-xs font-medium text-indigo-600 hover:text-indigo-800"
-                                            >
-                                              View
-                                            </Link>
-                                          </td>
-                                        </tr>
-                                      );
-                                    })}
-                                  </tbody>
-                                </table>
-                              </div>
-                            )}
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
                           </td>
                         </tr>
                       )}
@@ -278,8 +253,8 @@ export default function AdminCustomersPage() {
               </tbody>
             </table>
           </div>
-        )}
-      </div>
+        </Panel>
+      )}
     </div>
   );
 }

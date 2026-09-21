@@ -3,12 +3,24 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import Link from 'next/link';
-import { MessageSquareText, Search, Star, Trash2 } from 'lucide-react';
+import { Eye, EyeOff, MessageSquareText, Star } from 'lucide-react';
 import { getProducts, getReviews } from '@/lib/store';
 import { formatDate } from '@/lib/format';
 import type { Review } from '@/lib/types';
+import {
+  Btn,
+  ConfirmDialog,
+  PageHeader,
+  Panel,
+  SearchInput,
+  inputCls,
+  rowCls,
+  tdCls,
+  thCls,
+  theadCls,
+} from '../_ui';
 
-/** Reviews ship in the seed file; deletions are a client-side demo override. */
+/** Reviews ship in the seed file; hiding is a client-side demo override. */
 const HIDDEN_KEY = 'novamart_reviews_hidden';
 
 interface ReviewRow extends Review {
@@ -20,9 +32,7 @@ function loadHiddenIds(): string[] {
   if (typeof window === 'undefined') return [];
   try {
     const parsed: unknown = JSON.parse(localStorage.getItem(HIDDEN_KEY) ?? '[]');
-    return Array.isArray(parsed)
-      ? parsed.filter((x): x is string => typeof x === 'string')
-      : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === 'string') : [];
   } catch {
     return [];
   }
@@ -42,31 +52,31 @@ function Stars({ value }: { value: number }) {
       {[1, 2, 3, 4, 5].map((i) => (
         <Star
           key={i}
-          className={`h-3.5 w-3.5 ${i <= value ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+          className={`h-3.5 w-3.5 ${i <= Math.round(value) ? 'fill-[#C99A2C] text-[#C99A2C]' : 'fill-[#2E2820] text-[#2E2820]'}`}
         />
       ))}
     </span>
   );
 }
 
+type Tab = 'visible' | 'hidden';
+
 export default function AdminReviewsPage() {
   const [rows, setRows] = useState<ReviewRow[]>([]);
   const [hiddenIds, setHiddenIds] = useState<string[]>([]);
   const [query, setQuery] = useState('');
   const [ratingFilter, setRatingFilter] = useState('all');
-  const [deleteTarget, setDeleteTarget] = useState<ReviewRow | null>(null);
+  const [tab, setTab] = useState<Tab>('visible');
+  const [hideTarget, setHideTarget] = useState<ReviewRow | null>(null);
 
   useEffect(() => {
-    const hidden = loadHiddenIds();
-    setHiddenIds(hidden);
+    setHiddenIds(loadHiddenIds());
     try {
       const products = getProducts();
       const all: ReviewRow[] = [];
       for (const p of products) {
         try {
-          for (const r of getReviews(p.id)) {
-            all.push({ ...r, productName: p.name, productSlug: p.slug });
-          }
+          for (const r of getReviews(p.id)) all.push({ ...r, productName: p.name, productSlug: p.slug });
         } catch {
           /* skip products whose reviews fail to load */
         }
@@ -78,11 +88,26 @@ export default function AdminReviewsPage() {
     }
   }, []);
 
-  const visible = useMemo(() => {
-    const hidden = new Set(hiddenIds);
+  const hiddenSet = useMemo(() => new Set(hiddenIds), [hiddenIds]);
+
+  const hide = (id: string) => {
+    const next = [...hiddenIds, id];
+    setHiddenIds(next);
+    persistHiddenIds(next);
+  };
+
+  const unhide = (id: string) => {
+    const next = hiddenIds.filter((x) => x !== id);
+    setHiddenIds(next);
+    persistHiddenIds(next);
+  };
+
+  const list = useMemo(() => {
     const q = query.trim().toLowerCase();
     return rows.filter((r) => {
-      if (hidden.has(r.id)) return false;
+      const isHidden = hiddenSet.has(r.id);
+      if (tab === 'visible' && isHidden) return false;
+      if (tab === 'hidden' && !isHidden) return false;
       if (ratingFilter !== 'all' && r.rating !== Number(ratingFilter)) return false;
       if (!q) return true;
       return (
@@ -92,54 +117,62 @@ export default function AdminReviewsPage() {
         r.body.toLowerCase().includes(q)
       );
     });
-  }, [rows, hiddenIds, query, ratingFilter]);
+  }, [rows, hiddenSet, tab, query, ratingFilter]);
 
+  const visibleCount = rows.length - hiddenIds.length;
   const average = useMemo(() => {
-    if (visible.length === 0) return 0;
-    return visible.reduce((s, r) => s + r.rating, 0) / visible.length;
-  }, [visible]);
+    const vis = rows.filter((r) => !hiddenSet.has(r.id));
+    if (vis.length === 0) return 0;
+    return vis.reduce((s, r) => s + r.rating, 0) / vis.length;
+  }, [rows, hiddenSet]);
 
-  function confirmDelete() {
-    if (!deleteTarget) return;
-    const next = [...hiddenIds, deleteTarget.id];
-    setHiddenIds(next);
-    persistHiddenIds(next);
-    setDeleteTarget(null);
-  }
+  const tabBtn = (t: Tab, label: string, count: number) => (
+    <button
+      type="button"
+      onClick={() => setTab(t)}
+      className={`rounded-full px-4 py-1.5 text-sm font-semibold transition ${
+        tab === t
+          ? 'bg-[#E4572E] text-white'
+          : 'border border-[#2E2820] text-[#A39A89] hover:border-[#E4572E] hover:text-[#E4572E]'
+      }`}
+    >
+      {label} <span className="tabular-nums opacity-70">({count})</span>
+    </button>
+  );
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Reviews</h1>
-          <p className="mt-1 text-sm text-gray-500">
-            Moderate what shoppers say about your products.
-          </p>
-        </div>
-        <div className="flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 shadow-sm">
-          <Stars value={Math.round(average)} />
-          <span className="text-sm font-medium text-gray-900">{average.toFixed(1)}</span>
-          <span className="text-sm text-gray-500">avg · {visible.length} reviews</span>
-        </div>
+      <PageHeader
+        title="Reviews"
+        sub="Moderate what shoppers say. Hiding a review removes it from the storefront — nothing is ever truly deleted."
+        actions={
+          <div className="flex items-center gap-2.5 rounded-full border border-[#2E2820] bg-[#1E1A14] px-4 py-2">
+            <Stars value={average} />
+            <span className="text-sm font-semibold tabular-nums text-[#F2EBDD]">{average.toFixed(1)}</span>
+            <span className="text-xs text-[#A39A89]">avg · {visibleCount} live</span>
+          </div>
+        }
+      />
+
+      <div className="flex flex-wrap items-center gap-2">
+        {tabBtn('visible', 'Live', visibleCount)}
+        {tabBtn('hidden', 'Hidden', hiddenIds.length)}
       </div>
 
-      <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
-        <div className="flex flex-col gap-3 border-b border-gray-200 p-4 sm:flex-row sm:items-center">
-          <div className="relative max-w-sm flex-1">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-            <input
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search product, customer, or text…"
-              className="w-full rounded-lg border border-gray-300 py-2 pl-9 pr-3 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-            />
-          </div>
+      <Panel className="overflow-hidden">
+        <div className="flex flex-col gap-3 border-b border-[#2E2820] p-4 sm:flex-row sm:items-center">
+          <SearchInput
+            value={query}
+            onChange={setQuery}
+            placeholder="Search product, customer, or text…"
+            ariaLabel="Search reviews"
+            className="flex-1"
+          />
           <select
             value={ratingFilter}
             onChange={(e: ChangeEvent<HTMLSelectElement>) => setRatingFilter(e.target.value)}
             aria-label="Filter by rating"
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+            className={`${inputCls} sm:w-44`}
           >
             <option value="all">All ratings</option>
             <option value="5">5 stars</option>
@@ -150,60 +183,77 @@ export default function AdminReviewsPage() {
           </select>
         </div>
 
-        {visible.length === 0 ? (
-          <div className="p-10 text-center">
-            <MessageSquareText className="mx-auto h-10 w-10 text-gray-300" />
-            <p className="mt-3 font-medium text-gray-900">No reviews found</p>
-            <p className="mt-1 text-sm text-gray-500">
-              {query || ratingFilter !== 'all'
-                ? 'Try clearing your filters.'
-                : 'Customer reviews will appear here once shoppers leave them.'}
+        {list.length === 0 ? (
+          <div className="flex flex-col items-center px-6 py-14 text-center">
+            <span className="flex h-12 w-12 items-center justify-center rounded-full border border-[#2E2820] bg-[#14110D] text-[#A39A89]">
+              <MessageSquareText className="h-5 w-5" />
+            </span>
+            <p className="mt-4 font-semibold text-[#F2EBDD]">
+              {tab === 'hidden' ? 'Nothing hidden' : 'No reviews found'}
+            </p>
+            <p className="mt-1 max-w-sm text-sm text-[#A39A89]">
+              {tab === 'hidden'
+                ? 'Hidden reviews land here, where you can restore them any time.'
+                : query || ratingFilter !== 'all'
+                  ? 'Try clearing your filters.'
+                  : 'Customer reviews appear here once shoppers leave them.'}
             </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200 text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Product</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Customer</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Rating</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Review</th>
-                  <th className="px-4 py-3 text-left font-medium text-gray-500">Date</th>
-                  <th className="px-4 py-3 text-right font-medium text-gray-500">Actions</th>
+            <table className="w-full min-w-[860px] text-left text-sm">
+              <thead>
+                <tr className={theadCls}>
+                  <th scope="col" className={thCls}>Product</th>
+                  <th scope="col" className={thCls}>Customer</th>
+                  <th scope="col" className={thCls}>Rating</th>
+                  <th scope="col" className={thCls}>Review</th>
+                  <th scope="col" className={thCls}>Date</th>
+                  <th scope="col" className={`${thCls} text-right`}>Moderate</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
-                {visible.map((r) => (
-                  <tr key={r.id} className="align-top hover:bg-gray-50">
-                    <td className="max-w-[180px] px-4 py-3">
+              <tbody>
+                {list.map((r) => (
+                  <tr key={r.id} className={`${rowCls} align-top`}>
+                    <td className={`${tdCls} max-w-[180px]`}>
                       <Link
                         href={`/product/${r.productSlug}`}
-                        className="font-medium text-indigo-600 hover:text-indigo-800"
+                        className="font-medium text-[#E4572E] hover:underline"
                       >
                         {r.productName}
                       </Link>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-gray-700">{r.userName}</td>
-                    <td className="whitespace-nowrap px-4 py-3">
+                    <td className={`${tdCls} whitespace-nowrap text-[#F2EBDD]`}>{r.userName}</td>
+                    <td className={`${tdCls} whitespace-nowrap`}>
                       <Stars value={r.rating} />
                     </td>
-                    <td className="max-w-sm px-4 py-3">
-                      <p className="font-medium text-gray-900">{r.title}</p>
-                      <p className="mt-0.5 line-clamp-3 text-gray-600">{r.body}</p>
+                    <td className={`${tdCls} max-w-md`}>
+                      <p className="font-semibold text-[#F2EBDD]">{r.title}</p>
+                      <p className="mt-0.5 line-clamp-3 text-sm text-[#A39A89]">{r.body}</p>
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-gray-500">
+                    <td className={`${tdCls} whitespace-nowrap text-[#A39A89]`}>
                       {formatDate(r.createdAt)}
                     </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-right">
-                      <button
-                        type="button"
-                        onClick={() => setDeleteTarget(r)}
-                        aria-label={`Delete review by ${r.userName}`}
-                        className="rounded-lg p-2 text-gray-500 hover:bg-gray-100 hover:text-rose-600"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+                    <td className={`${tdCls} whitespace-nowrap text-right`}>
+                      {tab === 'visible' ? (
+                        <Btn
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => setHideTarget(r)}
+                          aria-label={`Hide review by ${r.userName}`}
+                        >
+                          <EyeOff className="h-3.5 w-3.5" /> Hide
+                        </Btn>
+                      ) : (
+                        <Btn
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => unhide(r.id)}
+                          aria-label={`Restore review by ${r.userName}`}
+                        >
+                          <Eye className="h-3.5 w-3.5" /> Restore
+                        </Btn>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -211,41 +261,26 @@ export default function AdminReviewsPage() {
             </table>
           </div>
         )}
-      </div>
+      </Panel>
 
-      {deleteTarget && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="absolute inset-0 bg-gray-900/50"
-            onClick={() => setDeleteTarget(null)}
-            aria-hidden="true"
-          />
-          <div className="relative w-full max-w-sm rounded-xl bg-white p-6 shadow-xl">
-            <h2 className="text-lg font-bold text-gray-900">Delete review?</h2>
-            <p className="mt-2 text-sm text-gray-600">
-              The {deleteTarget.rating}-star review by{' '}
-              <span className="font-medium text-gray-900">{deleteTarget.userName}</span> on{' '}
-              <span className="font-medium text-gray-900">{deleteTarget.productName}</span> will be
-              hidden from the storefront.
+      {hideTarget && (
+        <ConfirmDialog
+          title="Hide this review?"
+          body={
+            <p>
+              The {hideTarget.rating}-star review by{' '}
+              <span className="font-semibold text-[#F2EBDD]">{hideTarget.userName}</span> on{' '}
+              <span className="font-semibold text-[#F2EBDD]">{hideTarget.productName}</span> will
+              disappear from the storefront. You can restore it from the Hidden tab.
             </p>
-            <div className="mt-5 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setDeleteTarget(null)}
-                className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                type="button"
-                onClick={confirmDelete}
-                className="rounded-lg bg-rose-600 px-4 py-2 text-sm font-medium text-white hover:bg-rose-700"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        </div>
+          }
+          confirmLabel="Hide review"
+          onCancel={() => setHideTarget(null)}
+          onConfirm={() => {
+            hide(hideTarget.id);
+            setHideTarget(null);
+          }}
+        />
       )}
     </div>
   );

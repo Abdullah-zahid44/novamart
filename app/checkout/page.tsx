@@ -72,21 +72,23 @@ function cardBrand(num: string) {
 
 function ReviewRow({ title, onEdit, children }: { title: string; onEdit: () => void; children: ReactNode }) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 sm:p-5">
+    <section className="rounded-[14px] border border-line bg-card p-5">
       <div className="mb-2 flex items-center justify-between">
-        <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+        <h3 className="text-sm font-semibold text-ink">{title}</h3>
         <button
           type="button"
           onClick={onEdit}
-          className="text-sm font-medium text-indigo-600 hover:text-indigo-700"
+          className="text-sm font-medium text-accent hover:text-accent-deep hover:underline"
         >
           Edit
         </button>
       </div>
-      <div className="text-sm leading-relaxed text-slate-600">{children}</div>
+      <div className="text-sm leading-relaxed text-muted">{children}</div>
     </section>
   );
 }
+
+const stepShell = 'rounded-[14px] border border-line bg-card p-5 sm:p-7';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -250,10 +252,10 @@ export default function CheckoutPage() {
   if (!settings || !totals || !standardTotals) {
     return (
       <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6" aria-busy="true">
-        <div className="h-9 w-56 animate-pulse rounded-lg bg-slate-100" />
+        <div className="h-10 w-56 animate-pulse rounded-xl bg-sand" />
         <div className="mt-6 grid gap-8 lg:grid-cols-[1fr_360px]">
-          <div className="h-96 animate-pulse rounded-xl bg-slate-100" />
-          <div className="h-72 animate-pulse rounded-xl bg-slate-100" />
+          <div className="h-96 animate-pulse rounded-[14px] bg-sand" />
+          <div className="h-72 animate-pulse rounded-[14px] bg-sand" />
         </div>
       </main>
     );
@@ -262,10 +264,14 @@ export default function CheckoutPage() {
   const last4 = cardNumber.replace(/\D/g, '').slice(-4);
 
   return (
-    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-10">
-      <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl">Checkout</h1>
+    <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:py-12">
+      <p className="text-xs font-bold uppercase tracking-widest text-accent">Checkout</p>
+      <h1 className="mt-1 font-display text-3xl font-semibold text-ink sm:text-4xl">
+        Almost yours
+      </h1>
 
-      <ol className="mb-8 mt-6 flex items-center" aria-label="Checkout steps">
+      {/* Progress indicator */}
+      <ol className="mb-10 mt-8 flex items-center" aria-label="Checkout steps">
         {STEPS.map((label, i) => {
           const n = i + 1;
           const done = n < step;
@@ -282,20 +288,22 @@ export default function CheckoutPage() {
                 }}
                 disabled={n > step}
                 aria-current={active ? 'step' : undefined}
-                className={`flex items-center gap-2 ${n > step ? 'cursor-not-allowed' : ''}`}
+                className={`flex items-center gap-2.5 ${n > step ? 'cursor-not-allowed' : ''}`}
               >
                 <span
-                  className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold transition ${
-                    done || active
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-500'
-                  } ${active ? 'ring-4 ring-indigo-100' : ''}`}
+                  className={`flex h-9 w-9 items-center justify-center rounded-full text-sm font-semibold transition ${
+                    done
+                      ? 'bg-forest text-paper'
+                      : active
+                        ? 'bg-accent text-white ring-4 ring-accent/20'
+                        : 'bg-sand text-muted'
+                  }`}
                 >
                   {done ? <Check className="h-4 w-4" /> : n}
                 </span>
                 <span
                   className={`hidden text-sm font-medium sm:block ${
-                    active ? 'text-slate-900' : 'text-slate-500'
+                    active ? 'text-ink' : 'text-muted'
                   }`}
                 >
                   {label}
@@ -304,7 +312,7 @@ export default function CheckoutPage() {
               {n < STEPS.length && (
                 <span
                   aria-hidden
-                  className={`mx-2 h-0.5 flex-1 sm:mx-4 ${n < step ? 'bg-indigo-600' : 'bg-slate-200'}`}
+                  className={`mx-2 h-0.5 flex-1 rounded-full sm:mx-4 ${n < step ? 'bg-accent' : 'bg-line'}`}
                 />
               )}
             </li>
@@ -315,9 +323,10 @@ export default function CheckoutPage() {
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
         <div>
           {step === 1 && (
-            <section aria-label="Contact and shipping address" className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
-              <h2 className="text-lg font-semibold text-slate-900">Contact & Shipping Address</h2>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            <section aria-label="Contact and shipping address" className={stepShell}>
+              <h2 className="font-display text-2xl font-semibold text-ink">Where is it going?</h2>
+              <p className="mt-1 text-sm text-muted">We only ask for what the courier needs.</p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <Field label="Email address" htmlFor="co-email">
                     <TextInput
@@ -423,9 +432,9 @@ export default function CheckoutPage() {
                   />
                 </Field>
               </div>
-              <div className="mt-6 flex justify-end">
+              <div className="mt-7 flex justify-end">
                 <Button variant="primary" size="lg" type="button" onClick={goNext}>
-                  Continue to Shipping
+                  Continue to shipping
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -433,14 +442,15 @@ export default function CheckoutPage() {
           )}
 
           {step === 2 && (
-            <section aria-label="Shipping method" className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
-              <h2 className="text-lg font-semibold text-slate-900">Shipping Method</h2>
-              <div className="mt-5 space-y-3" role="radiogroup" aria-label="Shipping options">
+            <section aria-label="Shipping method" className={stepShell}>
+              <h2 className="font-display text-2xl font-semibold text-ink">How fast?</h2>
+              <p className="mt-1 text-sm text-muted">Pick a pace. Standard is on us over $75.</p>
+              <div className="mt-6 space-y-3" role="radiogroup" aria-label="Shipping options">
                 <label
-                  className={`flex cursor-pointer items-center gap-4 rounded-xl border p-4 transition ${
+                  className={`flex cursor-pointer items-center gap-4 rounded-[14px] border p-4 transition ${
                     method === 'standard'
-                      ? 'border-indigo-600 bg-indigo-50/50 ring-1 ring-indigo-600'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-accent bg-accent/[0.06] ring-1 ring-accent'
+                      : 'border-line bg-card hover:border-ink/30'
                   }`}
                 >
                   <input
@@ -449,16 +459,16 @@ export default function CheckoutPage() {
                     value="standard"
                     checked={method === 'standard'}
                     onChange={() => setMethod('standard')}
-                    className="h-4 w-4 accent-indigo-600"
+                    className="h-4 w-4 accent-[#E4572E]"
                   />
-                  <Truck className="h-6 w-6 shrink-0 text-slate-500" aria-hidden />
+                  <Truck className="h-6 w-6 shrink-0 text-muted" aria-hidden />
                   <span className="flex-1">
-                    <span className="block text-sm font-semibold text-slate-900">Standard</span>
-                    <span className="block text-xs text-slate-500">3–5 business days</span>
+                    <span className="block text-sm font-semibold text-ink">Standard</span>
+                    <span className="block text-xs text-muted">3–5 business days</span>
                   </span>
-                  <span className="text-sm font-semibold text-slate-900">
+                  <span className="tnum text-sm font-semibold text-ink">
                     {standardTotals.shipping === 0 ? (
-                      <span className="text-emerald-700">FREE</span>
+                      <span className="text-[#2F5D34]">FREE</span>
                     ) : (
                       currency(standardTotals.shipping)
                     )}
@@ -466,10 +476,10 @@ export default function CheckoutPage() {
                 </label>
 
                 <label
-                  className={`flex cursor-pointer items-center gap-4 rounded-xl border p-4 transition ${
+                  className={`flex cursor-pointer items-center gap-4 rounded-[14px] border p-4 transition ${
                     method === 'express'
-                      ? 'border-indigo-600 bg-indigo-50/50 ring-1 ring-indigo-600'
-                      : 'border-slate-200 hover:border-slate-300'
+                      ? 'border-accent bg-accent/[0.06] ring-1 ring-accent'
+                      : 'border-line bg-card hover:border-ink/30'
                   }`}
                 >
                   <input
@@ -478,30 +488,30 @@ export default function CheckoutPage() {
                     value="express"
                     checked={method === 'express'}
                     onChange={() => setMethod('express')}
-                    className="h-4 w-4 accent-indigo-600"
+                    className="h-4 w-4 accent-[#E4572E]"
                   />
-                  <Truck className="h-6 w-6 shrink-0 text-slate-500" aria-hidden />
+                  <Truck className="h-6 w-6 shrink-0 text-muted" aria-hidden />
                   <span className="flex-1">
-                    <span className="block text-sm font-semibold text-slate-900">Express</span>
-                    <span className="block text-xs text-slate-500">1–2 business days · always charged</span>
+                    <span className="block text-sm font-semibold text-ink">Express</span>
+                    <span className="block text-xs text-muted">1–2 business days · always charged</span>
                   </span>
-                  <span className="text-sm font-semibold text-slate-900">
+                  <span className="tnum text-sm font-semibold text-ink">
                     {currency(EXPRESS_SHIPPING_COST)}
                   </span>
                 </label>
               </div>
               {standardTotals.freeShip && (
-                <p className="mt-3 text-xs text-emerald-700">
+                <p className="mt-3 text-xs font-medium text-[#2F5D34]">
                   Your order qualifies for free standard shipping.
                 </p>
               )}
-              <div className="mt-6 flex justify-between">
+              <div className="mt-7 flex justify-between">
                 <Button variant="outline" type="button" onClick={goBack}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
                 </Button>
                 <Button variant="primary" size="lg" type="button" onClick={goNext}>
-                  Continue to Payment
+                  Continue to payment
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -509,19 +519,23 @@ export default function CheckoutPage() {
           )}
 
           {step === 3 && (
-            <section aria-label="Payment" className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6">
-              <h2 className="text-lg font-semibold text-slate-900">Payment</h2>
+            <section aria-label="Payment" className={stepShell}>
+              <h2 className="font-display text-2xl font-semibold text-ink">Payment</h2>
+              {/* Ink callout — demo notice, never an ugly yellow box */}
               <div
                 role="note"
-                className="mt-4 flex items-start gap-3 rounded-xl border border-amber-300 bg-amber-50 p-4"
+                className="mt-5 flex items-start gap-3.5 rounded-[14px] bg-ink p-5"
               >
-                <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" aria-hidden />
-                <p className="text-sm text-amber-900">
-                  <strong>Demo checkout — no real charge.</strong> This store is a demo; no payment
-                  is processed. Please don&apos;t enter a real card number.
-                </p>
+                <ShieldAlert className="mt-0.5 h-5 w-5 shrink-0 text-paper" aria-hidden />
+                <div className="text-sm leading-relaxed text-paper/90">
+                  <p className="font-semibold text-paper">Demo checkout — no real charge.</p>
+                  <p className="mt-1">
+                    This storefront is a demonstration. No payment is processed here, so please
+                    don&apos;t enter a real card number.
+                  </p>
+                </div>
               </div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 <div className="sm:col-span-2">
                   <Field label="Name on card" htmlFor="co-cardname">
                     <TextInput
@@ -551,10 +565,10 @@ export default function CheckoutPage() {
                         }}
                         placeholder="4242 4242 4242 4242"
                         error={errors.cardNumber}
-                        className="pr-10"
+                        className="pr-11"
                       />
                       <CreditCard
-                        className="pointer-events-none absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
+                        className="pointer-events-none absolute right-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-muted"
                         aria-hidden
                       />
                     </div>
@@ -589,13 +603,13 @@ export default function CheckoutPage() {
                   />
                 </Field>
               </div>
-              <div className="mt-6 flex justify-between">
+              <div className="mt-7 flex justify-between">
                 <Button variant="outline" type="button" onClick={goBack}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
                 </Button>
                 <Button variant="primary" size="lg" type="button" onClick={goNext}>
-                  Review Order
+                  Review order
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
@@ -626,10 +640,10 @@ export default function CheckoutPage() {
                 <ReviewRow title="Payment" onEdit={() => setStep(3)}>
                   {cardBrand(cardNumber)} ending in {last4 || '····'} · {cardName}
                   <br />
-                  <span className="text-xs text-slate-500">Demo payment — no real charge.</span>
+                  <span className="text-xs text-muted">Demo payment — no real charge.</span>
                 </ReviewRow>
               </div>
-              <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
+              <div className="mt-7 flex flex-col-reverse gap-3 sm:flex-row sm:justify-between">
                 <Button variant="outline" type="button" onClick={goBack}>
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Back
@@ -643,7 +657,7 @@ export default function CheckoutPage() {
                   ) : (
                     <>
                       <Lock className="mr-2 h-4 w-4" />
-                      Place Order · {currency(totals.total)}
+                      Place order · {currency(totals.total)}
                     </>
                   )}
                 </Button>
@@ -652,28 +666,29 @@ export default function CheckoutPage() {
           )}
         </div>
 
+        {/* Summary sidebar */}
         <aside
           aria-label="Order summary"
-          className="h-fit rounded-xl border border-slate-200 bg-white p-5 lg:sticky lg:top-4"
+          className="h-fit rounded-[14px] border border-line bg-sand p-6 lg:sticky lg:top-4"
         >
-          <h2 className="text-lg font-semibold text-slate-900">Order Summary</h2>
-          <ul className="mt-4 max-h-64 space-y-3 overflow-y-auto">
+          <h2 className="font-display text-xl font-semibold text-ink">Order summary</h2>
+          <ul className="mt-4 max-h-64 space-y-3.5 overflow-y-auto">
             {items.map(item => {
               const key = cartLineKey(item.productId, item.color, item.size);
               const variant = [item.color, item.size].filter(Boolean).join(' · ');
               return (
                 <li key={key} className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-card">
                     <Image src={item.image} alt={item.name} fill sizes="48px" className="object-cover" />
-                    <span className="absolute -right-0 -top-0 flex h-5 w-5 items-center justify-center rounded-bl-lg bg-slate-900/70 text-[10px] font-semibold text-white">
+                    <span className="tnum absolute right-0 top-0 flex h-5 min-w-5 items-center justify-center rounded-bl-xl bg-ink/75 px-1 text-[10px] font-semibold text-paper">
                       {item.qty}
                     </span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium text-slate-900">{item.name}</p>
-                    {variant && <p className="truncate text-xs text-slate-500">{variant}</p>}
+                    <p className="truncate text-sm font-medium text-ink">{item.name}</p>
+                    {variant && <p className="truncate text-xs text-muted">{variant}</p>}
                   </div>
-                  <p className="shrink-0 text-sm font-semibold text-slate-900">
+                  <p className="tnum shrink-0 text-sm font-semibold text-ink">
                     {currency(item.price * item.qty)}
                   </p>
                 </li>
@@ -681,7 +696,7 @@ export default function CheckoutPage() {
             })}
           </ul>
 
-          <div className="mt-4 border-t border-slate-100 pt-4">
+          <div className="mt-4 border-t border-line pt-4">
             <CouponForm
               subtotal={totals.subtotal}
               coupon={coupon}
@@ -690,32 +705,32 @@ export default function CheckoutPage() {
             />
           </div>
 
-          <dl className="mt-4 space-y-2 text-sm">
+          <dl className="mt-5 space-y-2.5 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-600">Subtotal</dt>
-              <dd className="font-medium text-slate-900">{currency(totals.subtotal)}</dd>
+              <dt className="text-muted">Subtotal</dt>
+              <dd className="tnum font-medium text-ink">{currency(totals.subtotal)}</dd>
             </div>
             {totals.discount > 0 && coupon && (
-              <div className="flex justify-between text-emerald-700">
+              <div className="flex justify-between text-[#2F5D34]">
                 <dt>Discount ({coupon.code})</dt>
-                <dd className="font-medium">−{currency(totals.discount)}</dd>
+                <dd className="tnum font-medium">−{currency(totals.discount)}</dd>
               </div>
             )}
             <div className="flex justify-between">
-              <dt className="text-slate-600">
+              <dt className="text-muted">
                 Shipping ({method === 'standard' ? 'Standard' : 'Express'})
               </dt>
-              <dd className="font-medium text-slate-900">
+              <dd className="tnum font-medium text-ink">
                 {totals.shipping === 0 ? 'FREE' : currency(totals.shipping)}
               </dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Tax</dt>
-              <dd className="font-medium text-slate-900">{currency(totals.tax)}</dd>
+              <dt className="text-muted">Tax</dt>
+              <dd className="tnum font-medium text-ink">{currency(totals.tax)}</dd>
             </div>
-            <div className="flex justify-between border-t border-slate-200 pt-3 text-base">
-              <dt className="font-semibold text-slate-900">Total</dt>
-              <dd className="font-bold text-slate-900">{currency(totals.total)}</dd>
+            <div className="flex justify-between border-t border-line pt-3.5 text-base">
+              <dt className="font-semibold text-ink">Total</dt>
+              <dd className="tnum font-semibold text-ink">{currency(totals.total)}</dd>
             </div>
           </dl>
         </aside>

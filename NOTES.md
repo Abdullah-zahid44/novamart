@@ -39,3 +39,56 @@
 - Everything else matched call sites: Button variants/sizes, Input/Textarea label+error, Card className passthrough, EmptyState `{icon, title, hint, action}`, SectionHeading `{kicker, title, sub, link}`, Price `{value, compareAt?, size?}`, QtySelector `{value, onChange, max?}`, Badge children/variants.
 - **Tax scale verified**: `settings.taxRate` is a fraction (`0.08`); `components/cart/cart-utils.ts` and checkout both do `subtotal * taxRate` — consistent.
 - `lib/store.ts` public API untouched. `app/layout.tsx` already wrapped children in `<CartShell>` with `<Header/>`/`<Footer/>` — kept as-is.
+
+---
+
+# NovaMart — Masterpiece Redesign Notes (2026-09-21)
+
+## How to run
+
+```bash
+cd ~/workspace/ecommerce-site
+npm install
+npm run dev      # development server → http://localhost:3000
+npm run build    # production build
+npm run start    # serve the production build → http://localhost:3000
+```
+
+## Credentials (demo)
+
+| Role | Email | Password |
+|---|---|---|
+| Customer | `demo@novamart.com` | `demo123` |
+| Admin | `admin@novamart.com` | `admin123` |
+
+## Coupons (seed)
+
+| Code | Type | Value | Min order |
+|---|---|---|---|
+| `WELCOME10` | percent | 10% | $50 |
+| `SAVE20` | flat | $20 | $150 |
+| `FREESHIP` | free shipping | — | $75 |
+| `STUDENT15` | percent | 15% | $30 |
+
+## Honest demo limitations — NovaMart is NOT production-commerce-ready
+
+- **localStorage persistence, no real database.** All data (cart, users, orders, admin edits, coupons,
+  settings) lives in the browser's localStorage under `novamart_*` keys. Clearing browser data wipes
+  everything. There is no server-side store, no multi-device sync, no backup.
+- **Local demo authentication.** Passwords are stored in plaintext in localStorage. The seeded admin and
+  demo customer exist only in the browser. This is a design demo — never use this auth in production.
+- **Demo orders only.** Orders created at checkout are local records with demo order numbers (`NM-…`).
+  Nothing is sent to a warehouse, nothing ships.
+- **Fake/demo payment processing.** Checkout's payment step is a demo UI. No card is charged, no money
+  moves, no payment gateway is connected. COPY_DECK states on the checkout page: "Demo checkout — no card
+  is charged, no money moves. This is a design demo, not a store."
+- **Demo imagery.** Product photos are placeholder seeds; editorial art in `public/images/` is AI-generated
+  for the redesign.
+
+## Redesign reference docs
+
+- `DESIGN_BRIEF.md` — visual source of truth (palette, Fraunces/Space Grotesk, motion, copy voice).
+- `COPY_DECK.md` — approved copy (hero, categories, reviews, about, footer, empty states, microcopy).
+- `CONTRACT.md` — API/route/data contract (unchanged by the redesign).
+- `QA_REPORT.md` — full QA checklist (PENDING until the QA run executes).
+- `BUILD_REPORT.md` — environment, dependencies, build commands.

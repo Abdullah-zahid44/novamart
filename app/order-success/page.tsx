@@ -36,7 +36,7 @@ function OrderSuccessContent() {
           hint="We couldn't find an order with that number. Check the link you followed, or track your order with its number and email."
           action={
             <Button variant="primary" onClick={() => router.push('/track')}>
-              Track an Order
+              Track an order
             </Button>
           }
         />
@@ -47,7 +47,7 @@ function OrderSuccessContent() {
   if (!order) {
     return (
       <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6" aria-busy="true">
-        <div className="h-72 animate-pulse rounded-2xl bg-slate-100" />
+        <div className="h-72 animate-pulse rounded-[14px] bg-sand" />
       </main>
     );
   }
@@ -55,92 +55,91 @@ function OrderSuccessContent() {
   const firstName = order.name.split(' ')[0] || order.name;
 
   return (
-    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center sm:p-10">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-emerald-600" aria-hidden />
-        <h1 className="mt-4 text-2xl font-bold text-slate-900 sm:text-3xl">
-          Thank you, {firstName}!
+    <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6 lg:py-14">
+      <div className="rounded-[14px] border border-line bg-card p-6 text-center sm:p-12">
+        <CheckCircle2 className="mx-auto h-14 w-14 text-[#7FB069]" aria-hidden />
+        <h1 className="mt-5 font-display text-4xl font-semibold text-ink sm:text-5xl">
+          Thank you{firstName ? `, ${firstName}` : ''}.
         </h1>
-        <p className="mt-2 text-slate-600">
-          Your order is confirmed and our team is getting it ready.
+        <p className="mx-auto mt-3 max-w-md text-muted">
+          Your order is confirmed and being packed. A receipt is on its way to your inbox.
         </p>
-        <p className="mt-5 inline-block rounded-lg bg-slate-100 px-5 py-2.5 font-mono text-lg font-semibold tracking-wide text-slate-900">
+        <p className="mt-6 inline-block rounded-full border border-line bg-sand px-6 py-2.5 font-mono text-lg font-semibold tracking-wide text-ink">
           {order.number}
         </p>
-        <p className="mt-3 text-sm text-slate-500">
-          A confirmation was sent to{' '}
-          <span className="font-medium text-slate-700">{order.email}</span>
+        <p className="mt-3 text-sm text-muted">
+          Confirmation sent to <span className="font-medium text-ink">{order.email}</span>
         </p>
-        <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
           <Button
             variant="primary"
             size="lg"
             onClick={() => router.push(`/track?number=${encodeURIComponent(order.number)}`)}
           >
-            Track Order
+            Track order
           </Button>
           <Button variant="outline" size="lg" onClick={() => router.push('/shop')}>
-            Continue Shopping
+            Keep shopping
           </Button>
         </div>
       </div>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Order status">
-          <h2 className="text-base font-semibold text-slate-900">Order Status</h2>
-          <p className="mt-1 text-xs text-slate-500">Placed {formatDate(order.createdAt)}</p>
-          <div className="mt-4">
+        <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Order status">
+          <h2 className="font-display text-lg font-semibold text-ink">Order status</h2>
+          <p className="mt-1 text-xs text-muted">Placed {formatDate(order.createdAt)}</p>
+          <div className="mt-5">
             <OrderTimeline timeline={order.timeline} />
           </div>
         </section>
 
-        <section className="rounded-xl border border-slate-200 bg-white p-5" aria-label="Order summary">
-          <h2 className="text-base font-semibold text-slate-900">Summary</h2>
-          <ul className="mt-3 space-y-3">
+        <section className="rounded-[14px] border border-line bg-card p-6" aria-label="Order summary">
+          <h2 className="font-display text-lg font-semibold text-ink">Summary</h2>
+          <ul className="mt-4 space-y-3">
             {order.items.map((it, i) => (
               <li key={`${it.productId}-${i}`} className="flex items-center gap-3">
-                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-slate-100">
+                <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-xl bg-sand">
                   <Image src={it.image} alt={it.name} fill sizes="48px" className="object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-medium text-slate-900">{it.name}</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="truncate text-sm font-medium text-ink">{it.name}</p>
+                  <p className="text-xs text-muted">
                     Qty {it.qty}
                     {[it.color, it.size].filter(Boolean).join(' · ') && (
                       <> · {[it.color, it.size].filter(Boolean).join(' · ')}</>
                     )}
                   </p>
                 </div>
-                <p className="shrink-0 text-sm font-semibold text-slate-900">
+                <p className="tnum shrink-0 text-sm font-semibold text-ink">
                   {currency(it.price * it.qty)}
                 </p>
               </li>
             ))}
           </ul>
-          <dl className="mt-4 space-y-1.5 border-t border-slate-100 pt-3 text-sm">
+          <dl className="mt-4 space-y-1.5 border-t border-line pt-4 text-sm">
             <div className="flex justify-between">
-              <dt className="text-slate-600">Subtotal</dt>
-              <dd className="text-slate-900">{currency(order.subtotal)}</dd>
+              <dt className="text-muted">Subtotal</dt>
+              <dd className="tnum text-ink">{currency(order.subtotal)}</dd>
             </div>
             {order.discount > 0 && (
-              <div className="flex justify-between text-emerald-700">
+              <div className="flex justify-between text-[#2F5D34]">
                 <dt>Discount{order.couponCode ? ` (${order.couponCode})` : ''}</dt>
-                <dd>−{currency(order.discount)}</dd>
+                <dd className="tnum">−{currency(order.discount)}</dd>
               </div>
             )}
             <div className="flex justify-between">
-              <dt className="text-slate-600">Shipping</dt>
-              <dd className="text-slate-900">
+              <dt className="text-muted">Shipping</dt>
+              <dd className="tnum text-ink">
                 {order.shipping === 0 ? 'FREE' : currency(order.shipping)}
               </dd>
             </div>
             <div className="flex justify-between">
-              <dt className="text-slate-600">Tax</dt>
-              <dd className="text-slate-900">{currency(order.tax)}</dd>
+              <dt className="text-muted">Tax</dt>
+              <dd className="tnum text-ink">{currency(order.tax)}</dd>
             </div>
-            <div className="flex justify-between border-t border-slate-100 pt-2 text-base font-bold text-slate-900">
+            <div className="flex justify-between border-t border-line pt-2.5 text-base font-semibold text-ink">
               <dt>Total</dt>
-              <dd>{currency(order.total)}</dd>
+              <dd className="tnum">{currency(order.total)}</dd>
             </div>
           </dl>
         </section>
@@ -154,7 +153,7 @@ export default function OrderSuccessPage() {
     <Suspense
       fallback={
         <main className="mx-auto max-w-3xl px-4 py-10 sm:px-6" aria-busy="true">
-          <div className="h-72 animate-pulse rounded-2xl bg-slate-100" />
+          <div className="h-72 animate-pulse rounded-[14px] bg-sand" />
         </main>
       }
     >
