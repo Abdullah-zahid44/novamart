@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -15,11 +15,35 @@ export default function CategoryPage() {
   const slug = params.category as string;
   const [sort, setSort] = useState('featured');
 
-  const category = useMemo(() => getCategories().find((c) => c.slug === slug), [slug]);
+  // Product data lives in localStorage, which the server cannot read. Gate the
+  // catalog lookup behind mount so SSR HTML matches the first client render;
+  // genuinely unknown slugs still hit notFound() after hydration.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const category = useMemo(
+    () => (mounted ? getCategories().find((c) => c.slug === slug) : undefined),
+    [slug, mounted],
+  );
   const products = useMemo(() => {
     if (!category) return [];
     return sortProducts(getProducts().filter((p) => p.category === category.slug), sort);
   }, [category, sort]);
+
+  if (!mounted) {
+    return (
+      <div className="mx-auto max-w-7xl animate-pulse px-4 py-10" aria-label="Loading category">
+        <div className="h-8 w-56 rounded bg-line" />
+        <div className="mt-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="aspect-[3/4] rounded-[14px] bg-line/60" />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (!category) notFound();
 

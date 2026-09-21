@@ -124,7 +124,11 @@ function ensureSeed(): void {
 
 export function getProducts(): Product[] {
   ensureSeed();
-  return read<Product[]>('products_override', []);
+  // The server has no localStorage. Render the seed catalog during SSR so the
+  // server HTML matches the first client render of a fresh browser exactly
+  // (admin edits live in that browser's localStorage and apply after mount).
+  if (!isBrowser()) return seed.products;
+  return read<Product[]>('products_override', seed.products);
 }
 
 export function getProductBySlug(slug: string): Product | undefined {

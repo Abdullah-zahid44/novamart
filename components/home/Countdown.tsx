@@ -28,10 +28,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
 
 /** Live countdown to Friday's drop. Styled for the accent deals band. */
 export function Countdown() {
-  const [target] = useState<number>(() => nextFridayMidnight());
-  const [now, setNow] = useState<number>(() => Date.now());
+  // Date.now() differs between the server render and the client's first render,
+  // which breaks hydration. Render stable zeros until mounted, then go live.
+  const [target, setTarget] = useState<number>(0);
+  const [now, setNow] = useState<number>(0);
 
   useEffect(() => {
+    setTarget(nextFridayMidnight());
+    setNow(Date.now());
     const id = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(id);
   }, []);

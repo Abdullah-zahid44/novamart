@@ -1,0 +1,241 @@
+{
+ "routes": {
+  "d:/": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/shop": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/shop/electronics": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/deals": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/about": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/contact": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/faq": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/shipping": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/privacy": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/terms": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/cart": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/checkout": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/login": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/signup": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/track": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/account": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/admin/login": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/admin": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "d:/product/aurora-x9-noise-cancelling-headphones": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/shop": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/shop/electronics": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/deals": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/about": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/contact": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/faq": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/shipping": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/privacy": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/terms": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/cart": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/checkout": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/login": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/signup": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/track": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/account": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/admin/login": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/admin": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  },
+  "m:/product/aurora-x9-noise-cancelling-headphones": {
+   "status": 200,
+   "overflow": false,
+   "console_errors": [],
+   "exceptions": []
+  }
+ },
+ "flows": {
+  "d:cart->checkout": {
+   "fail": "Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"button\").filter(has_text=\"Add to Cart\").first\n    - locator resolved to <button disabled type=\"button\" class=\"inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:cursor-not-allowed disabled:opacity-50 bg-accent text-white hover:bg-accent-deep focus-visible:ring-accent shadow-sm h-12 px-6 text-base w-full\">\u2026</button>\n  - attempting click action\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n    - waiting 20ms\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n      - waiting 100ms\n    56 \u00d7 waiting for element to be visible, enabled and stable\n       - element is not enabled\n     - retrying click action\n       - waiting 500ms\n"
+  },
+  "m:cart->checkout": {
+   "fail": "Locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(\"button\").filter(has_text=\"Add to Cart\").first\n    - locator resolved to <button disabled type=\"button\" class=\"inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-paper disabled:cursor-not-allowed disabled:opacity-50 bg-accent text-white hover:bg-accent-deep focus-visible:ring-accent shadow-sm h-12 px-6 text-base w-full\">\u2026</button>\n  - attempting click action\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n    - waiting 20ms\n    2 \u00d7 waiting for element to be visible, enabled and stable\n      - element is not enabled\n    - retrying click action\n      - waiting 100ms\n    56 \u00d7 waiting for element to be visible, enabled and stable\n       - element is not enabled\n     - retrying click action\n       - waiting 500ms\n"
+  }
+ },
+ "screenshots": 38
+}

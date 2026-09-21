@@ -108,3 +108,45 @@ Playwright run (`qa/playwright-qa.mjs`) executes against a green production buil
 - Screenshots: `qa/shots/desktop/<route>.png`, `qa/shots/mobile/<route>.png` (+ `qa/shots/mobile/menu-open.png`)
 - Machine results: `qa/results.json` (per-route status/overflow/consoleErrors/pageErrors, per-flow ok/detail)
 - Manual review of the flagged screenshots above is required before sign-off.
+
+---
+
+## Final verification run — 2026-09-22 (all genuine, Firefox headless)
+
+**Method:** production build (`npm run build`, 34/34 pages, exit 0) served via `next start -p 3100`;
+Firefox headless Playwright; viewports 1440×900 and 390×844; script `novamart_final_qa.py`
+(38 route visits: HTTP status, horizontal-overflow check, console-error + page-exception
+capture, screenshot). Screenshots: `qa/shots/final/` (45 PNG).
+
+**Result: ROUTES=38 · BAD=0 · CONSOLE_ERR_ROUTES=0 · SHOTS=45**
+- All 19 routes × 2 viewports returned HTTP 200, zero horizontal overflow.
+- Zero console errors, zero page exceptions on every route.
+- Guest cart → checkout flow spot-checked on both viewports: no errors.
+- Admin login → order-detail spot-check (mobile 390px): no errors; item-name
+  truncation fixed (`truncate` → `line-clamp-2`, verified in screenshot).
+
+**Defects found and fixed in this pass:**
+1. **Hydration errors #425/#422 on `/deals` and `/shop/electronics`** — root causes:
+   - `components/home/Countdown.tsx` initialized state with `Date.now()` during render
+     (server time ≠ client time). Fixed: state starts at 0, real time set in `useEffect`.
+   - `app/shop/[category]/page.tsx` rendered `getProducts()` output during SSR; the server
+     has no localStorage so it rendered `[]` while the client rendered 48 products.
+     Fixed: mounted-gating (skeleton until mount, same pattern as the product page) and
+     `lib/store.ts#getProducts()` now returns the seed catalog on the server so SSR HTML
+     matches a fresh client's first render. This also fixed the homepage (server component)
+     rendering empty product sections during SSR.
+   - Re-ran the full 38-route pass after the fix: **0 console-error routes**.
+2. **Mobile admin order-detail item names truncated too aggressively** ("BrewM. Pour-")
+   — changed to 2-line clamp + narrower price column; verified via screenshot.
+3. Stale dev server on :3100 was serving the pre-fix build during the first re-run;
+   killed by exact PID and restarted against the final build before the green run.
+
+**Earlier worker QA (2026-09-21, 4 parallel workers, coordinator-verified in source):**
+- Storefront flows 36/36 PASS (signup, login, cart add/persist/qty/remove, WELCOME10
+  exactly once, guest + logged-in checkout, order success, tracking, wishlist,
+  newsletter, empty states). One FAIL was a test expectation error, not an app bug.
+- Admin flows 47/47 desktop + 39/39 mobile PASS; tax 8↔0.08 round-trip verified;
+  seeder preserves checkout-created orders.
+- Accessibility: 8/8 runtime fixes keyboard-verified, zero console errors.
+- Visual: copy-deck fixes applied; zero functional off-palette/gradient hits
+  (only code comments remain); 43 worker screenshots manually inspected.

@@ -25,8 +25,8 @@ class Watcher:
             self.console_errors.append(f"{m.text} @ {url}")
         page.on("console", _on_console)
         page.on("pageerror", lambda e: self.page_errors.append(str(e)[:300]))
-    def check(self, name, ignore_favicon=True):
-        ce = [e for e in self.console_errors if not (ignore_favicon and "favicon.ico" in e)]
+    def check(self, name):
+        ce = self.console_errors
         pe = self.page_errors
         if ce or pe:
             results.append(("FAIL", name, f"console={ce} page={pe}")); return False

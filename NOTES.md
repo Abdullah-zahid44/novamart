@@ -92,3 +92,12 @@ npm run start    # serve the production build → http://localhost:3000
 - `CONTRACT.md` — API/route/data contract (unchanged by the redesign).
 - `QA_REPORT.md` — full QA checklist (PENDING until the QA run executes).
 - `BUILD_REPORT.md` — environment, dependencies, build commands.
+
+## 2026-09-22 — final QA + push
+- Full 38-route Firefox QA green: 0 bad routes, 0 console-error routes, 45 screenshots.
+- Real defects fixed: 2 hydration-error root causes (Countdown Date.now, category page
+  localStorage-during-SSR), 1 mobile truncation polish, 1 stale-server incident.
+- Pushed to GitHub Abdullah-zahid44/novamart via gh_push.py (Data API; plain git push
+  401s from this VM as documented).
+- Reminder for the final user report: localStorage persistence, demo auth, demo orders,
+  fake payments — NOT production-commerce-ready.

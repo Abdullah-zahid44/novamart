@@ -2,7 +2,7 @@
 Run: python3 ~/workspace/ecommerce-site/qa/qa_admin_desktop.py
 Same-browser-context admin edits + storefront reflection (localStorage).
 Any console error or page error = FAIL for that check."""
-import os, sys, time
+import os, sys, time, json
 from playwright.sync_api import sync_playwright
 
 BASE = "http://127.0.0.1:3106"
@@ -24,8 +24,8 @@ class Watcher:
             self.console_errors.append(f"{m.text} @ {url}")
         page.on("console", _on_console)
         page.on("pageerror", lambda e: self.page_errors.append(str(e)[:300]))
-    def check(self, name, ignore_favicon=True):
-        ce = [e for e in self.console_errors if not (ignore_favicon and "favicon.ico" in e)]
+    def check(self, name):
+        ce = self.console_errors
         pe = self.page_errors
         if ce or pe:
             results.append(("FAIL", name, f"console={ce} page={pe}")); return False
@@ -117,7 +117,10 @@ def _run():
           return null})()""")
         check("3a edit button opens product edit page", pid is not None, f"{pid}")
         p.click(f"a[aria-label='Edit {pid['name']}']")
-        p.wait_for_timeout(2000)
+        try:
+            p.wait_for_url(f"**/admin/products/{pid['id']}", timeout=15000)
+        except Exception:
+            pass
         check("3a2 edit page loaded", f"/admin/products/{pid['id']}" in p.url, f"url={p.url}")
         new_name = pid["name"] + " — QA"
         p.fill("#pf-name", new_name); p.fill("#pf-price", "199.99"); p.fill("#pf-stock", "42")
@@ -264,25 +267,45 @@ def _run():
         goto(p, f"{BASE}/admin/settings"); p.wait_for_timeout(1000)
         check("8b settings form shows 10 after reload", p.input_value("#set-tax") == "10", f"value={p.input_value('#set-tax')}")
         p7 = ctx.new_page()
-        goto(p7, f"{BASE}/checkout"); p7.wait_for_timeout(1000)
-        tot = p7.evaluate("""(()=>{const t=document.body.innerText; const m=t.match(/Tax\\s*\\$([0-9.]+)/i);
-          const s=JSON.parse(localStorage.getItem('novamart_settings'))||{}; return {taxText:m&&m[1], rate:s.taxRate}})()""")
-        check("8c checkout uses updated tax rate", (tot or {}).get("rate") == 0.10, f"{tot}")
+        goto(p7, f"{BASE}/"); p7.wait_for_timeout(800)
+        # seed a cart with a known-price item to verify the actual tax math
+        p7.evaluate("""()=>{const pr=(JSON.parse(localStorage.getItem('novamart_products_override'))||[])
+          .concat(JSON.parse(localStorage.getItem('novamart_products')||'[]'))[0];
+          localStorage.setItem('novamart_cart', JSON.stringify([{id:pr.id,name:pr.name,price:100,qty:1,
+          image:(pr.images||[])[0]||'',color:'',size:''}]))}""")
+        goto(p7, f"{BASE}/checkout"); p7.wait_for_timeout(1500)
+        tot = p7.evaluate("""(()=>{const t=document.body.innerText;
+          const tm=t.match(/Tax[^$]*\\$([0-9.,]+)/i); const sm=t.match(/Subtotal\\s*\\$([0-9.,]+)/i);
+          const s=JSON.parse(localStorage.getItem('novamart_settings'))||{};
+          return {taxText:tm&&tm[1], subText:sm&&sm[1], rate:s.taxRate}})()""")
+        exp_tax = round(float((tot or {}).get("subText") or 0) * 0.10, 2)
+        got_tax = float((tot or {}).get("taxText") or -1)
+        check("8c checkout tax = subtotal x 10%", abs(got_tax - exp_tax) < 0.02,
+              f"subtotal=${(tot or {}).get('subText')} tax=${(tot or {}).get('taxText')} expected=${exp_tax}")
+        p7.evaluate("localStorage.removeItem('novamart_cart')")
         p7.close()
         goto(p, f"{BASE}/admin/settings"); p.wait_for_timeout(1000)
         p.fill("#set-tax", "8"); p.click("button[type=submit]"); p.wait_for_timeout(1200)
         check("8d tax restored to 8%", abs(((ls_get(p, "settings") or {}).get("taxRate") or 0) - 0.08) < 1e-9)
         w.check("8e no console errors on settings")
 
-        # ---- 9. seeder safety ----
+        # ---- 9. seeder safety (sentinel order) ----
         w.clean()
-        before_n = len(ls_get(p, "orders") or [])
+        saved_orders = ls_get(p, "orders") or []
+        sentinel = [{"id": "ord_qa_sentinel", "items": [], "total": 1.0, "status": "pending",
+                     "createdAt": "2026-09-22T00:00:00.000Z", "customer": {"name": "QA Sentinel"}}]
+        p.evaluate(f"localStorage.setItem('novamart_orders', '{json.dumps(sentinel)}')")
         p8 = ctx.new_page()
+        # /admin/orders invokes ensureDemoOrders(); a correct seeder must not touch the sentinel
+        goto(p8, f"{BASE}/admin/orders"); p8.wait_for_timeout(1200)
         for r in ["/", "/shop", "/checkout"]:
             goto(p8, f"{BASE}{r}"); p8.wait_for_timeout(800)
-        after_n = len(p8.evaluate("JSON.parse(localStorage.getItem('novamart_orders')||'[]')") or [])
-        check("9a storefront visits do not add demo orders", after_n == before_n, f"before={before_n} after={after_n}")
+        after_orders = p8.evaluate("JSON.parse(localStorage.getItem('novamart_orders')||'[]')") or []
+        check("9a seeder leaves sentinel order untouched",
+              len(after_orders) == 1 and after_orders[0]["id"] == "ord_qa_sentinel",
+              f"before=1 sentinel after={len(after_orders)}")
         p8.close()
+        p.evaluate(f"localStorage.setItem('novamart_orders', '{json.dumps(saved_orders)}')")
         w.check("9b no console errors on storefront pages")
         b.close()
 

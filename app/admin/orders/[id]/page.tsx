@@ -219,7 +219,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
       </Panel>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-6 lg:col-span-2">
+        <div className="min-w-0 space-y-6 lg:col-span-2">
           <Panel className="p-5 sm:p-6">
             <SectionHead icon={PackageSearch} title={`Items (${itemCount})`} />
             <ul className="mt-4 divide-y divide-[#2E2820]/60">
@@ -233,7 +233,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                     loading="lazy"
                   />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-medium text-[#F2EBDD]">{item.name}</p>
+                    <p className="line-clamp-2 text-sm font-medium leading-snug text-[#F2EBDD]">{item.name}</p>
                     {(item.color || item.size) && (
                       <p className="text-xs text-[#A39A89]">
                         {[item.color, item.size].filter(Boolean).join(' · ')}
@@ -241,7 +241,7 @@ export default function AdminOrderDetailPage({ params }: { params: { id: string 
                     )}
                   </div>
                   <p className="shrink-0 text-sm tabular-nums text-[#A39A89]">× {item.qty}</p>
-                  <p className="w-24 shrink-0 text-right text-sm font-semibold tabular-nums text-[#F2EBDD]">
+                  <p className="w-20 shrink-0 text-right text-sm font-semibold tabular-nums text-[#F2EBDD]">
                     {currency(item.price * item.qty)}
                   </p>
                 </li>

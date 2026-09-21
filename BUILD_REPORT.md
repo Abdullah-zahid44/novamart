@@ -123,3 +123,14 @@ npm run build
   passed clean at final integration check (2026-09-21, exit 0, no output).
 - A dedicated build-integrator agent ran `npx tsc --noEmit` on a loop during the redesign and fixed only
   integration-level issues (import paths, prop mismatches) without restyling.
+
+## Final build — 2026-09-22
+- `npx tsc --noEmit`: exit 0, no errors (after hydration + truncation fixes).
+- `npm run build`: exit 0 — "✓ Compiled successfully", "✓ Generating static pages (34/34)".
+- Fixes in this build vs the interim push:
+  - `lib/store.ts` — `getProducts()` returns the seed catalog during SSR (was `[]`,
+    caused hydration mismatch + empty SSR product sections).
+  - `components/home/Countdown.tsx` — SSR-safe init (was `Date.now()` at render).
+  - `app/shop/[category]/page.tsx` — mounted-gating with loading skeleton.
+  - `app/admin/orders/[id]/page.tsx` — item names `line-clamp-2` instead of `truncate`.
+- Production server verified on :3100 (HTTP 200) before the green QA run.
