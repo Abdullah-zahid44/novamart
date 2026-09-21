@@ -1,0 +1,2090 @@
+{
+  "products": [
+    {
+      "id": "p001",
+      "slug": "aurora-x9-noise-cancelling-headphones",
+      "name": "Aurora X9 Noise-Cancelling Headphones",
+      "brand": "SonicWave",
+      "category": "electronics",
+      "price": 249.99,
+      "rating": 4.8,
+      "reviewsCount": 2314,
+      "images": [
+        "https://picsum.photos/seed/novamart-1-1/800/800",
+        "https://picsum.photos/seed/novamart-1-2/800/800",
+        "https://picsum.photos/seed/novamart-1-3/800/800"
+      ],
+      "colors": [
+        "Midnight Black",
+        "Arctic White",
+        "Navy"
+      ],
+      "stock": 142,
+      "tags": [
+        "headphones",
+        "audio",
+        "wireless",
+        "bluetooth",
+        "anc"
+      ],
+      "description": "Flagship over-ear headphones with adaptive noise cancellation that silences commutes, offices, and jet engines. Plush memory-foam earcups and a 40-hour battery keep you in the zone all week.",
+      "specs": {
+        "Driver": "40mm dynamic",
+        "ANC": "Hybrid adaptive, -45dB",
+        "Battery life": "40 hours (ANC on)",
+        "Bluetooth": "5.3 with multipoint",
+        "Weight": "254 g",
+        "Charging": "USB-C fast charge (10 min = 5 h)"
+      },
+      "createdAt": "2026-01-18T10:00:00.000Z",
+      "compareAtPrice": 329.99,
+      "badge": "HOT",
+      "featured": true
+    },
+    {
+      "id": "p002",
+      "slug": "voltcharge-65w-gan-charger",
+      "name": "VoltCharge 65W GaN Fast Charger",
+      "brand": "VoltEdge",
+      "category": "electronics",
+      "price": 39.99,
+      "rating": 4.6,
+      "reviewsCount": 1876,
+      "images": [
+        "https://picsum.photos/seed/novamart-2-1/800/800",
+        "https://picsum.photos/seed/novamart-2-2/800/800",
+        "https://picsum.photos/seed/novamart-2-3/800/800"
+      ],
+      "colors": [
+        "White",
+        "Black"
+      ],
+      "stock": 320,
+      "tags": [
+        "charger",
+        "usb-c",
+        "gan",
+        "fast-charging",
+        "travel"
+      ],
+      "description": "A pocket-sized 65W GaN charger that powers a laptop, tablet, and phone at once. Foldable prongs and smart power distribution make it the only travel charger you need.",
+      "specs": {
+        "Output": "65W GaN II",
+        "Ports": "2x USB-C + 1x USB-A",
+        "Input": "100-240V universal",
+        "Size": "49 x 43 x 28 mm",
+        "Safety": "Over-voltage and heat protection"
+      },
+      "createdAt": "2026-02-04T10:00:00.000Z"
+    },
+    {
+      "id": "p003",
+      "slug": "pixelpro-4k-action-camera",
+      "name": "PixelPro 4K Action Camera",
+      "brand": "OptiCam",
+      "category": "electronics",
+      "price": 299.99,
+      "rating": 4.7,
+      "reviewsCount": 942,
+      "images": [
+        "https://picsum.photos/seed/novamart-3-1/800/800",
+        "https://picsum.photos/seed/novamart-3-2/800/800",
+        "https://picsum.photos/seed/novamart-3-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "Ember Orange"
+      ],
+      "stock": 87,
+      "tags": [
+        "camera",
+        "action-cam",
+        "4k",
+        "waterproof",
+        "vlogging"
+      ],
+      "description": "Shoot cinematic 4K60 footage with pro-grade stabilization in a body that survives 10 meters underwater. A front display makes vlogging and framing selfies effortless.",
+      "specs": {
+        "Sensor": "1/1.9\" 48MP",
+        "Video": "4K60 / 1080p240",
+        "Waterproof": "10 m without case",
+        "Stabilization": "6-axis electronic",
+        "Battery": "2x 1720 mAh included",
+        "Displays": "2.0\" rear + 1.4\" front"
+      },
+      "createdAt": "2026-02-22T10:00:00.000Z",
+      "compareAtPrice": 379.99,
+      "badge": "SALE"
+    },
+    {
+      "id": "p004",
+      "slug": "homehub-mini-smart-speaker",
+      "name": "HomeHub Mini Smart Speaker",
+      "brand": "Nestron",
+      "category": "electronics",
+      "price": 49.99,
+      "rating": 4.5,
+      "reviewsCount": 3108,
+      "images": [
+        "https://picsum.photos/seed/novamart-4-1/800/800",
+        "https://picsum.photos/seed/novamart-4-2/800/800",
+        "https://picsum.photos/seed/novamart-4-3/800/800"
+      ],
+      "colors": [
+        "Charcoal",
+        "Sand",
+        "Sage"
+      ],
+      "stock": 410,
+      "tags": [
+        "smart-home",
+        "speaker",
+        "voice-assistant",
+        "bluetooth"
+      ],
+      "description": "Room-filling 360-degree sound from a speaker that fits in your palm. Voice assistant built in, multi-room pairing, and 12 hours of playtime for all-day listening.",
+      "specs": {
+        "Output": "15W, 360-degree",
+        "Battery": "12 hours playtime",
+        "Voice assistant": "Built in",
+        "Connectivity": "Bluetooth 5.2 + Wi-Fi",
+        "Water resistance": "IPX5"
+      },
+      "createdAt": "2026-03-09T10:00:00.000Z",
+      "badge": "BESTSELLER"
+    },
+    {
+      "id": "p005",
+      "slug": "mechpro-rgb-mechanical-keyboard",
+      "name": "MechPro RGB Mechanical Keyboard",
+      "brand": "KeyForge",
+      "category": "electronics",
+      "price": 129.99,
+      "rating": 4.6,
+      "reviewsCount": 1204,
+      "images": [
+        "https://picsum.photos/seed/novamart-5-1/800/800",
+        "https://picsum.photos/seed/novamart-5-2/800/800",
+        "https://picsum.photos/seed/novamart-5-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "White"
+      ],
+      "stock": 156,
+      "tags": [
+        "keyboard",
+        "mechanical",
+        "rgb",
+        "gaming",
+        "typing"
+      ],
+      "description": "Hot-swappable mechanical switches, a gasket-mounted plate, and per-key RGB for a typing feel you can tune to taste. Tri-mode connectivity covers desk, laptop, and tablet.",
+      "specs": {
+        "Switches": "Hot-swap linear",
+        "Layout": "75%, 84 keys",
+        "Connectivity": "Bluetooth / 2.4 GHz / USB-C",
+        "Battery": "4000 mAh",
+        "Keycaps": "PBT double-shot",
+        "Backlight": "Per-key RGB"
+      },
+      "createdAt": "2026-03-27T10:00:00.000Z",
+      "compareAtPrice": 159.99
+    },
+    {
+      "id": "p006",
+      "slug": "ultraview-27-4k-monitor",
+      "name": "UltraView 27\" 4K UHD Monitor",
+      "brand": "Lumina",
+      "category": "electronics",
+      "price": 349.99,
+      "rating": 4.7,
+      "reviewsCount": 689,
+      "images": [
+        "https://picsum.photos/seed/novamart-6-1/800/800",
+        "https://picsum.photos/seed/novamart-6-2/800/800",
+        "https://picsum.photos/seed/novamart-6-3/800/800"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "stock": 64,
+      "tags": [
+        "monitor",
+        "4k",
+        "display",
+        "usb-c",
+        "office"
+      ],
+      "description": "A 27-inch 4K IPS panel with 99% sRGB coverage and HDR400 for color work that actually looks right. A single USB-C cable drives the display, data, and 90W laptop charging.",
+      "specs": {
+        "Panel": "27\" IPS, 4K UHD",
+        "Color": "99% sRGB, HDR400",
+        "Refresh rate": "60 Hz, 5 ms",
+        "Ports": "2x HDMI 2.0, DP 1.4, USB-C 90W",
+        "Stand": "Height, tilt, and pivot adjustable"
+      },
+      "createdAt": "2026-04-12T10:00:00.000Z",
+      "compareAtPrice": 429.99,
+      "featured": true
+    },
+    {
+      "id": "p007",
+      "slug": "airbuds-pro-wireless-earbuds",
+      "name": "AirBuds Pro True Wireless Earbuds",
+      "brand": "SonicWave",
+      "category": "electronics",
+      "price": 149.99,
+      "rating": 4.5,
+      "reviewsCount": 2873,
+      "images": [
+        "https://picsum.photos/seed/novamart-7-1/800/800",
+        "https://picsum.photos/seed/novamart-7-2/800/800",
+        "https://picsum.photos/seed/novamart-7-3/800/800"
+      ],
+      "colors": [
+        "White",
+        "Black",
+        "Ocean Blue"
+      ],
+      "stock": 233,
+      "tags": [
+        "earbuds",
+        "wireless",
+        "bluetooth",
+        "anc",
+        "audio"
+      ],
+      "description": "Feather-light earbuds with adaptive noise cancellation, wireless charging, and a transparency mode that sounds natural. Six microphones keep calls crisp even on windy streets.",
+      "specs": {
+        "ANC": "Adaptive hybrid",
+        "Battery": "8 h + 24 h with case",
+        "Charging": "USB-C + Qi wireless",
+        "Bluetooth": "5.3",
+        "Water resistance": "IPX5",
+        "Microphones": "6-mic array"
+      },
+      "createdAt": "2026-04-29T10:00:00.000Z",
+      "compareAtPrice": 189.99
+    },
+    {
+      "id": "p008",
+      "slug": "voltpack-20000mah-power-bank",
+      "name": "VoltPack 20000mAh Power Bank",
+      "brand": "VoltEdge",
+      "category": "electronics",
+      "price": 45.99,
+      "rating": 4.4,
+      "reviewsCount": 1952,
+      "images": [
+        "https://picsum.photos/seed/novamart-8-1/800/800",
+        "https://picsum.photos/seed/novamart-8-2/800/800",
+        "https://picsum.photos/seed/novamart-8-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "Graphite"
+      ],
+      "stock": 0,
+      "tags": [
+        "power-bank",
+        "charging",
+        "travel",
+        "usb-c"
+      ],
+      "description": "20,000mAh of backup power with 22.5W fast charging and a digital percentage display. Charges three devices at once — phone, earbuds, and smartwatch.",
+      "specs": {
+        "Capacity": "20000 mAh",
+        "Output": "22.5W max",
+        "Ports": "2x USB-A + 1x USB-C",
+        "Display": "LED percentage display",
+        "Safety": "12-layer circuit protection"
+      },
+      "createdAt": "2026-05-16T10:00:00.000Z"
+    },
+    {
+      "id": "p009",
+      "slug": "brewmaster-pour-over-coffee-set",
+      "name": "BrewMaster Pour-Over Coffee Set",
+      "brand": "Kavella",
+      "category": "home-kitchen",
+      "price": 89.99,
+      "rating": 4.7,
+      "reviewsCount": 764,
+      "images": [
+        "https://picsum.photos/seed/novamart-9-1/800/800",
+        "https://picsum.photos/seed/novamart-9-2/800/800",
+        "https://picsum.photos/seed/novamart-9-3/800/800"
+      ],
+      "colors": [
+        "Natural",
+        "Matte Black"
+      ],
+      "stock": 118,
+      "tags": [
+        "coffee",
+        "pour-over",
+        "brewing",
+        "kettle"
+      ],
+      "description": "Everything for cafe-level pour-over at home: borosilicate carafe, precision gooseneck kettle, ceramic dripper, and walnut collar. Brew a cleaner, sweeter cup in four minutes.",
+      "specs": {
+        "Carafe": "600 ml borosilicate glass",
+        "Kettle": "900 ml gooseneck",
+        "Dripper": "V60-style ceramic",
+        "Includes": "40 filters and coffee scoop",
+        "Care": "Dishwasher-safe glass"
+      },
+      "createdAt": "2026-06-02T10:00:00.000Z",
+      "badge": "NEW"
+    },
+    {
+      "id": "p010",
+      "slug": "chefpro-12pc-knife-set",
+      "name": "ChefPro 12-Piece Knife Set",
+      "brand": "ForgeCraft",
+      "category": "home-kitchen",
+      "price": 129.99,
+      "rating": 4.8,
+      "reviewsCount": 1103,
+      "images": [
+        "https://picsum.photos/seed/novamart-10-1/800/800",
+        "https://picsum.photos/seed/novamart-10-2/800/800",
+        "https://picsum.photos/seed/novamart-10-3/800/800"
+      ],
+      "colors": [
+        "Walnut",
+        "Black"
+      ],
+      "stock": 95,
+      "tags": [
+        "knives",
+        "kitchen",
+        "cooking",
+        "cutlery"
+      ],
+      "description": "Twelve German-steel knives, forged for balance and finished with a razor-sharp 15-degree edge. The acacia block keeps every blade protected and within reach.",
+      "specs": {
+        "Blades": "12-piece German 1.4116 steel",
+        "Edge": "15-degree precision grind",
+        "Handles": "Pakkawood",
+        "Block": "Acacia wood",
+        "Care": "Hand wash recommended"
+      },
+      "createdAt": "2026-06-20T10:00:00.000Z",
+      "compareAtPrice": 179.99
+    },
+    {
+      "id": "p011",
+      "slug": "aromamist-ultrasonic-diffuser",
+      "name": "AromaMist Ultrasonic Diffuser",
+      "brand": "ZenAir",
+      "category": "home-kitchen",
+      "price": 34.99,
+      "rating": 4.3,
+      "reviewsCount": 2210,
+      "images": [
+        "https://picsum.photos/seed/novamart-11-1/800/800",
+        "https://picsum.photos/seed/novamart-11-2/800/800",
+        "https://picsum.photos/seed/novamart-11-3/800/800"
+      ],
+      "colors": [
+        "White",
+        "Woodgrain"
+      ],
+      "stock": 275,
+      "tags": [
+        "diffuser",
+        "aromatherapy",
+        "home",
+        "wellness"
+      ],
+      "description": "Whisper-quiet ultrasonic mist with 7-color ambient light and automatic shut-off. Fills medium rooms with cool, even fragrance for up to 10 hours.",
+      "specs": {
+        "Tank": "500 ml",
+        "Runtime": "Up to 10 hours",
+        "Noise": "Under 30 dB",
+        "Light": "7-color LED",
+        "Auto-off": "Waterless shut-off"
+      },
+      "createdAt": "2026-07-08T10:00:00.000Z"
+    },
+    {
+      "id": "p012",
+      "slug": "culina-ceramic-cookware-10pc",
+      "name": "Culina 10-Piece Ceramic Cookware Set",
+      "brand": "Culina",
+      "category": "home-kitchen",
+      "price": 159.99,
+      "rating": 4.6,
+      "reviewsCount": 1487,
+      "images": [
+        "https://picsum.photos/seed/novamart-12-1/800/800",
+        "https://picsum.photos/seed/novamart-12-2/800/800",
+        "https://picsum.photos/seed/novamart-12-3/800/800"
+      ],
+      "colors": [
+        "Cream",
+        "Slate"
+      ],
+      "stock": 132,
+      "tags": [
+        "cookware",
+        "non-stick",
+        "kitchen",
+        "ceramic"
+      ],
+      "description": "Ten pieces of ceramic non-stick cookware that sear, saute, and simmer without sticking — and without PFAS. Oven-safe to 450°F with stay-cool handles.",
+      "specs": {
+        "Pieces": "10 (pots, pans, lids)",
+        "Coating": "Ceramic non-stick, PFAS-free",
+        "Compatibility": "Gas, electric, induction",
+        "Oven-safe": "To 450°F",
+        "Handles": "Stay-cool silicone"
+      },
+      "createdAt": "2026-07-25T10:00:00.000Z",
+      "compareAtPrice": 219.99,
+      "badge": "BESTSELLER",
+      "featured": true
+    },
+    {
+      "id": "p013",
+      "slug": "lumiglow-desk-lamp",
+      "name": "LumiGlow LED Desk Lamp with Wireless Charger",
+      "brand": "Lumina",
+      "category": "home-kitchen",
+      "price": 59.99,
+      "rating": 4.4,
+      "reviewsCount": 689,
+      "images": [
+        "https://picsum.photos/seed/novamart-13-1/800/800",
+        "https://picsum.photos/seed/novamart-13-2/800/800",
+        "https://picsum.photos/seed/novamart-13-3/800/800"
+      ],
+      "colors": [
+        "White",
+        "Black"
+      ],
+      "stock": 203,
+      "tags": [
+        "lamp",
+        "desk",
+        "led",
+        "wireless-charging",
+        "office"
+      ],
+      "description": "A minimalist LED desk lamp with stepless dimming, three color temperatures, and a 15W wireless charging pad in the base. One object, zero cable clutter.",
+      "specs": {
+        "Brightness": "800 lm, stepless dimming",
+        "Color temp": "2700K - 6000K",
+        "Wireless charging": "15W Qi pad",
+        "Arm": "270-degree adjustable",
+        "Power": "USB-C"
+      },
+      "createdAt": "2026-08-10T10:00:00.000Z"
+    },
+    {
+      "id": "p014",
+      "slug": "robovac-s9-self-cleaning",
+      "name": "RoboVac S9 Self-Cleaning Robot Vacuum",
+      "brand": "RoboClean",
+      "category": "home-kitchen",
+      "price": 399.99,
+      "rating": 4.5,
+      "reviewsCount": 542,
+      "images": [
+        "https://picsum.photos/seed/novamart-14-1/800/800",
+        "https://picsum.photos/seed/novamart-14-2/800/800",
+        "https://picsum.photos/seed/novamart-14-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "White"
+      ],
+      "stock": 41,
+      "tags": [
+        "robot-vacuum",
+        "smart-home",
+        "cleaning"
+      ],
+      "description": "LiDAR mapping, 5000Pa suction, and a self-emptying base that holds 60 days of dust. It mops, avoids cables, and resumes cleaning exactly where it left off.",
+      "specs": {
+        "Suction": "5000 Pa",
+        "Navigation": "LiDAR with AI obstacle avoidance",
+        "Base": "Self-emptying, 60-day capacity",
+        "Mopping": "Sonic mop",
+        "Runtime": "180 minutes",
+        "App": "Scheduling and no-go zones"
+      },
+      "createdAt": "2026-08-28T10:00:00.000Z",
+      "compareAtPrice": 499.99
+    },
+    {
+      "id": "p015",
+      "slug": "nordhaus-bamboo-bath-tray",
+      "name": "NordHaus Bamboo Bath Tray Set",
+      "brand": "NordHaus",
+      "category": "home-kitchen",
+      "price": 29.99,
+      "rating": 4.2,
+      "reviewsCount": 438,
+      "images": [
+        "https://picsum.photos/seed/novamart-15-1/800/800",
+        "https://picsum.photos/seed/novamart-15-2/800/800",
+        "https://picsum.photos/seed/novamart-15-3/800/800"
+      ],
+      "colors": [
+        "Natural Bamboo"
+      ],
+      "stock": 0,
+      "tags": [
+        "bath",
+        "bamboo",
+        "home",
+        "spa"
+      ],
+      "description": "A solid bamboo caddy that spans your tub with room for a book, a candle, and a glass of wine. Adjustable width fits tubs from 70 to 105 cm.",
+      "specs": {
+        "Material": "Moso bamboo",
+        "Width": "Adjustable 70-105 cm",
+        "Features": "Book stand and wine-glass slot",
+        "Finish": "Water-resistant oil",
+        "Care": "Wipe clean"
+      },
+      "createdAt": "2026-01-18T10:00:00.000Z"
+    },
+    {
+      "id": "p016",
+      "slug": "trailmate-insulated-bottle-1l",
+      "name": "TrailMate Insulated Steel Bottle 1L",
+      "brand": "TrailMate",
+      "category": "home-kitchen",
+      "price": 24.99,
+      "rating": 4.6,
+      "reviewsCount": 1930,
+      "images": [
+        "https://picsum.photos/seed/novamart-16-1/800/800",
+        "https://picsum.photos/seed/novamart-16-2/800/800",
+        "https://picsum.photos/seed/novamart-16-3/800/800"
+      ],
+      "colors": [
+        "Forest Green",
+        "Charcoal",
+        "Coral"
+      ],
+      "stock": 520,
+      "tags": [
+        "bottle",
+        "insulated",
+        "outdoor",
+        "hydration"
+      ],
+      "description": "Double-wall vacuum insulation keeps drinks cold for 24 hours or hot for 12 in a rugged 1-liter steel body. A leak-proof cap and cupholder-friendly base go anywhere.",
+      "specs": {
+        "Capacity": "1 L",
+        "Insulation": "Double-wall vacuum",
+        "Retention": "24 h cold / 12 h hot",
+        "Material": "18/8 stainless steel",
+        "Cap": "Leak-proof sport cap"
+      },
+      "createdAt": "2026-02-04T10:00:00.000Z"
+    },
+    {
+      "id": "p017",
+      "slug": "essential-organic-cotton-tee",
+      "name": "Essential Organic Cotton T-Shirt",
+      "brand": "Threadline",
+      "category": "fashion",
+      "price": 29.99,
+      "rating": 4.5,
+      "reviewsCount": 3421,
+      "images": [
+        "https://picsum.photos/seed/novamart-17-1/800/800",
+        "https://picsum.photos/seed/novamart-17-2/800/800",
+        "https://picsum.photos/seed/novamart-17-3/800/800"
+      ],
+      "colors": [
+        "White",
+        "Black",
+        "Heather Grey",
+        "Olive",
+        "Navy"
+      ],
+      "stock": 480,
+      "tags": [
+        "t-shirt",
+        "organic",
+        "basics",
+        "cotton"
+      ],
+      "description": "The perfect everyday tee in heavyweight organic cotton with a structured drape that holds its shape. Pre-shrunk, tagless, and garment-dyed for rich, lasting color.",
+      "specs": {
+        "Fabric": "100% organic cotton, 220 gsm",
+        "Fit": "Classic, true to size",
+        "Care": "Machine wash cold",
+        "Certification": "GOTS-certified organic",
+        "Details": "Tagless, side-seamed"
+      },
+      "createdAt": "2026-02-22T10:00:00.000Z",
+      "badge": "NEW",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "p018",
+      "slug": "urbanweave-denim-trucker-jacket",
+      "name": "UrbanWeave Denim Trucker Jacket",
+      "brand": "UrbanWeave",
+      "category": "fashion",
+      "price": 89.99,
+      "rating": 4.6,
+      "reviewsCount": 876,
+      "images": [
+        "https://picsum.photos/seed/novamart-18-1/800/800",
+        "https://picsum.photos/seed/novamart-18-2/800/800",
+        "https://picsum.photos/seed/novamart-18-3/800/800"
+      ],
+      "colors": [
+        "Washed Blue",
+        "Black Denim"
+      ],
+      "stock": 124,
+      "tags": [
+        "jacket",
+        "denim",
+        "outerwear"
+      ],
+      "description": "A timeless trucker in rigid Japanese denim that breaks in beautifully with wear. Copper rivets, double-needle stitching, and a fit that layers over anything.",
+      "specs": {
+        "Fabric": "12 oz Japanese denim",
+        "Fit": "Regular trucker",
+        "Hardware": "Copper rivets",
+        "Care": "Machine wash",
+        "Details": "Double-needle seams"
+      },
+      "createdAt": "2026-03-09T10:00:00.000Z",
+      "compareAtPrice": 119.99,
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "p019",
+      "slug": "cloudstep-running-sneakers",
+      "name": "CloudStep Running Sneakers",
+      "brand": "Strideline",
+      "category": "fashion",
+      "price": 119.99,
+      "rating": 4.7,
+      "reviewsCount": 2154,
+      "images": [
+        "https://picsum.photos/seed/novamart-19-1/800/800",
+        "https://picsum.photos/seed/novamart-19-2/800/800",
+        "https://picsum.photos/seed/novamart-19-3/800/800"
+      ],
+      "colors": [
+        "White/Grey",
+        "Black/Red",
+        "Navy/White"
+      ],
+      "stock": 189,
+      "tags": [
+        "sneakers",
+        "running",
+        "shoes",
+        "athletic"
+      ],
+      "description": "Cloud-like EVA midsole with responsive energy return for daily miles. An engineered mesh upper breathes while reflective details keep night runs visible.",
+      "specs": {
+        "Midsole": "Dual-density EVA",
+        "Drop": "8 mm",
+        "Weight": "265 g (US 9)",
+        "Upper": "Engineered mesh",
+        "Outsole": "Full-length rubber"
+      },
+      "createdAt": "2026-03-27T10:00:00.000Z",
+      "badge": "HOT",
+      "sizes": [
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12"
+      ],
+      "featured": true
+    },
+    {
+      "id": "p020",
+      "slug": "nordknit-merino-crew-sweater",
+      "name": "NordKnit Merino Wool Crew Sweater",
+      "brand": "NordKnit",
+      "category": "fashion",
+      "price": 79.99,
+      "rating": 4.6,
+      "reviewsCount": 643,
+      "images": [
+        "https://picsum.photos/seed/novamart-20-1/800/800",
+        "https://picsum.photos/seed/novamart-20-2/800/800",
+        "https://picsum.photos/seed/novamart-20-3/800/800"
+      ],
+      "colors": [
+        "Oatmeal",
+        "Charcoal",
+        "Forest"
+      ],
+      "stock": 167,
+      "tags": [
+        "sweater",
+        "wool",
+        "knitwear",
+        "winter"
+      ],
+      "description": "A buttery 100% merino crew knit at a mid-weight that layers from fall through spring. Naturally odor-resistant and machine-washable — no dry cleaner needed.",
+      "specs": {
+        "Fabric": "100% merino wool",
+        "Knit": "12-gauge",
+        "Fit": "Relaxed crew",
+        "Care": "Machine washable",
+        "Details": "Ribbed cuffs and hem"
+      },
+      "createdAt": "2026-04-12T10:00:00.000Z",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "p021",
+      "slug": "amara-linen-summer-dress",
+      "name": "Amara Linen Summer Dress",
+      "brand": "Amara",
+      "category": "fashion",
+      "price": 69.99,
+      "rating": 4.5,
+      "reviewsCount": 512,
+      "images": [
+        "https://picsum.photos/seed/novamart-21-1/800/800",
+        "https://picsum.photos/seed/novamart-21-2/800/800",
+        "https://picsum.photos/seed/novamart-21-3/800/800"
+      ],
+      "colors": [
+        "Terracotta",
+        "Sage",
+        "Ivory"
+      ],
+      "stock": 143,
+      "tags": [
+        "dress",
+        "linen",
+        "summer"
+      ],
+      "description": "A breezy European flax linen dress with a flattering smocked back and side pockets — yes, real pockets. Pre-washed for softness and cut for movement.",
+      "specs": {
+        "Fabric": "100% European flax linen",
+        "Fit": "A-line with smocked back",
+        "Details": "Side pockets",
+        "Care": "Machine wash",
+        "Length": "Midi"
+      },
+      "createdAt": "2026-04-29T10:00:00.000Z",
+      "compareAtPrice": 94.99,
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "p022",
+      "slug": "velluto-classic-leather-tote",
+      "name": "Velluto Classic Leather Tote",
+      "brand": "Velluto",
+      "category": "fashion",
+      "price": 149.99,
+      "rating": 4.8,
+      "reviewsCount": 398,
+      "images": [
+        "https://picsum.photos/seed/novamart-22-1/800/800",
+        "https://picsum.photos/seed/novamart-22-2/800/800",
+        "https://picsum.photos/seed/novamart-22-3/800/800"
+      ],
+      "colors": [
+        "Tan",
+        "Black",
+        "Cognac"
+      ],
+      "stock": 76,
+      "tags": [
+        "bag",
+        "leather",
+        "tote",
+        "work"
+      ],
+      "description": "A full-grain leather tote that carries a 14-inch laptop, water bottle, and daily essentials. It ages into a rich patina, with solid brass hardware throughout.",
+      "specs": {
+        "Leather": "Full-grain, vegetable-tanned",
+        "Dimensions": "38 x 28 x 12 cm",
+        "Lining": "Cotton twill",
+        "Hardware": "Solid brass",
+        "Strap drop": "62 cm"
+      },
+      "createdAt": "2026-05-16T10:00:00.000Z",
+      "compareAtPrice": 189.99,
+      "featured": true
+    },
+    {
+      "id": "p023",
+      "slug": "threadline-slim-fit-chinos",
+      "name": "Threadline Slim-Fit Chino Pants",
+      "brand": "Threadline",
+      "category": "fashion",
+      "price": 54.99,
+      "rating": 4.4,
+      "reviewsCount": 1108,
+      "images": [
+        "https://picsum.photos/seed/novamart-23-1/800/800",
+        "https://picsum.photos/seed/novamart-23-2/800/800",
+        "https://picsum.photos/seed/novamart-23-3/800/800"
+      ],
+      "colors": [
+        "Khaki",
+        "Navy",
+        "Olive",
+        "Stone"
+      ],
+      "stock": 0,
+      "tags": [
+        "pants",
+        "chinos",
+        "basics",
+        "workwear"
+      ],
+      "description": "A sharp slim-fit chino in stretch twill that moves from office to dinner. A wrinkle-resistant finish keeps you crisp from the morning meeting to the evening out.",
+      "specs": {
+        "Fabric": "97% cotton, 3% elastane",
+        "Fit": "Slim, mid-rise",
+        "Finish": "Wrinkle-resistant",
+        "Care": "Machine wash",
+        "Details": "Slanted front pockets"
+      },
+      "createdAt": "2026-06-02T10:00:00.000Z",
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL"
+      ]
+    },
+    {
+      "id": "p024",
+      "slug": "solstice-aviator-sunglasses",
+      "name": "Solstice Polarized Aviator Sunglasses",
+      "brand": "Solstice",
+      "category": "fashion",
+      "price": 89.99,
+      "rating": 4.6,
+      "reviewsCount": 731,
+      "images": [
+        "https://picsum.photos/seed/novamart-24-1/800/800",
+        "https://picsum.photos/seed/novamart-24-2/800/800",
+        "https://picsum.photos/seed/novamart-24-3/800/800"
+      ],
+      "colors": [
+        "Gold/Brown",
+        "Silver/Grey",
+        "Black"
+      ],
+      "stock": 214,
+      "tags": [
+        "sunglasses",
+        "polarized",
+        "accessories"
+      ],
+      "description": "Classic aviators with polarized CR-39 lenses that cut glare without distorting color. A featherweight metal frame with adjustable nose pads fits all day.",
+      "specs": {
+        "Lens": "Polarized CR-39, UV400",
+        "Frame": "Stainless steel",
+        "Weight": "28 g",
+        "Details": "Adjustable nose pads",
+        "Includes": "Hard case and microfiber cloth"
+      },
+      "createdAt": "2026-06-20T10:00:00.000Z",
+      "compareAtPrice": 109.99
+    },
+    {
+      "id": "p025",
+      "slug": "lumiere-vitamin-c-serum",
+      "name": "Lumière Vitamin C Brightening Serum",
+      "brand": "Lumière",
+      "category": "beauty",
+      "price": 34.99,
+      "rating": 4.7,
+      "reviewsCount": 4230,
+      "images": [
+        "https://picsum.photos/seed/novamart-25-1/800/800",
+        "https://picsum.photos/seed/novamart-25-2/800/800",
+        "https://picsum.photos/seed/novamart-25-3/800/800"
+      ],
+      "colors": [
+        "Clear"
+      ],
+      "stock": 610,
+      "tags": [
+        "serum",
+        "vitamin-c",
+        "skincare",
+        "brightening"
+      ],
+      "description": "A 15% stabilized vitamin C serum with vitamin E and ferulic acid for visibly brighter, more even skin in four weeks. Lightweight, fast-absorbing, and never sticky.",
+      "specs": {
+        "Actives": "15% ethylated L-ascorbic acid",
+        "Size": "30 ml",
+        "Skin types": "All (patch test first)",
+        "Use": "AM, before moisturizer",
+        "Free of": "Fragrance and parabens"
+      },
+      "createdAt": "2026-07-08T10:00:00.000Z",
+      "badge": "BESTSELLER",
+      "featured": true
+    },
+    {
+      "id": "p026",
+      "slug": "hydraboost-hyaluronic-moisturizer",
+      "name": "HydraBoost Hyaluronic Acid Moisturizer",
+      "brand": "Lumière",
+      "category": "beauty",
+      "price": 28.99,
+      "rating": 4.5,
+      "reviewsCount": 2876,
+      "images": [
+        "https://picsum.photos/seed/novamart-26-1/800/800",
+        "https://picsum.photos/seed/novamart-26-2/800/800",
+        "https://picsum.photos/seed/novamart-26-3/800/800"
+      ],
+      "colors": [
+        "White"
+      ],
+      "stock": 455,
+      "tags": [
+        "moisturizer",
+        "hyaluronic",
+        "skincare",
+        "hydration"
+      ],
+      "description": "A gel-cream with five weights of hyaluronic acid plus ceramides for 72-hour hydration. It plumps fine lines without clogging pores or feeling heavy.",
+      "specs": {
+        "Actives": "5x hyaluronic acid + ceramides",
+        "Size": "50 ml",
+        "Hydration": "72 hours",
+        "Finish": "Lightweight gel-cream",
+        "Free of": "Fragrance and alcohol"
+      },
+      "createdAt": "2026-07-25T10:00:00.000Z"
+    },
+    {
+      "id": "p027",
+      "slug": "velvetine-12pc-brush-set",
+      "name": "Velvetine 12-Piece Brush Set",
+      "brand": "Velvetine",
+      "category": "beauty",
+      "price": 42.99,
+      "rating": 4.6,
+      "reviewsCount": 1234,
+      "images": [
+        "https://picsum.photos/seed/novamart-27-1/800/800",
+        "https://picsum.photos/seed/novamart-27-2/800/800",
+        "https://picsum.photos/seed/novamart-27-3/800/800"
+      ],
+      "colors": [
+        "Rose Gold",
+        "Black"
+      ],
+      "stock": 289,
+      "tags": [
+        "brushes",
+        "makeup",
+        "tools",
+        "vegan"
+      ],
+      "description": "Twelve hand-tied synthetic brushes covering base, eyes, and lips — dense enough to blend, soft enough for sensitive skin. Vegan and cruelty-free.",
+      "specs": {
+        "Count": "12 brushes",
+        "Bristles": "Synthetic taklon",
+        "Handles": "Birch wood",
+        "Case": "Roll-up travel case",
+        "Care": "Wash weekly"
+      },
+      "createdAt": "2026-08-10T10:00:00.000Z",
+      "compareAtPrice": 59.99,
+      "badge": "SALE"
+    },
+    {
+      "id": "p028",
+      "slug": "botanica-argan-repair-oil",
+      "name": "Botanica Argan Repair Hair Oil",
+      "brand": "Botanica",
+      "category": "beauty",
+      "price": 24.99,
+      "rating": 4.4,
+      "reviewsCount": 987,
+      "images": [
+        "https://picsum.photos/seed/novamart-28-1/800/800",
+        "https://picsum.photos/seed/novamart-28-2/800/800",
+        "https://picsum.photos/seed/novamart-28-3/800/800"
+      ],
+      "colors": [
+        "Amber"
+      ],
+      "stock": 376,
+      "tags": [
+        "hair-oil",
+        "argan",
+        "haircare",
+        "frizz"
+      ],
+      "description": "Cold-pressed Moroccan argan oil with jojoba to tame frizz and add glass-like shine. Three drops smooth the ends without weighing hair down.",
+      "specs": {
+        "Oil": "Cold-pressed argan + jojoba",
+        "Size": "100 ml",
+        "Use": "2-3 drops on damp ends",
+        "Hair types": "All",
+        "Free of": "Silicones and parabens"
+      },
+      "createdAt": "2026-08-28T10:00:00.000Z"
+    },
+    {
+      "id": "p029",
+      "slug": "velvetine-matte-lipstick-set",
+      "name": "Velvetine Matte Liquid Lipstick Set of 6",
+      "brand": "Velvetine",
+      "category": "beauty",
+      "price": 32.99,
+      "rating": 4.3,
+      "reviewsCount": 1743,
+      "images": [
+        "https://picsum.photos/seed/novamart-29-1/800/800",
+        "https://picsum.photos/seed/novamart-29-2/800/800",
+        "https://picsum.photos/seed/novamart-29-3/800/800"
+      ],
+      "colors": [
+        "Nudes",
+        "Reds",
+        "Berries"
+      ],
+      "stock": 342,
+      "tags": [
+        "lipstick",
+        "makeup",
+        "matte"
+      ],
+      "description": "Six bestselling shades in a weightless matte formula that lasts eight hours without cracking. Enriched with vitamin E so lips stay comfortable all day.",
+      "specs": {
+        "Shades": "6 (nude to berry)",
+        "Finish": "Weightless matte",
+        "Wear": "Up to 8 hours",
+        "Enriched with": "Vitamin E",
+        "Free of": "Parabens"
+      },
+      "createdAt": "2026-01-18T10:00:00.000Z",
+      "compareAtPrice": 39.99
+    },
+    {
+      "id": "p030",
+      "slug": "pureearth-charcoal-clay-mask",
+      "name": "PureEarth Charcoal Detox Clay Mask",
+      "brand": "PureEarth",
+      "category": "beauty",
+      "price": 19.99,
+      "rating": 4.2,
+      "reviewsCount": 1356,
+      "images": [
+        "https://picsum.photos/seed/novamart-30-1/800/800",
+        "https://picsum.photos/seed/novamart-30-2/800/800",
+        "https://picsum.photos/seed/novamart-30-3/800/800"
+      ],
+      "colors": [
+        "Black"
+      ],
+      "stock": 498,
+      "tags": [
+        "mask",
+        "charcoal",
+        "skincare",
+        "pores"
+      ],
+      "description": "Activated charcoal and kaolin clay draw out impurities and unclog pores in ten minutes. Aloe and green tea keep skin calm — never tight or dry.",
+      "specs": {
+        "Actives": "Charcoal + kaolin + aloe",
+        "Size": "100 ml",
+        "Use": "1-2x weekly, 10 minutes",
+        "Skin types": "Oily / combination",
+        "Free of": "Fragrance"
+      },
+      "createdAt": "2026-02-04T10:00:00.000Z"
+    },
+    {
+      "id": "p031",
+      "slug": "glowtech-facial-cleansing-brush",
+      "name": "GlowTech Sonic Facial Cleansing Brush",
+      "brand": "GlowTech",
+      "category": "beauty",
+      "price": 59.99,
+      "rating": 4.5,
+      "reviewsCount": 764,
+      "images": [
+        "https://picsum.photos/seed/novamart-31-1/800/800",
+        "https://picsum.photos/seed/novamart-31-2/800/800",
+        "https://picsum.photos/seed/novamart-31-3/800/800"
+      ],
+      "colors": [
+        "Pink",
+        "White",
+        "Mint"
+      ],
+      "stock": 187,
+      "tags": [
+        "cleansing",
+        "brush",
+        "skincare",
+        "sonic"
+      ],
+      "description": "Sonic cleansing at 12,000 pulsations per minute lifts makeup and daily buildup. Ultra-soft silicone bristles suit even sensitive skin, and it is fully waterproof.",
+      "specs": {
+        "Technology": "Sonic, 12,000/min",
+        "Bristles": "Medical-grade silicone",
+        "Battery": "USB rechargeable, 30 days",
+        "Waterproof": "IPX7",
+        "Modes": "3 speeds"
+      },
+      "createdAt": "2026-02-22T10:00:00.000Z",
+      "compareAtPrice": 79.99
+    },
+    {
+      "id": "p032",
+      "slug": "pureearth-natural-deodorant-duo",
+      "name": "PureEarth Natural Deodorant Duo",
+      "brand": "PureEarth",
+      "category": "beauty",
+      "price": 16.99,
+      "rating": 4.1,
+      "reviewsCount": 892,
+      "images": [
+        "https://picsum.photos/seed/novamart-32-1/800/800",
+        "https://picsum.photos/seed/novamart-32-2/800/800",
+        "https://picsum.photos/seed/novamart-32-3/800/800"
+      ],
+      "colors": [
+        "Citrus",
+        "Unscented"
+      ],
+      "stock": 0,
+      "tags": [
+        "deodorant",
+        "natural",
+        "bodycare"
+      ],
+      "description": "Two sticks of aluminum-free deodorant with baking-soda-free formulas that actually work. Twenty-four-hour odor protection with a clean citrus or unscented finish.",
+      "specs": {
+        "Count": "2 x 75 g",
+        "Formula": "Aluminum-free, no baking soda",
+        "Protection": "24-hour odor",
+        "Scents": "Citrus + unscented",
+        "Free of": "Parabens"
+      },
+      "createdAt": "2026-03-09T10:00:00.000Z"
+    },
+    {
+      "id": "p033",
+      "slug": "flexform-progrip-yoga-mat",
+      "name": "FlexForm ProGrip Yoga Mat 6mm",
+      "brand": "FlexForm",
+      "category": "sports",
+      "price": 39.99,
+      "rating": 4.7,
+      "reviewsCount": 2567,
+      "images": [
+        "https://picsum.photos/seed/novamart-33-1/800/800",
+        "https://picsum.photos/seed/novamart-33-2/800/800",
+        "https://picsum.photos/seed/novamart-33-3/800/800"
+      ],
+      "colors": [
+        "Teal",
+        "Purple",
+        "Charcoal",
+        "Rose"
+      ],
+      "stock": 389,
+      "tags": [
+        "yoga",
+        "mat",
+        "fitness",
+        "exercise"
+      ],
+      "description": "A 6mm ProGrip mat with alignment lines and a natural rubber base that grips any floor. The sweat-resistant top keeps you stable through hot flows.",
+      "specs": {
+        "Thickness": "6 mm",
+        "Material": "Natural rubber + PU top",
+        "Size": "183 x 66 cm",
+        "Weight": "2.4 kg",
+        "Includes": "Carry strap"
+      },
+      "createdAt": "2026-03-27T10:00:00.000Z",
+      "badge": "BESTSELLER"
+    },
+    {
+      "id": "p034",
+      "slug": "ironcore-adjustable-dumbbell",
+      "name": "IronCore Adjustable Dumbbell 24kg",
+      "brand": "IronCore",
+      "category": "sports",
+      "price": 149.99,
+      "rating": 4.8,
+      "reviewsCount": 1102,
+      "images": [
+        "https://picsum.photos/seed/novamart-34-1/800/800",
+        "https://picsum.photos/seed/novamart-34-2/800/800",
+        "https://picsum.photos/seed/novamart-34-3/800/800"
+      ],
+      "colors": [
+        "Black/Steel"
+      ],
+      "stock": 58,
+      "tags": [
+        "dumbbell",
+        "strength",
+        "gym",
+        "weights"
+      ],
+      "description": "One dumbbell replaces fifteen: dial from 2.5 to 24 kg in seconds with a twist of the handle. A compact steel core with knurled grip stands up to heavy lifts.",
+      "specs": {
+        "Range": "2.5 - 24 kg adjustable",
+        "Settings": "15 weight increments",
+        "Grip": "Knurled steel",
+        "Storage": "Compact tray included",
+        "Warranty": "2 years"
+      },
+      "createdAt": "2026-04-12T10:00:00.000Z",
+      "compareAtPrice": 199.99,
+      "badge": "SALE",
+      "featured": true
+    },
+    {
+      "id": "p035",
+      "slug": "trailmate-gym-duffel",
+      "name": "TrailMate Insulated Gym Duffel 35L",
+      "brand": "TrailMate",
+      "category": "sports",
+      "price": 64.99,
+      "rating": 4.5,
+      "reviewsCount": 543,
+      "images": [
+        "https://picsum.photos/seed/novamart-35-1/800/800",
+        "https://picsum.photos/seed/novamart-35-2/800/800",
+        "https://picsum.photos/seed/novamart-35-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "Navy",
+        "Olive"
+      ],
+      "stock": 176,
+      "tags": [
+        "duffel",
+        "gym",
+        "bag",
+        "travel"
+      ],
+      "description": "A 35-liter gym duffel with a ventilated shoe garage, insulated bottle pocket, and trolley sleeve. The water-resistant shell shrugs off locker-room floors.",
+      "specs": {
+        "Capacity": "35 L",
+        "Material": "Water-resistant 900D",
+        "Compartments": "Shoe garage + 6 pockets",
+        "Carry": "Handles + shoulder strap",
+        "Details": "Trolley sleeve"
+      },
+      "createdAt": "2026-04-29T10:00:00.000Z"
+    },
+    {
+      "id": "p036",
+      "slug": "flexform-resistance-band-set",
+      "name": "FlexForm Resistance Band Set of 5",
+      "brand": "FlexForm",
+      "category": "sports",
+      "price": 29.99,
+      "rating": 4.6,
+      "reviewsCount": 1987,
+      "images": [
+        "https://picsum.photos/seed/novamart-36-1/800/800",
+        "https://picsum.photos/seed/novamart-36-2/800/800",
+        "https://picsum.photos/seed/novamart-36-3/800/800"
+      ],
+      "colors": [
+        "Multicolor"
+      ],
+      "stock": 432,
+      "tags": [
+        "resistance-bands",
+        "fitness",
+        "home-gym"
+      ],
+      "description": "Five stackable resistance bands (10-50 lbs) with cushioned handles, ankle straps, and a door anchor. A full gym that fits in a drawer.",
+      "specs": {
+        "Resistance": "10-50 lbs, stackable",
+        "Includes": "Handles, ankle straps, door anchor",
+        "Material": "Natural latex",
+        "Count": "5 bands",
+        "Storage": "Carry bag included"
+      },
+      "createdAt": "2026-05-16T10:00:00.000Z"
+    },
+    {
+      "id": "p037",
+      "slug": "summit-trail-backpack-20l",
+      "name": "Summit Trail Backpack 20L",
+      "brand": "Summit",
+      "category": "sports",
+      "price": 79.99,
+      "rating": 4.6,
+      "reviewsCount": 654,
+      "images": [
+        "https://picsum.photos/seed/novamart-37-1/800/800",
+        "https://picsum.photos/seed/novamart-37-2/800/800",
+        "https://picsum.photos/seed/novamart-37-3/800/800"
+      ],
+      "colors": [
+        "Slate",
+        "Rust",
+        "Forest"
+      ],
+      "stock": 143,
+      "tags": [
+        "backpack",
+        "hiking",
+        "outdoor",
+        "trail"
+      ],
+      "description": "A 20-liter trail pack with a ventilated back panel, hip-belt pockets, and an integrated rain cover. Hydration-ready with trekking-pole loops for long days out.",
+      "specs": {
+        "Capacity": "20 L",
+        "Back": "Ventilated air-mesh",
+        "Includes": "Rain cover",
+        "Hydration": "3 L reservoir-ready",
+        "Weight": "0.9 kg"
+      },
+      "createdAt": "2026-06-02T10:00:00.000Z"
+    },
+    {
+      "id": "p038",
+      "slug": "pulsefit-smart-jump-rope",
+      "name": "PulseFit Smart Jump Rope with Counter",
+      "brand": "PulseFit",
+      "category": "sports",
+      "price": 34.99,
+      "rating": 4.4,
+      "reviewsCount": 876,
+      "images": [
+        "https://picsum.photos/seed/novamart-38-1/800/800",
+        "https://picsum.photos/seed/novamart-38-2/800/800",
+        "https://picsum.photos/seed/novamart-38-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "Coral"
+      ],
+      "stock": 267,
+      "tags": [
+        "jump-rope",
+        "cardio",
+        "fitness",
+        "smart"
+      ],
+      "description": "A smart rope that counts jumps, calories, and streaks on its HD handle display — no app needed. Tangle-free ball bearings keep your rhythm smooth.",
+      "specs": {
+        "Display": "HD jump and calorie counter",
+        "Bearings": "360-degree ball bearing",
+        "Rope": "Adjustable 3 m PVC",
+        "Battery": "30-day rechargeable",
+        "Modes": "Free, timer, target"
+      },
+      "createdAt": "2026-06-20T10:00:00.000Z"
+    },
+    {
+      "id": "p039",
+      "slug": "courtking-pickleball-paddle-set",
+      "name": "CourtKing Pickleball Paddle Set of 2",
+      "brand": "CourtKing",
+      "category": "sports",
+      "price": 89.99,
+      "rating": 4.7,
+      "reviewsCount": 432,
+      "images": [
+        "https://picsum.photos/seed/novamart-39-1/800/800",
+        "https://picsum.photos/seed/novamart-39-2/800/800",
+        "https://picsum.photos/seed/novamart-39-3/800/800"
+      ],
+      "colors": [
+        "Blue",
+        "Green"
+      ],
+      "stock": 98,
+      "tags": [
+        "pickleball",
+        "paddle",
+        "racket-sports"
+      ],
+      "description": "Two fiberglass-face paddles with honeycomb polymer cores for control with pop. Includes four balls and a carry bag — court-ready out of the box.",
+      "specs": {
+        "Face": "Fiberglass",
+        "Core": "Polymer honeycomb",
+        "Weight": "225 g each",
+        "Grip": "4.25\" cushioned",
+        "Includes": "2 paddles, 4 balls, bag"
+      },
+      "createdAt": "2026-07-08T10:00:00.000Z",
+      "compareAtPrice": 119.99
+    },
+    {
+      "id": "p040",
+      "slug": "flexform-recovery-foam-roller",
+      "name": "FlexForm Recovery Foam Roller",
+      "brand": "FlexForm",
+      "category": "sports",
+      "price": 24.99,
+      "rating": 4.3,
+      "reviewsCount": 765,
+      "images": [
+        "https://picsum.photos/seed/novamart-40-1/800/800",
+        "https://picsum.photos/seed/novamart-40-2/800/800",
+        "https://picsum.photos/seed/novamart-40-3/800/800"
+      ],
+      "colors": [
+        "Black",
+        "Blue"
+      ],
+      "stock": 0,
+      "tags": [
+        "foam-roller",
+        "recovery",
+        "fitness",
+        "mobility"
+      ],
+      "description": "A high-density EPP foam roller that holds its shape under 150 kg. Textured zones target calves, quads, and back for faster recovery after hard sessions.",
+      "specs": {
+        "Material": "High-density EPP",
+        "Size": "45 x 14 cm",
+        "Load": "Up to 150 kg",
+        "Zones": "3 texture zones",
+        "Weight": "0.8 kg"
+      },
+      "createdAt": "2026-07-25T10:00:00.000Z"
+    },
+    {
+      "id": "p041",
+      "slug": "brickworks-city-builder-1200pc",
+      "name": "BrickWorks City Builder 1200-Piece Set",
+      "brand": "BrickWorks",
+      "category": "toys-and-games",
+      "price": 79.99,
+      "rating": 4.9,
+      "reviewsCount": 3210,
+      "images": [
+        "https://picsum.photos/seed/novamart-41-1/800/800",
+        "https://picsum.photos/seed/novamart-41-2/800/800",
+        "https://picsum.photos/seed/novamart-41-3/800/800"
+      ],
+      "colors": [
+        "Multicolor"
+      ],
+      "stock": 214,
+      "tags": [
+        "building-blocks",
+        "bricks",
+        "kids",
+        "stem"
+      ],
+      "description": "Twelve hundred pieces to build a bustling downtown: tower, cafe, fire station, and eight minifigures with vehicles. Compatible with all major brick brands.",
+      "specs": {
+        "Pieces": "1200",
+        "Minifigures": "8",
+        "Age": "6+",
+        "Compatibility": "Major brick brands",
+        "Manual": "Step-by-step, 240 pages"
+      },
+      "createdAt": "2026-08-10T10:00:00.000Z",
+      "badge": "BESTSELLER",
+      "featured": true
+    },
+    {
+      "id": "p042",
+      "slug": "empires-strategy-board-game",
+      "name": "Empires Strategy Board Game",
+      "brand": "TableTide",
+      "category": "toys-and-games",
+      "price": 49.99,
+      "rating": 4.7,
+      "reviewsCount": 876,
+      "images": [
+        "https://picsum.photos/seed/novamart-42-1/800/800",
+        "https://picsum.photos/seed/novamart-42-2/800/800",
+        "https://picsum.photos/seed/novamart-42-3/800/800"
+      ],
+      "colors": [
+        "Standard"
+      ],
+      "stock": 132,
+      "tags": [
+        "board-game",
+        "strategy",
+        "family"
+      ],
+      "description": "A 60-to-90-minute strategy epic of trade, alliances, and territory for two to four players. Every game tells a different story — no two empires rise the same.",
+      "specs": {
+        "Players": "2-4",
+        "Play time": "60-90 min",
+        "Age": "12+",
+        "Components": "180+ pieces",
+        "Mechanics": "Area control, trading"
+      },
+      "createdAt": "2026-08-28T10:00:00.000Z"
+    },
+    {
+      "id": "p043",
+      "slug": "turbotots-rc-stunt-car",
+      "name": "TurboTots 4WD RC Stunt Car",
+      "brand": "TurboTots",
+      "category": "toys-and-games",
+      "price": 59.99,
+      "rating": 4.5,
+      "reviewsCount": 1234,
+      "images": [
+        "https://picsum.photos/seed/novamart-43-1/800/800",
+        "https://picsum.photos/seed/novamart-43-2/800/800",
+        "https://picsum.photos/seed/novamart-43-3/800/800"
+      ],
+      "colors": [
+        "Red",
+        "Blue",
+        "Green"
+      ],
+      "stock": 187,
+      "tags": [
+        "rc-car",
+        "remote-control",
+        "toys",
+        "stunt"
+      ],
+      "description": "A 4WD stunt car that flips, spins, and climbs at 25 km/h with a 2.4 GHz controller reaching 80 meters. Double-sided driving means crashes are just tricks.",
+      "specs": {
+        "Speed": "25 km/h",
+        "Range": "80 m, 2.4 GHz",
+        "Drive": "4WD, double-sided",
+        "Battery": "2x rechargeable",
+        "Runtime": "40 min total"
+      },
+      "createdAt": "2026-01-18T10:00:00.000Z",
+      "compareAtPrice": 79.99
+    },
+    {
+      "id": "p044",
+      "slug": "cuddlecrew-plush-dragon",
+      "name": "CuddleCrew Plush Dragon 40cm",
+      "brand": "CuddleCrew",
+      "category": "toys-and-games",
+      "price": 29.99,
+      "rating": 4.8,
+      "reviewsCount": 654,
+      "images": [
+        "https://picsum.photos/seed/novamart-44-1/800/800",
+        "https://picsum.photos/seed/novamart-44-2/800/800",
+        "https://picsum.photos/seed/novamart-44-3/800/800"
+      ],
+      "colors": [
+        "Emerald",
+        "Ruby",
+        "Sapphire"
+      ],
+      "stock": 243,
+      "tags": [
+        "plush",
+        "stuffed-animal",
+        "kids",
+        "gift"
+      ],
+      "description": "A 40 cm dragon with ultra-soft minky fur, embroidered details with no small parts, and weighted paws for extra huggability. Machine-washable.",
+      "specs": {
+        "Size": "40 cm",
+        "Material": "Minky plush",
+        "Details": "Embroidered, no small parts",
+        "Filling": "Weighted paws",
+        "Care": "Machine washable"
+      },
+      "createdAt": "2026-02-04T10:00:00.000Z"
+    },
+    {
+      "id": "p045",
+      "slug": "mindspark-volcano-science-kit",
+      "name": "MindSpark Volcano Eruption Science Kit",
+      "brand": "MindSpark",
+      "category": "toys-and-games",
+      "price": 34.99,
+      "rating": 4.6,
+      "reviewsCount": 543,
+      "images": [
+        "https://picsum.photos/seed/novamart-45-1/800/800",
+        "https://picsum.photos/seed/novamart-45-2/800/800",
+        "https://picsum.photos/seed/novamart-45-3/800/800"
+      ],
+      "colors": [
+        "Standard"
+      ],
+      "stock": 176,
+      "tags": [
+        "science-kit",
+        "stem",
+        "educational",
+        "kids"
+      ],
+      "description": "Erupt a 15 cm volcano again and again with safe, reusable compounds. Includes real rock specimens, a magnifier, and a 32-page learning guide.",
+      "specs": {
+        "Experiments": "15+",
+        "Volcano": "15 cm, reusable",
+        "Guide": "32-page illustrated",
+        "Age": "8+",
+        "Safety": "Non-toxic compounds"
+      },
+      "createdAt": "2026-02-22T10:00:00.000Z"
+    },
+    {
+      "id": "p046",
+      "slug": "timbertots-wooden-train-set",
+      "name": "TimberTots 52-Piece Wooden Train Set",
+      "brand": "TimberTots",
+      "category": "toys-and-games",
+      "price": 44.99,
+      "rating": 4.7,
+      "reviewsCount": 432,
+      "images": [
+        "https://picsum.photos/seed/novamart-46-1/800/800",
+        "https://picsum.photos/seed/novamart-46-2/800/800",
+        "https://picsum.photos/seed/novamart-46-3/800/800"
+      ],
+      "colors": [
+        "Natural"
+      ],
+      "stock": 154,
+      "tags": [
+        "wooden-toys",
+        "train",
+        "toddler",
+        "kids"
+      ],
+      "description": "Fifty-two pieces of smooth beechwood track, trains, and a bridge that click together magnetically. Builds spatial skills — and very long railways.",
+      "specs": {
+        "Pieces": "52",
+        "Material": "Beechwood",
+        "Connectors": "Magnetic",
+        "Age": "3+",
+        "Compatibility": "Standard wooden track"
+      },
+      "createdAt": "2026-03-09T10:00:00.000Z"
+    },
+    {
+      "id": "p047",
+      "slug": "pieceful-starry-harbor-puzzle",
+      "name": "Pieceful 'Starry Harbor' 1000-Piece Puzzle",
+      "brand": "Pieceful",
+      "category": "toys-and-games",
+      "price": 19.99,
+      "rating": 4.5,
+      "reviewsCount": 876,
+      "images": [
+        "https://picsum.photos/seed/novamart-47-1/800/800",
+        "https://picsum.photos/seed/novamart-47-2/800/800",
+        "https://picsum.photos/seed/novamart-47-3/800/800"
+      ],
+      "colors": [
+        "Standard"
+      ],
+      "stock": 321,
+      "tags": [
+        "puzzle",
+        "jigsaw",
+        "family"
+      ],
+      "description": "One thousand pieces of a moonlit harbor scene, printed on low-glare blueboard with a near-zero-dust cut. Includes a full-size poster guide.",
+      "specs": {
+        "Pieces": "1000",
+        "Finished size": "68 x 48 cm",
+        "Material": "Low-glare blueboard",
+        "Cut": "Precision, low dust",
+        "Includes": "Poster guide"
+      },
+      "createdAt": "2026-03-27T10:00:00.000Z"
+    },
+    {
+      "id": "p048",
+      "slug": "skydart-mini-4k-drone",
+      "name": "SkyDart Mini 4K Camera Drone",
+      "brand": "SkyDart",
+      "category": "toys-and-games",
+      "price": 129.99,
+      "rating": 4.4,
+      "reviewsCount": 765,
+      "images": [
+        "https://picsum.photos/seed/novamart-48-1/800/800",
+        "https://picsum.photos/seed/novamart-48-2/800/800",
+        "https://picsum.photos/seed/novamart-48-3/800/800"
+      ],
+      "colors": [
+        "Grey",
+        "Black"
+      ],
+      "stock": 87,
+      "tags": [
+        "drone",
+        "camera",
+        "rc",
+        "aerial"
+      ],
+      "description": "A sub-249 g 4K drone with a 3-axis gimbal, 34-minute flight time, and obstacle sensing. It folds to pocket size — no registration needed in most regions.",
+      "specs": {
+        "Camera": "4K, 3-axis gimbal",
+        "Flight time": "34 min",
+        "Weight": "249 g",
+        "Range": "10 km",
+        "Sensors": "Forward and backward obstacle sensing"
+      },
+      "createdAt": "2026-04-12T10:00:00.000Z",
+      "compareAtPrice": 169.99
+    }
+  ],
+  "categories": [
+    {
+      "id": "c1",
+      "name": "Electronics",
+      "slug": "electronics",
+      "image": "https://picsum.photos/seed/novamart-cat-electronics/800/600",
+      "description": "Headphones, cameras, smart home gear and everyday tech — tested picks for work and play."
+    },
+    {
+      "id": "c2",
+      "name": "Home & Kitchen",
+      "slug": "home-kitchen",
+      "image": "https://picsum.photos/seed/novamart-cat-home-kitchen/800/600",
+      "description": "Cookware, coffee gear, cleaning tech and cozy upgrades for every room."
+    },
+    {
+      "id": "c3",
+      "name": "Fashion",
+      "slug": "fashion",
+      "image": "https://picsum.photos/seed/novamart-cat-fashion/800/600",
+      "description": "Wardrobe staples and statement pieces in quality, honest fabrics."
+    },
+    {
+      "id": "c4",
+      "name": "Beauty",
+      "slug": "beauty",
+      "image": "https://picsum.photos/seed/novamart-cat-beauty/800/600",
+      "description": "Skincare, haircare and makeup that actually deliver on their promises."
+    },
+    {
+      "id": "c5",
+      "name": "Sports",
+      "slug": "sports",
+      "image": "https://picsum.photos/seed/novamart-cat-sports/800/600",
+      "description": "Training gear, outdoor essentials and recovery tools for every level."
+    },
+    {
+      "id": "c6",
+      "name": "Toys & Games",
+      "slug": "toys-and-games",
+      "image": "https://picsum.photos/seed/novamart-cat-toys-and-games/800/600",
+      "description": "Building sets, board games and STEM toys for kids and the young at heart."
+    }
+  ],
+  "coupons": [
+    {
+      "code": "WELCOME10",
+      "type": "percent",
+      "value": 10,
+      "minOrder": 50,
+      "expiresAt": "2027-06-30T23:59:59.000Z",
+      "usageLimit": 1000,
+      "used": 0,
+      "active": true
+    },
+    {
+      "code": "SAVE20",
+      "type": "flat",
+      "value": 20,
+      "minOrder": 150,
+      "expiresAt": "2027-06-30T23:59:59.000Z",
+      "usageLimit": 1000,
+      "used": 0,
+      "active": true
+    },
+    {
+      "code": "FREESHIP",
+      "type": "freeship",
+      "value": 0,
+      "minOrder": 75,
+      "expiresAt": "2027-06-30T23:59:59.000Z",
+      "usageLimit": 1000,
+      "used": 0,
+      "active": true
+    },
+    {
+      "code": "STUDENT15",
+      "type": "percent",
+      "value": 15,
+      "minOrder": 30,
+      "expiresAt": "2027-06-30T23:59:59.000Z",
+      "usageLimit": 1000,
+      "used": 0,
+      "active": true
+    }
+  ],
+  "reviews": [
+    {
+      "id": "r001",
+      "productId": "p001",
+      "userName": "Marcus T.",
+      "rating": 5,
+      "title": "Worth every penny",
+      "body": "The noise cancellation is unreal — my open office just disappears. Battery easily lasts my whole work week.",
+      "createdAt": "2026-08-14T12:00:00.000Z"
+    },
+    {
+      "id": "r002",
+      "productId": "p001",
+      "userName": "Priya S.",
+      "rating": 5,
+      "title": "Best headphones I have owned",
+      "body": "Incredibly comfortable for long flights and the multipoint connection between laptop and phone is seamless.",
+      "createdAt": "2026-07-02T12:00:00.000Z"
+    },
+    {
+      "id": "r003",
+      "productId": "p004",
+      "userName": "Dana R.",
+      "rating": 4,
+      "title": "Great little speaker",
+      "body": "Sound is impressive for the size. Wish the bass was a touch deeper, but for the kitchen it is perfect.",
+      "createdAt": "2026-08-29T12:00:00.000Z"
+    },
+    {
+      "id": "r004",
+      "productId": "p007",
+      "userName": "Leo M.",
+      "rating": 5,
+      "title": "ANC rivals the big brands",
+      "body": "Call quality is excellent and the wireless charging case is so convenient. Highly recommend.",
+      "createdAt": "2026-09-05T12:00:00.000Z"
+    },
+    {
+      "id": "r005",
+      "productId": "p012",
+      "userName": "Hannah K.",
+      "rating": 5,
+      "title": "Cooks like a dream",
+      "body": "Nothing sticks, cleanup takes seconds, and they look beautiful on the stove. The lids fit perfectly.",
+      "createdAt": "2026-07-19T12:00:00.000Z"
+    },
+    {
+      "id": "r006",
+      "productId": "p012",
+      "userName": "George P.",
+      "rating": 4,
+      "title": "Solid set, minor gripe",
+      "body": "Great heat distribution and truly non-stick. Only wish the largest pan had a helper handle.",
+      "createdAt": "2026-08-03T12:00:00.000Z"
+    },
+    {
+      "id": "r007",
+      "productId": "p014",
+      "userName": "Nadia F.",
+      "rating": 5,
+      "title": "It empties itself!",
+      "body": "Two months in and I have not touched the dustbin once. Mapping is accurate and it dodges cables well.",
+      "createdAt": "2026-08-21T12:00:00.000Z"
+    },
+    {
+      "id": "r008",
+      "productId": "p017",
+      "userName": "Chris B.",
+      "rating": 5,
+      "title": "My new favorite tee",
+      "body": "Thick, soft, and the fit is spot on. Bought three more after the first wash held up perfectly.",
+      "createdAt": "2026-06-30T12:00:00.000Z"
+    },
+    {
+      "id": "r009",
+      "productId": "p017",
+      "userName": "Sofia L.",
+      "rating": 4,
+      "title": "Great quality basics",
+      "body": "Lovely fabric weight and colors. Runs slightly boxy — size down if you like a closer fit.",
+      "createdAt": "2026-08-11T12:00:00.000Z"
+    },
+    {
+      "id": "r010",
+      "productId": "p019",
+      "userName": "Andre W.",
+      "rating": 5,
+      "title": "Clouds for feet",
+      "body": "Ran my first 10K in these with zero blisters. Cushioning is plush but still responsive.",
+      "createdAt": "2026-09-01T12:00:00.000Z"
+    },
+    {
+      "id": "r011",
+      "productId": "p022",
+      "userName": "Elena V.",
+      "rating": 5,
+      "title": "Beautiful craftsmanship",
+      "body": "The leather smells amazing and the stitching is flawless. Fits my laptop plus everything else.",
+      "createdAt": "2026-07-27T12:00:00.000Z"
+    },
+    {
+      "id": "r012",
+      "productId": "p025",
+      "userName": "Maya R.",
+      "rating": 5,
+      "title": "Glowing skin in weeks",
+      "body": "My dark spots visibly faded after a month. Layers well under moisturizer, no irritation at all.",
+      "createdAt": "2026-08-17T12:00:00.000Z"
+    },
+    {
+      "id": "r013",
+      "productId": "p025",
+      "userName": "Jin A.",
+      "rating": 4,
+      "title": "Effective, be patient",
+      "body": "Took about three weeks to see brightness improve. The pump dispenses a bit much — use half a pump.",
+      "createdAt": "2026-07-08T12:00:00.000Z"
+    },
+    {
+      "id": "r014",
+      "productId": "p027",
+      "userName": "Tara N.",
+      "rating": 5,
+      "title": "Pro quality brushes",
+      "body": "Blends like brushes three times the price. The roll case keeps everything organized for travel.",
+      "createdAt": "2026-08-25T12:00:00.000Z"
+    },
+    {
+      "id": "r015",
+      "productId": "p029",
+      "userName": "Bianca C.",
+      "rating": 3,
+      "title": "Good, shades run dark",
+      "body": "Formula lasts all day and does not dry my lips. The nude shades run darker than pictured though.",
+      "createdAt": "2026-09-09T12:00:00.000Z"
+    },
+    {
+      "id": "r016",
+      "productId": "p033",
+      "userName": "Sam R.",
+      "rating": 5,
+      "title": "Zero slipping",
+      "body": "Grip is phenomenal even in hot yoga. The alignment lines genuinely help my form. Worth it.",
+      "createdAt": "2026-07-14T12:00:00.000Z"
+    },
+    {
+      "id": "r017",
+      "productId": "p034",
+      "userName": "Dan K.",
+      "rating": 5,
+      "title": "Replaced my whole rack",
+      "body": "Dial mechanism is smooth and fast. Saved me a fortune and a whole wall of dumbbells.",
+      "createdAt": "2026-08-06T12:00:00.000Z"
+    },
+    {
+      "id": "r018",
+      "productId": "p034",
+      "userName": "Ruth E.",
+      "rating": 4,
+      "title": "Heavy but brilliant",
+      "body": "Adjustment is quick and the build feels solid. They are chunky — check your storage space first.",
+      "createdAt": "2026-08-28T12:00:00.000Z"
+    },
+    {
+      "id": "r019",
+      "productId": "p036",
+      "userName": "Mike D.",
+      "rating": 5,
+      "title": "Home gym essential",
+      "body": "Bands are thick and the handles are comfortable. The door anchor holds firm. Great value set.",
+      "createdAt": "2026-07-22T12:00:00.000Z"
+    },
+    {
+      "id": "r020",
+      "productId": "p041",
+      "userName": "Parent of two",
+      "rating": 5,
+      "title": "Hours of quiet building",
+      "body": "My 7 and 9 year old built the whole city over a weekend. Pieces fit perfectly, zero missing.",
+      "createdAt": "2026-08-12T12:00:00.000Z"
+    },
+    {
+      "id": "r021",
+      "productId": "p041",
+      "userName": "Kevin J.",
+      "rating": 5,
+      "title": "Great gift",
+      "body": "Bought for my nephew's birthday — he was thrilled. Instructions are clear and the buildings look awesome.",
+      "createdAt": "2026-09-03T12:00:00.000Z"
+    },
+    {
+      "id": "r022",
+      "productId": "p042",
+      "userName": "BoardGameNight",
+      "rating": 4,
+      "title": "Deep but teachable",
+      "body": "First game took two hours with rules, the second was 75 minutes of pure strategy. Components are lovely.",
+      "createdAt": "2026-07-30T12:00:00.000Z"
+    },
+    {
+      "id": "r023",
+      "productId": "p043",
+      "userName": "Sam O.",
+      "rating": 5,
+      "title": "Kids love it",
+      "body": "Survived being driven off the porch steps repeatedly. Batteries last well and it charges fast.",
+      "createdAt": "2026-08-19T12:00:00.000Z"
+    },
+    {
+      "id": "r024",
+      "productId": "p048",
+      "userName": "AerialAl",
+      "rating": 4,
+      "title": "Impressive for the size",
+      "body": "Footage is stable and sharp, and 30+ minute flights are real. Wind pushes it around a bit.",
+      "createdAt": "2026-09-07T12:00:00.000Z"
+    }
+  ],
+  "settings": {
+    "storeName": "NovaMart",
+    "tagline": "Everything you love, delivered.",
+    "announcement": "Free shipping on orders over $75 · New customers get 10% off with code WELCOME10",
+    "shippingFlat": 6.99,
+    "freeShipOver": 75,
+    "taxRate": 0.08,
+    "supportEmail": "support@novamart.com"
+  }
+}
